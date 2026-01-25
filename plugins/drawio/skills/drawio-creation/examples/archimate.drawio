@@ -1,0 +1,227 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Claude" version="21.0.0" type="device">
+  <diagram id="archimate-example" name="ArchiMate Enterprise Architecture">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="Order Management System - ArchiMate 3.0" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="20" width="400" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== MOTIVATION LAYER ==================== -->
+        <mxCell id="motivation-label" value="Motivation" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="100" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Driver -->
+        <mxCell id="driver1" value="Increase&#xa;Customer&#xa;Satisfaction" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#CCCCFF;shape=mxgraph.archimate3.application;appType=driver;archiType=oct;" vertex="1" parent="1">
+          <mxGeometry x="60" y="90" width="130" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Goal -->
+        <mxCell id="goal1" value="Reduce Order&#xa;Processing Time" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#CCCCFF;shape=mxgraph.archimate3.application;appType=goal;archiType=oct;" vertex="1" parent="1">
+          <mxGeometry x="230" y="90" width="130" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Requirement -->
+        <mxCell id="req1" value="Real-time&#xa;Order Tracking" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#CCCCFF;shape=mxgraph.archimate3.application;appType=req;archiType=oct;" vertex="1" parent="1">
+          <mxGeometry x="400" y="90" width="130" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BUSINESS LAYER (Yellow) ==================== -->
+        <mxCell id="business-label" value="Business Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="180" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Business Actor -->
+        <mxCell id="actor1" value="Customer" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=actor;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="60" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Business Role -->
+        <mxCell id="role1" value="Order&#xa;Manager" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=role;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="220" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Business Process -->
+        <mxCell id="process1" value="Order&#xa;Processing" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=proc;archiType=square;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="process2" value="Payment&#xa;Handling" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=proc;archiType=square;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="540" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <mxCell id="process3" value="Fulfillment" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=proc;archiType=square;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Business Service -->
+        <mxCell id="busserv1" value="Order&#xa;Service" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=serv;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="860" y="210" width="120" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Business Object -->
+        <mxCell id="busobj1" value="Order" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#FFFFB5;shape=mxgraph.archimate3.application;appType=passive;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="540" y="290" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== APPLICATION LAYER (Blue) ==================== -->
+        <mxCell id="app-label" value="Application Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="140" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Application Component -->
+        <mxCell id="appcomp1" value="Order Management&#xa;Application" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=comp;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="100" y="390" width="150" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appcomp2" value="CRM&#xa;System" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=comp;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="290" y="390" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appcomp3" value="Payment&#xa;Gateway" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=comp;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="460" y="390" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appcomp4" value="Inventory&#xa;System" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=comp;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="630" y="390" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appcomp5" value="Notification&#xa;Service" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=comp;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="800" y="390" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Application Service -->
+        <mxCell id="appserv1" value="Order API" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=serv;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="115" y="480" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="appserv2" value="Payment API" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=serv;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="465" y="480" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Data Object -->
+        <mxCell id="dataobj1" value="Order&#xa;Data" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#B5FFFF;shape=mxgraph.archimate3.application;appType=passive;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="300" y="480" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== TECHNOLOGY LAYER (Green) ==================== -->
+        <mxCell id="tech-label" value="Technology Layer" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="140" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Node -->
+        <mxCell id="node1" value="Web Server&#xa;(nginx)" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=node;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="80" y="590" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node2" value="App Server&#xa;(Node.js)" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=node;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="250" y="590" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="node3" value="App Server&#xa;(Java)" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=node;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="420" y="590" width="130" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- System Software -->
+        <mxCell id="syssw1" value="PostgreSQL" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=sysSw;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="590" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="syssw2" value="Redis" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=sysSw;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="750" y="590" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Artifact -->
+        <mxCell id="artifact1" value="order-api.jar" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=artifact;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="250" y="680" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Communication Network -->
+        <mxCell id="network1" value="Corporate LAN" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#C9E7B7;shape=mxgraph.archimate3.application;appType=netw;archiType=square;" vertex="1" parent="1">
+          <mxGeometry x="910" y="600" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== RELATIONSHIPS ==================== -->
+
+        <!-- Influence (Driver to Goal) -->
+        <mxCell id="rel1" value="" style="edgeStyle=elbowEdgeStyle;html=1;endArrow=open;elbow=vertical;endFill=0;dashed=1;dashPattern=6 4;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="driver1" target="goal1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Realization (Goal to Requirement) -->
+        <mxCell id="rel2" value="" style="edgeStyle=elbowEdgeStyle;html=1;endArrow=block;elbow=vertical;endFill=0;dashed=1;dashPattern=2 2;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="goal1" target="req1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Assignment (Role to Process) -->
+        <mxCell id="rel3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=none;startArrow=oval;startFill=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="role1" target="process1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Triggering (Process to Process) -->
+        <mxCell id="rel4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=classic;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="process1" target="process2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=classic;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="process2" target="process3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Access (Process to Business Object) -->
+        <mxCell id="rel6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;dashed=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="process1" target="busobj1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Realization (App Component realizes Business Process) -->
+        <mxCell id="rel7" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=0;dashed=1;dashPattern=2 2;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="appcomp1" target="process1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="rel8" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=0;dashed=1;dashPattern=2 2;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="appcomp3" target="process2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Serving (App Service serves Business Process) -->
+        <mxCell id="rel9" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=open;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="appserv1" target="appcomp1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Realization (Node realizes App Component) -->
+        <mxCell id="rel10" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;endArrow=block;endFill=0;dashed=1;dashPattern=2 2;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="node2" target="appcomp1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== LEGEND ==================== -->
+        <mxCell id="legend" value="ArchiMate 3.0 Legend" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=25;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="90" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="█ Motivation (Purple)" style="text;strokeColor=none;fillColor=#CCCCFF;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="25" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="█ Business (Yellow)" style="text;strokeColor=none;fillColor=#FFFFB5;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="50" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="█ Application (Cyan)" style="text;strokeColor=none;fillColor=#B5FFFF;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="75" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" value="█ Technology (Green)" style="text;strokeColor=none;fillColor=#C9E7B7;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="100" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg5" value="─● Assignment" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="125" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg6" value="──▷ Triggering/Flow" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="150" width="200" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="leg7" value="- -▷ Realization" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;overflow=hidden;whiteSpace=wrap;html=1;fontSize=10;" vertex="1" parent="legend">
+          <mxGeometry y="175" width="200" height="25" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

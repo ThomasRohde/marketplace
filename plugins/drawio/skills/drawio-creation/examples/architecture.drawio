@@ -1,0 +1,164 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="Claude" version="21.0.0" type="device">
+  <diagram id="architecture-example" name="Microservices Architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Client Layer -->
+        <mxCell id="2" value="Client Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;startSize=30;fontStyle=1;fontSize=14;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="1020" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Web App -->
+        <mxCell id="3" value="Web App&#xa;(React)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="120" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Mobile App -->
+        <mxCell id="4" value="Mobile App&#xa;(React Native)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="280" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Third Party -->
+        <mxCell id="5" value="Third Party&#xa;Integrations" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="2">
+          <mxGeometry x="440" y="50" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- API Gateway Layer -->
+        <mxCell id="6" value="API Gateway" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;startSize=30;fontStyle=1;fontSize=14;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="1020" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Kong Gateway -->
+        <mxCell id="7" value="Kong API Gateway&#xa;(Rate Limiting, Auth, Routing)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" vertex="1" parent="6">
+          <mxGeometry x="360" y="40" width="300" height="45" as="geometry" />
+        </mxCell>
+
+        <!-- Services Layer -->
+        <mxCell id="8" value="Microservices" style="swimlane;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;startSize=30;fontStyle=1;fontSize=14;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="340" width="1020" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Auth Service -->
+        <mxCell id="9" value="Auth Service&#xa;(Node.js)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="40" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- User Service -->
+        <mxCell id="10" value="User Service&#xa;(Go)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="200" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Product Service -->
+        <mxCell id="11" value="Product Service&#xa;(Python)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="360" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Order Service -->
+        <mxCell id="12" value="Order Service&#xa;(Java)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="520" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Payment Service -->
+        <mxCell id="13" value="Payment Service&#xa;(Node.js)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="680" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Notification Service -->
+        <mxCell id="14" value="Notification&#xa;Service (Go)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="8">
+          <mxGeometry x="840" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Message Queue -->
+        <mxCell id="15" value="Message Queue (RabbitMQ)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="400" y="540" width="260" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Data Layer -->
+        <mxCell id="16" value="Data Layer" style="swimlane;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;startSize=30;fontStyle=1;fontSize=14;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="1020" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- PostgreSQL -->
+        <mxCell id="17" value="PostgreSQL&#xa;(Users, Orders)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="16">
+          <mxGeometry x="80" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- MongoDB -->
+        <mxCell id="18" value="MongoDB&#xa;(Products)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="16">
+          <mxGeometry x="240" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Redis -->
+        <mxCell id="19" value="Redis&#xa;(Cache, Sessions)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="16">
+          <mxGeometry x="400" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Elasticsearch -->
+        <mxCell id="20" value="Elasticsearch&#xa;(Search)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="16">
+          <mxGeometry x="560" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- S3 -->
+        <mxCell id="21" value="S3&#xa;(Files, Images)" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=11;" vertex="1" parent="16">
+          <mxGeometry x="720" y="40" width="100" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- External Services -->
+        <mxCell id="22" value="External Services" style="swimlane;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;startSize=30;fontStyle=1;fontSize=14;horizontal=1;" vertex="1" parent="1">
+          <mxGeometry x="700" y="40" width="360" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Stripe -->
+        <mxCell id="23" value="Stripe&#xa;(Payments)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry x="30" y="50" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Twilio -->
+        <mxCell id="24" value="Twilio&#xa;(SMS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry x="140" y="50" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- SendGrid -->
+        <mxCell id="25" value="SendGrid&#xa;(Email)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11;" vertex="1" parent="22">
+          <mxGeometry x="250" y="50" width="90" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Connectors -->
+        <!-- Client to Gateway -->
+        <mxCell id="26" value="" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#666666;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" target="6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="160" as="sourcePoint" />
+            <mxPoint x="550" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Gateway to Services -->
+        <mxCell id="27" value="" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="300" as="sourcePoint" />
+            <mxPoint x="550" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Services to Message Queue -->
+        <mxCell id="28" value="" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#666666;dashed=1;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="500" as="sourcePoint" />
+            <mxPoint x="530" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Services to Data -->
+        <mxCell id="29" value="" style="endArrow=classic;startArrow=classic;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="530" y="580" as="sourcePoint" />
+            <mxPoint x="530" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

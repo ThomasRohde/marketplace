@@ -1,0 +1,9 @@
+{
+  "name": "drawio",
+  "version": "1.0.0",
+  "description": "Create production-ready DrawIO diagram files with comprehensive XML knowledge for flowcharts, architecture diagrams, UML, network diagrams, and more",
+  "author": {
+    "name": "Claude Code Plugin"
+  },
+  "keywords": ["drawio", "diagrams", "flowchart", "architecture", "uml", "visualization"]
+}
