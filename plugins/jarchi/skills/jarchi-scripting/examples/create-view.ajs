@@ -1,0 +1,155 @@
+/**
+ * Create View Example
+ *
+ * This script demonstrates how to programmatically create an ArchiMate view
+ * with elements, relationships, and visual styling.
+ *
+ * Creates a layered view showing:
+ * - Business layer (processes)
+ * - Application layer (components and services)
+ * - Technology layer (nodes)
+ *
+ * Usage:
+ * 1. Open a model in Archi (or create new one)
+ * 2. Run this script from the Scripts Manager
+ *
+ * CLI Usage:
+ * Archi -application com.archimatetool.commandline.app -consoleLog -nosplash \
+ *   --loadModel "model.archimate" --script.runScript "create-view.ajs" \
+ *   --saveModel "model.archimate"
+ */
+
+// Ensure a model is selected
+if (!model.isSet()) {
+    console.error("Please select a model first!");
+    exit();
+}
+
+console.log("Creating layered architecture view...\n");
+
+// Color schemes for each layer
+var colors = {
+    business: {fill: "#ffffcc", line: "#d6b656"},     // Yellow
+    application: {fill: "#dae8fc", line: "#6c8ebf"},  // Blue
+    technology: {fill: "#d5e8d4", line: "#82b366"}    // Green
+};
+
+// Dimensions
+var elementWidth = 140;
+var elementHeight = 60;
+var horizontalGap = 40;
+var verticalGap = 80;
+var layerHeight = 120;
+
+// Create elements - Business Layer
+console.log("Creating business layer elements...");
+var customerMgmt = model.createElement("business-process", "Customer Management");
+var orderProcess = model.createElement("business-process", "Order Processing");
+var invoicing = model.createElement("business-process", "Invoicing");
+
+// Create elements - Application Layer
+console.log("Creating application layer elements...");
+var crmApp = model.createElement("application-component", "CRM Application");
+var orderService = model.createElement("application-service", "Order Service");
+var billingApp = model.createElement("application-component", "Billing System");
+
+// Create elements - Technology Layer
+console.log("Creating technology layer elements...");
+var appServer = model.createElement("node", "Application Server");
+var dbServer = model.createElement("node", "Database Server");
+
+// Create relationships
+console.log("Creating relationships...");
+var rel1 = model.createRelationship("serving-relationship", "", orderService, orderProcess);
+var rel2 = model.createRelationship("realization-relationship", "", crmApp, orderService);
+var rel3 = model.createRelationship("serving-relationship", "", billingApp, invoicing);
+var rel4 = model.createRelationship("triggering-relationship", "", orderProcess, invoicing);
+var rel5 = model.createRelationship("assignment-relationship", "", appServer, crmApp);
+var rel6 = model.createRelationship("assignment-relationship", "", appServer, billingApp);
+var rel7 = model.createRelationship("serving-relationship", "", dbServer, appServer);
+
+// Create the view
+console.log("Creating view...");
+var view = model.createArchimateView("Generated Layered View");
+view.viewpoint = "layered";
+
+// Calculate positions
+var startX = 50;
+var businessY = 50;
+var applicationY = businessY + layerHeight + verticalGap;
+var technologyY = applicationY + layerHeight + verticalGap;
+
+// Helper function to add element to view with styling
+function addStyledElement(element, x, y, colorScheme) {
+    var obj = view.add(element, x, y, elementWidth, elementHeight);
+    obj.fillColor = colorScheme.fill;
+    obj.lineColor = colorScheme.line;
+    return obj;
+}
+
+// Add Business Layer elements
+console.log("Adding elements to view...");
+var obj_customerMgmt = addStyledElement(customerMgmt, startX, businessY, colors.business);
+var obj_orderProcess = addStyledElement(orderProcess, startX + elementWidth + horizontalGap, businessY, colors.business);
+var obj_invoicing = addStyledElement(invoicing, startX + 2 * (elementWidth + horizontalGap), businessY, colors.business);
+
+// Add Application Layer elements
+var obj_crmApp = addStyledElement(crmApp, startX, applicationY, colors.application);
+var obj_orderService = addStyledElement(orderService, startX + elementWidth + horizontalGap, applicationY, colors.application);
+var obj_billingApp = addStyledElement(billingApp, startX + 2 * (elementWidth + horizontalGap), applicationY, colors.application);
+
+// Add Technology Layer elements
+var obj_appServer = addStyledElement(appServer, startX + (elementWidth + horizontalGap) / 2, technologyY, colors.technology);
+var obj_dbServer = addStyledElement(dbServer, startX + 1.5 * (elementWidth + horizontalGap), technologyY, colors.technology);
+
+// Add relationships to view
+console.log("Adding relationships to view...");
+view.add(rel1, obj_orderService, obj_orderProcess);
+view.add(rel2, obj_crmApp, obj_orderService);
+view.add(rel3, obj_billingApp, obj_invoicing);
+view.add(rel4, obj_orderProcess, obj_invoicing);
+view.add(rel5, obj_appServer, obj_crmApp);
+view.add(rel6, obj_appServer, obj_billingApp);
+view.add(rel7, obj_dbServer, obj_appServer);
+
+// Add layer labels using groups
+console.log("Adding layer labels...");
+var businessGroup = view.createObject("group", startX - 30, businessY - 30,
+    3 * (elementWidth + horizontalGap) + 20, layerHeight + 20);
+businessGroup.name = "Business Layer";
+businessGroup.fillColor = "#ffffd0";
+
+var appGroup = view.createObject("group", startX - 30, applicationY - 30,
+    3 * (elementWidth + horizontalGap) + 20, layerHeight + 20);
+appGroup.name = "Application Layer";
+appGroup.fillColor = "#e8f4fc";
+
+var techGroup = view.createObject("group", startX - 30, technologyY - 30,
+    2 * (elementWidth + horizontalGap) + 60, layerHeight + 20);
+techGroup.name = "Technology Layer";
+techGroup.fillColor = "#e8f8e8";
+
+// Send groups to back so elements appear on top
+businessGroup.sendToBack();
+appGroup.sendToBack();
+techGroup.sendToBack();
+
+// Add a note
+var note = view.createObject("note", startX + 3 * (elementWidth + horizontalGap) + 30, businessY, 150, 120);
+note.text = "Generated View\n\nThis view was created automatically by a jArchi script.\n\nCreated: " + new Date().toISOString().split('T')[0];
+note.fillColor = "#fff2cc";
+
+// Open the view in UI if running interactively
+try {
+    view.openInUI();
+} catch(e) {
+    // Ignore error if running in CLI mode
+}
+
+console.log("\n===========================================");
+console.log("View created successfully!");
+console.log("===========================================");
+console.log("View name: " + view.name);
+console.log("Elements added: 8");
+console.log("Relationships added: 7");
+console.log("\nThe view has been opened in Archi.");

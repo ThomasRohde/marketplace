@@ -1,0 +1,325 @@
+/**
+ * Batch Update Example
+ *
+ * This script demonstrates batch updating of element properties.
+ * Shows how to:
+ * - Query elements by criteria
+ * - Update properties on multiple elements
+ * - Add/modify custom properties
+ * - Update visual styling across all views
+ *
+ * Usage:
+ * 1. Open a model in Archi
+ * 2. Run this script from the Scripts Manager
+ * 3. Follow interactive prompts
+ *
+ * CLI Usage (non-interactive mode):
+ * Archi -application com.archimatetool.commandline.app -consoleLog -nosplash \
+ *   --loadModel "model.archimate" --script.runScript "batch-update.ajs" \
+ *   --mode "add-property" --propertyName "Status" --propertyValue "Active" \
+ *   --saveModel "model.archimate"
+ */
+
+// Ensure a model is selected
+if (!model.isSet()) {
+    console.error("Please select a model first!");
+    exit();
+}
+
+// ============================================
+// Configuration
+// ============================================
+
+// Check for CLI mode
+var cliMode = false;
+var mode, propertyName, propertyValue, targetType;
+
+var args = $.process.argv;
+for (var i = 0; i < args.length; i++) {
+    if (args[i] === "--mode") {
+        mode = args[i + 1];
+        cliMode = true;
+    }
+    if (args[i] === "--propertyName") propertyName = args[i + 1];
+    if (args[i] === "--propertyValue") propertyValue = args[i + 1];
+    if (args[i] === "--targetType") targetType = args[i + 1];
+}
+
+// ============================================
+// Interactive Mode
+// ============================================
+
+if (!cliMode) {
+    // Select operation
+    var operations = [
+        "Add/Update Property on All Elements",
+        "Add Documentation to Empty Elements",
+        "Standardize Element Colors by Layer",
+        "Add Review Date to Selected Elements",
+        "Find and Report Orphaned Elements"
+    ];
+
+    mode = window.promptSelection("Select operation:", operations);
+    if (!mode) {
+        console.log("Cancelled.");
+        exit();
+    }
+}
+
+console.log("===========================================");
+console.log("Batch Update: " + mode);
+console.log("Model: " + model.name);
+console.log("===========================================\n");
+
+// ============================================
+// Operation: Add/Update Property
+// ============================================
+
+if (mode === "Add/Update Property on All Elements" || mode === "add-property") {
+    // Get property details
+    if (!propertyName) {
+        propertyName = window.prompt("Property name:", "Status");
+        if (!propertyName) exit();
+    }
+
+    if (!propertyValue) {
+        propertyValue = window.prompt("Property value:", "Active");
+        if (propertyValue === null) exit();
+    }
+
+    var elements = $("element");
+    var count = 0;
+
+    // Optional: Filter by type
+    if (!cliMode) {
+        var filterChoice = window.confirm("Filter by element type?");
+        if (filterChoice) {
+            targetType = window.prompt("Enter element type (e.g., business-actor):");
+            if (targetType) {
+                elements = elements.filter(targetType);
+            }
+        }
+    } else if (targetType) {
+        elements = elements.filter(targetType);
+    }
+
+    console.log("Updating " + elements.size() + " elements...");
+
+    elements.each(function(element) {
+        element.prop(propertyName, propertyValue);
+        count++;
+        if (count % 50 === 0) {
+            console.log("  Processed " + count + " elements...");
+        }
+    });
+
+    console.log("\nUpdated property '" + propertyName + "' = '" + propertyValue + "' on " + count + " elements.");
+}
+
+// ============================================
+// Operation: Add Documentation to Empty Elements
+// ============================================
+
+else if (mode === "Add Documentation to Empty Elements") {
+    var emptyDocs = $("element").filter(function(e) {
+        return !e.documentation || e.documentation.trim() === "";
+    });
+
+    var count = emptyDocs.size();
+    console.log("Found " + count + " elements without documentation.\n");
+
+    if (count === 0) {
+        console.log("All elements have documentation!");
+        exit();
+    }
+
+    if (!window.confirm("Add default documentation to " + count + " elements?")) {
+        console.log("Cancelled.");
+        exit();
+    }
+
+    var template = window.prompt(
+        "Enter documentation template (use {name} and {type} as placeholders):",
+        "This {type} represents {name}. TODO: Add detailed description."
+    );
+
+    if (!template) exit();
+
+    emptyDocs.each(function(element) {
+        var doc = template
+            .replace(/{name}/g, element.name)
+            .replace(/{type}/g, element.type.replace(/-/g, " "));
+        element.documentation = doc;
+    });
+
+    console.log("Added documentation to " + count + " elements.");
+}
+
+// ============================================
+// Operation: Standardize Colors by Layer
+// ============================================
+
+else if (mode === "Standardize Element Colors by Layer") {
+    var colorSchemes = {
+        // Strategy
+        "resource": {fill: "#f5f5f5", line: "#666666"},
+        "capability": {fill: "#f5f5f5", line: "#666666"},
+        "course-of-action": {fill: "#f5f5f5", line: "#666666"},
+        "value-stream": {fill: "#f5f5f5", line: "#666666"},
+
+        // Business
+        "business-actor": {fill: "#ffffcc", line: "#d6b656"},
+        "business-role": {fill: "#ffffcc", line: "#d6b656"},
+        "business-process": {fill: "#ffffcc", line: "#d6b656"},
+        "business-function": {fill: "#ffffcc", line: "#d6b656"},
+        "business-service": {fill: "#ffffcc", line: "#d6b656"},
+        "business-object": {fill: "#ffffcc", line: "#d6b656"},
+        "business-event": {fill: "#ffffcc", line: "#d6b656"},
+        "business-collaboration": {fill: "#ffffcc", line: "#d6b656"},
+        "business-interaction": {fill: "#ffffcc", line: "#d6b656"},
+        "business-interface": {fill: "#ffffcc", line: "#d6b656"},
+        "contract": {fill: "#ffffcc", line: "#d6b656"},
+        "product": {fill: "#ffffcc", line: "#d6b656"},
+        "representation": {fill: "#ffffcc", line: "#d6b656"},
+
+        // Application
+        "application-component": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-function": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-service": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-process": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-interface": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-event": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-collaboration": {fill: "#dae8fc", line: "#6c8ebf"},
+        "application-interaction": {fill: "#dae8fc", line: "#6c8ebf"},
+        "data-object": {fill: "#dae8fc", line: "#6c8ebf"},
+
+        // Technology
+        "node": {fill: "#d5e8d4", line: "#82b366"},
+        "device": {fill: "#d5e8d4", line: "#82b366"},
+        "system-software": {fill: "#d5e8d4", line: "#82b366"},
+        "technology-service": {fill: "#d5e8d4", line: "#82b366"},
+        "technology-function": {fill: "#d5e8d4", line: "#82b366"},
+        "artifact": {fill: "#d5e8d4", line: "#82b366"},
+        "communication-network": {fill: "#d5e8d4", line: "#82b366"},
+        "path": {fill: "#d5e8d4", line: "#82b366"},
+
+        // Motivation
+        "stakeholder": {fill: "#e1d5e7", line: "#9673a6"},
+        "driver": {fill: "#e1d5e7", line: "#9673a6"},
+        "goal": {fill: "#e1d5e7", line: "#9673a6"},
+        "requirement": {fill: "#e1d5e7", line: "#9673a6"},
+        "constraint": {fill: "#e1d5e7", line: "#9673a6"},
+        "principle": {fill: "#e1d5e7", line: "#9673a6"},
+        "assessment": {fill: "#e1d5e7", line: "#9673a6"},
+        "outcome": {fill: "#e1d5e7", line: "#9673a6"},
+        "value": {fill: "#e1d5e7", line: "#9673a6"},
+        "meaning": {fill: "#e1d5e7", line: "#9673a6"}
+    };
+
+    var count = 0;
+
+    $("element").each(function(element) {
+        var scheme = colorSchemes[element.type];
+        if (scheme) {
+            // Update all visual instances
+            $(element).objectRefs().each(function(obj) {
+                obj.fillColor = scheme.fill;
+                obj.lineColor = scheme.line;
+                count++;
+            });
+        }
+    });
+
+    console.log("Updated colors on " + count + " visual objects.");
+}
+
+// ============================================
+// Operation: Add Review Date to Selected
+// ============================================
+
+else if (mode === "Add Review Date to Selected Elements") {
+    var selected = $(selection).filter("element");
+
+    if (selected.size() === 0) {
+        window.alert("Please select some elements in the model tree or view first.");
+        exit();
+    }
+
+    console.log("Selected " + selected.size() + " elements.");
+
+    var today = new Date().toISOString().split('T')[0];
+    var reviewDate = window.prompt("Review date:", today);
+    if (!reviewDate) exit();
+
+    var reviewer = window.prompt("Reviewer name:", "");
+
+    selected.each(function(element) {
+        element.prop("Last Review Date", reviewDate);
+        if (reviewer) {
+            element.prop("Reviewed By", reviewer);
+        }
+    });
+
+    console.log("Added review properties to " + selected.size() + " elements.");
+}
+
+// ============================================
+// Operation: Find Orphaned Elements
+// ============================================
+
+else if (mode === "Find and Report Orphaned Elements") {
+    console.log("Searching for orphaned elements...\n");
+
+    // Elements not in any view
+    var notInViews = [];
+    $("element").each(function(element) {
+        if ($(element).viewRefs().size() === 0) {
+            notInViews.push(element);
+        }
+    });
+
+    console.log("Elements not in any view: " + notInViews.length);
+    if (notInViews.length > 0 && notInViews.length <= 20) {
+        notInViews.forEach(function(e) {
+            console.log("  - " + e.type + ": " + e.name);
+        });
+    }
+
+    // Elements without relationships
+    var noRelationships = [];
+    $("element").each(function(element) {
+        if ($(element).rels().size() === 0) {
+            noRelationships.push(element);
+        }
+    });
+
+    console.log("\nElements without relationships: " + noRelationships.length);
+    if (noRelationships.length > 0 && noRelationships.length <= 20) {
+        noRelationships.forEach(function(e) {
+            console.log("  - " + e.type + ": " + e.name);
+        });
+    }
+
+    // Completely orphaned (not in views AND no relationships)
+    var fullyOrphaned = notInViews.filter(function(e) {
+        return $(e).rels().size() === 0;
+    });
+
+    console.log("\nFully orphaned (no views, no relationships): " + fullyOrphaned.length);
+    if (fullyOrphaned.length > 0) {
+        fullyOrphaned.forEach(function(e) {
+            console.log("  - " + e.type + ": " + e.name);
+        });
+
+        if (window.confirm("\nDelete " + fullyOrphaned.length + " fully orphaned elements?")) {
+            fullyOrphaned.forEach(function(e) {
+                e.delete();
+            });
+            console.log("\nDeleted " + fullyOrphaned.length + " orphaned elements.");
+        }
+    }
+}
+
+console.log("\n===========================================");
+console.log("Batch update complete!");
+console.log("===========================================");

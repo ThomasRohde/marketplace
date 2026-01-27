@@ -1,0 +1,262 @@
+/**
+ * Export Report Example
+ *
+ * This script exports model data to CSV and HTML formats.
+ * Demonstrates file operations and data formatting.
+ *
+ * Creates:
+ * - elements.csv - All elements with properties
+ * - relationships.csv - All relationships
+ * - report.html - HTML summary report
+ *
+ * Usage:
+ * 1. Open a model in Archi
+ * 2. Run this script from the Scripts Manager
+ * 3. Choose output directory when prompted
+ *
+ * CLI Usage:
+ * Archi -application com.archimatetool.commandline.app -consoleLog -nosplash \
+ *   --loadModel "model.archimate" --script.runScript "export-report.ajs" \
+ *   --outputDir "C:/Output"
+ */
+
+// Ensure a model is selected
+if (!model.isSet()) {
+    console.error("Please select a model first!");
+    exit();
+}
+
+// Get output directory
+var outputDir;
+
+// Check for CLI argument
+var args = $.process.argv;
+for (var i = 0; i < args.length; i++) {
+    if (args[i] === "--outputDir" && i + 1 < args.length) {
+        outputDir = args[i + 1];
+        break;
+    }
+}
+
+// If not CLI, prompt user
+if (!outputDir) {
+    outputDir = window.promptOpenDirectory({
+        title: "Select Output Directory"
+    });
+}
+
+if (!outputDir) {
+    console.log("No output directory selected. Exiting.");
+    exit();
+}
+
+console.log("Exporting to: " + outputDir);
+console.log("");
+
+// ============================================
+// Helper Functions
+// ============================================
+
+/**
+ * Escape a value for CSV format
+ */
+function escapeCSV(value) {
+    if (value === null || value === undefined) return "";
+    value = String(value);
+    // Escape quotes and wrap in quotes if contains comma, quote, or newline
+    if (value.includes(",") || value.includes('"') || value.includes("\n") || value.includes("\r")) {
+        return '"' + value.replace(/"/g, '""') + '"';
+    }
+    return value;
+}
+
+/**
+ * Escape HTML special characters
+ */
+function escapeHTML(text) {
+    if (!text) return "";
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
+/**
+ * Format element type for display
+ */
+function formatType(type) {
+    return type.split("-").map(function(word) {
+        return word.charAt(0).toUpperCase() + word.slice(1);
+    }).join(" ");
+}
+
+// ============================================
+// Export Elements to CSV
+// ============================================
+
+console.log("Exporting elements...");
+
+var elementsCSV = "ID,Name,Type,Documentation,Folder\n";
+var elementCount = 0;
+
+$("element").each(function(element) {
+    var folderPath = "";
+    var parent = $(element).parent().first();
+    while (parent && parent.type === "folder") {
+        folderPath = parent.name + "/" + folderPath;
+        parent = $(parent).parent().first();
+    }
+
+    elementsCSV += escapeCSV(element.id) + ",";
+    elementsCSV += escapeCSV(element.name) + ",";
+    elementsCSV += escapeCSV(element.type) + ",";
+    elementsCSV += escapeCSV(element.documentation) + ",";
+    elementsCSV += escapeCSV(folderPath) + "\n";
+
+    elementCount++;
+});
+
+$.fs.writeFile(outputDir + "/elements.csv", elementsCSV, "UTF8");
+console.log("  Exported " + elementCount + " elements to elements.csv");
+
+// ============================================
+// Export Relationships to CSV
+// ============================================
+
+console.log("Exporting relationships...");
+
+var relationshipsCSV = "ID,Name,Type,Source,Source Type,Target,Target Type,Documentation\n";
+var relationshipCount = 0;
+
+$("relationship").each(function(rel) {
+    relationshipsCSV += escapeCSV(rel.id) + ",";
+    relationshipsCSV += escapeCSV(rel.name) + ",";
+    relationshipsCSV += escapeCSV(rel.type) + ",";
+    relationshipsCSV += escapeCSV(rel.source.name) + ",";
+    relationshipsCSV += escapeCSV(rel.source.type) + ",";
+    relationshipsCSV += escapeCSV(rel.target.name) + ",";
+    relationshipsCSV += escapeCSV(rel.target.type) + ",";
+    relationshipsCSV += escapeCSV(rel.documentation) + "\n";
+
+    relationshipCount++;
+});
+
+$.fs.writeFile(outputDir + "/relationships.csv", relationshipsCSV, "UTF8");
+console.log("  Exported " + relationshipCount + " relationships to relationships.csv");
+
+// ============================================
+// Generate HTML Report
+// ============================================
+
+console.log("Generating HTML report...");
+
+// Count elements by type
+var typeCounts = {};
+$("element").each(function(e) {
+    typeCounts[e.type] = (typeCounts[e.type] || 0) + 1;
+});
+
+// Count relationships by type
+var relTypeCounts = {};
+$("relationship").each(function(r) {
+    relTypeCounts[r.type] = (relTypeCounts[r.type] || 0) + 1;
+});
+
+// Build HTML
+var html = '<!DOCTYPE html>\n';
+html += '<html lang="en">\n';
+html += '<head>\n';
+html += '  <meta charset="UTF-8">\n';
+html += '  <title>' + escapeHTML(model.name) + ' - Architecture Report</title>\n';
+html += '  <style>\n';
+html += '    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; margin: 40px; background: #f5f5f5; }\n';
+html += '    .container { max-width: 1200px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }\n';
+html += '    h1 { color: #333; border-bottom: 2px solid #4a90d9; padding-bottom: 10px; }\n';
+html += '    h2 { color: #4a90d9; margin-top: 30px; }\n';
+html += '    table { border-collapse: collapse; width: 100%; margin: 20px 0; }\n';
+html += '    th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }\n';
+html += '    th { background: #4a90d9; color: white; }\n';
+html += '    tr:nth-child(even) { background: #f9f9f9; }\n';
+html += '    tr:hover { background: #f0f7ff; }\n';
+html += '    .stats { display: flex; gap: 20px; flex-wrap: wrap; }\n';
+html += '    .stat-card { background: #f0f7ff; padding: 20px; border-radius: 8px; min-width: 150px; }\n';
+html += '    .stat-value { font-size: 32px; font-weight: bold; color: #4a90d9; }\n';
+html += '    .stat-label { color: #666; margin-top: 5px; }\n';
+html += '    .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }\n';
+html += '  </style>\n';
+html += '</head>\n';
+html += '<body>\n';
+html += '<div class="container">\n';
+
+// Header
+html += '<h1>' + escapeHTML(model.name) + '</h1>\n';
+if (model.purpose) {
+    html += '<p>' + escapeHTML(model.purpose) + '</p>\n';
+}
+
+// Summary statistics
+html += '<h2>Summary</h2>\n';
+html += '<div class="stats">\n';
+html += '  <div class="stat-card"><div class="stat-value">' + elementCount + '</div><div class="stat-label">Elements</div></div>\n';
+html += '  <div class="stat-card"><div class="stat-value">' + relationshipCount + '</div><div class="stat-label">Relationships</div></div>\n';
+html += '  <div class="stat-card"><div class="stat-value">' + $("view").size() + '</div><div class="stat-label">Views</div></div>\n';
+html += '</div>\n';
+
+// Elements by type
+html += '<h2>Elements by Type</h2>\n';
+html += '<table>\n';
+html += '<tr><th>Type</th><th>Count</th></tr>\n';
+for (var type in typeCounts) {
+    html += '<tr><td>' + formatType(type) + '</td><td>' + typeCounts[type] + '</td></tr>\n';
+}
+html += '</table>\n';
+
+// Relationships by type
+html += '<h2>Relationships by Type</h2>\n';
+html += '<table>\n';
+html += '<tr><th>Type</th><th>Count</th></tr>\n';
+for (var relType in relTypeCounts) {
+    html += '<tr><td>' + formatType(relType) + '</td><td>' + relTypeCounts[relType] + '</td></tr>\n';
+}
+html += '</table>\n';
+
+// Views list
+html += '<h2>Views</h2>\n';
+html += '<table>\n';
+html += '<tr><th>Name</th><th>Type</th><th>Viewpoint</th></tr>\n';
+$("view").each(function(v) {
+    var viewpoint = "";
+    if (v.viewpoint && v.viewpoint.name) {
+        viewpoint = v.viewpoint.name;
+    }
+    html += '<tr><td>' + escapeHTML(v.name) + '</td><td>' + formatType(v.type) + '</td><td>' + viewpoint + '</td></tr>\n';
+});
+html += '</table>\n';
+
+// Footer
+html += '<div class="footer">\n';
+html += '  Generated by jArchi on ' + new Date().toISOString() + '<br>\n';
+html += '  Model: ' + escapeHTML(model.name) + ' (ID: ' + model.id + ')\n';
+html += '</div>\n';
+
+html += '</div>\n';
+html += '</body>\n';
+html += '</html>\n';
+
+$.fs.writeFile(outputDir + "/report.html", html, "UTF8");
+console.log("  Generated report.html");
+
+// ============================================
+// Summary
+// ============================================
+
+console.log("");
+console.log("===========================================");
+console.log("Export Complete!");
+console.log("===========================================");
+console.log("Output directory: " + outputDir);
+console.log("Files created:");
+console.log("  - elements.csv (" + elementCount + " elements)");
+console.log("  - relationships.csv (" + relationshipCount + " relationships)");
+console.log("  - report.html (summary report)");

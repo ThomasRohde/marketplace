@@ -1,0 +1,119 @@
+/**
+ * Query Elements Example
+ *
+ * This script demonstrates how to query and report on ArchiMate model elements.
+ * It finds all business processes and lists their relationships.
+ *
+ * Usage:
+ * 1. Open a model in Archi
+ * 2. Run this script from the Scripts Manager
+ *
+ * CLI Usage:
+ * Archi -application com.archimatetool.commandline.app -consoleLog -nosplash \
+ *   --loadModel "model.archimate" --script.runScript "query-elements.ajs"
+ */
+
+// Ensure a model is selected
+if (!model.isSet()) {
+    console.error("Please select a model first!");
+    exit();
+}
+
+console.log("===========================================");
+console.log("Business Process Analysis Report");
+console.log("Model: " + model.name);
+console.log("===========================================\n");
+
+// Find all business processes
+var processes = $("business-process");
+console.log("Found " + processes.size() + " business processes\n");
+
+// Analyze each process
+processes.each(function(process) {
+    console.log("----------------------------------------");
+    console.log("PROCESS: " + process.name);
+    console.log("----------------------------------------");
+
+    // Get documentation
+    if (process.documentation) {
+        console.log("Documentation: " + process.documentation.substring(0, 100) + "...");
+    }
+
+    // Find who performs this process (assignment from actors/roles)
+    var performers = [];
+    $(process).inRels("assignment-relationship").each(function(rel) {
+        performers.push(rel.source.name + " (" + rel.source.type + ")");
+    });
+    if (performers.length > 0) {
+        console.log("Performed by: " + performers.join(", "));
+    }
+
+    // Find what this process triggers
+    var triggers = [];
+    $(process).outRels("triggering-relationship").each(function(rel) {
+        triggers.push(rel.target.name);
+    });
+    if (triggers.length > 0) {
+        console.log("Triggers: " + triggers.join(", "));
+    }
+
+    // Find what triggers this process
+    var triggeredBy = [];
+    $(process).inRels("triggering-relationship").each(function(rel) {
+        triggeredBy.push(rel.source.name);
+    });
+    if (triggeredBy.length > 0) {
+        console.log("Triggered by: " + triggeredBy.join(", "));
+    }
+
+    // Find supporting application services
+    var services = [];
+    $(process).inRels("serving-relationship").each(function(rel) {
+        if (rel.source.type === "application-service") {
+            services.push(rel.source.name);
+        }
+    });
+    if (services.length > 0) {
+        console.log("Supported by services: " + services.join(", "));
+    }
+
+    // Find accessed data objects
+    var dataObjects = [];
+    $(process).outRels("access-relationship").each(function(rel) {
+        if (rel.target.type === "business-object" || rel.target.type === "data-object") {
+            var accessType = rel.accessType || "access";
+            dataObjects.push(rel.target.name + " [" + accessType + "]");
+        }
+    });
+    if (dataObjects.length > 0) {
+        console.log("Data accessed: " + dataObjects.join(", "));
+    }
+
+    // Find views containing this process
+    var views = $(process).viewRefs();
+    console.log("Appears in " + views.size() + " view(s)");
+
+    console.log("");
+});
+
+// Summary statistics
+console.log("===========================================");
+console.log("Model Statistics");
+console.log("===========================================");
+console.log("Total Elements: " + $("element").size());
+console.log("Total Relationships: " + $("relationship").size());
+console.log("Total Views: " + $("view").size());
+console.log("");
+
+// Element type breakdown
+var types = {};
+$("element").each(function(e) {
+    types[e.type] = (types[e.type] || 0) + 1;
+});
+
+console.log("Elements by type:");
+for (var type in types) {
+    console.log("  " + type + ": " + types[type]);
+}
+
+console.log("\nAnalysis complete!");

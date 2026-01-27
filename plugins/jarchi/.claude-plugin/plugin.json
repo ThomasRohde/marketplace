@@ -1,0 +1,9 @@
+{
+  "name": "jarchi",
+  "version": "1.0.0",
+  "description": "Create jArchi scripts for Archi (ArchiMate modeling tool) with comprehensive API knowledge and CLI automation support for headless execution",
+  "author": {
+    "name": "Claude Code Plugin"
+  },
+  "keywords": ["jarchi", "archi", "archimate", "scripting", "automation", "enterprise-architecture"]
+}

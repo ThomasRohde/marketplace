@@ -29,4 +29,5 @@ desktop.ini
 # Build outputs
 dist/
 build/
+docs/
 *.log
