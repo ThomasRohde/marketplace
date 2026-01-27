@@ -21,6 +21,19 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["drawio", "diagrams", "flowchart", "architecture", "uml", "visualization"],
       "category": "productivity"
+    },
+    {
+      "name": "jarchi",
+      "source": "./plugins/jarchi",
+      "description": "Commands and skills for jArchi scripting: automate Archi models, views, and exports",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["jarchi", "archi", "automation", "scripts", "archimate"],
+      "category": "productivity"
     }
   ]
 }
