@@ -1,0 +1,10 @@
+{
+  "name": "archimate",
+  "version": "0.1.0",
+  "description": "ArchiMate enterprise architecture modeling assistance - element selection, relationships, patterns, and model quality guidance",
+  "author": {
+    "name": "Thomas",
+    "email": ""
+  },
+  "keywords": ["archimate", "enterprise-architecture", "modeling", "archi", "togaf"]
+}
