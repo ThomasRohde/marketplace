@@ -1,0 +1,32 @@
+{
+  "hooks": [
+    {
+      "type": "command",
+      "event": "session-start",
+      "bash": "./scripts/hooks/session-start.sh",
+      "powershell": "./scripts/hooks/session-start.ps1",
+      "timeoutSec": 30
+    },
+    {
+      "type": "command",
+      "event": "pre-tool-execution",
+      "bash": "./scripts/hooks/pre-tool.sh",
+      "powershell": "./scripts/hooks/pre-tool.ps1",
+      "timeoutSec": 15
+    },
+    {
+      "type": "command",
+      "event": "post-tool-execution",
+      "bash": "./scripts/hooks/post-tool.sh",
+      "powershell": "./scripts/hooks/post-tool.ps1",
+      "timeoutSec": 15
+    },
+    {
+      "type": "command",
+      "event": "session-end",
+      "bash": "./scripts/hooks/session-end.sh",
+      "powershell": "./scripts/hooks/session-end.ps1",
+      "timeoutSec": 30
+    }
+  ]
+}
