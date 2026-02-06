@@ -34,6 +34,32 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["jarchi", "archi", "automation", "scripts", "archimate"],
       "category": "productivity"
+    },
+    {
+      "name": "archimate",
+      "source": "./plugins/archimate",
+      "description": "ArchiMate enterprise architecture modeling assistance - element selection, relationships, patterns, and model quality guidance",
+      "version": "0.1.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["archimate", "enterprise-architecture", "modeling", "archi", "togaf"],
+      "category": "productivity"
+    },
+    {
+      "name": "copilot-customization",
+      "source": "./plugins/copilot-customization",
+      "description": "Create, scaffold, and configure GitHub Copilot customizations for VS Code projects, including instructions, prompts, agents, skills, hooks, and MCP integration",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["copilot", "github-copilot", "customization", "instructions", "agents", "skills", "hooks", "mcp"],
+      "category": "productivity"
     }
   ]
 }

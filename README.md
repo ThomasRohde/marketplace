@@ -45,6 +45,39 @@ Create production-ready DrawIO diagram files with comprehensive XML knowledge fo
 
 **Keywords:** drawio, diagrams, flowchart, architecture, uml, visualization
 
+### jarchi
+
+Commands and skills for jArchi scripting: automate Archi models, views, and exports.
+
+**Install:**
+```shell
+/plugin install jarchi@thomas-rohde-plugins
+```
+
+**Keywords:** jarchi, archi, automation, scripts, archimate
+
+### archimate
+
+ArchiMate enterprise architecture modeling assistance for element selection, relationships, patterns, and model quality guidance.
+
+**Install:**
+```shell
+/plugin install archimate@thomas-rohde-plugins
+```
+
+**Keywords:** archimate, enterprise-architecture, modeling, archi, togaf
+
+### copilot-customization
+
+Create, scaffold, and configure GitHub Copilot customizations for VS Code projects, including instructions, prompts, agents, skills, hooks, and MCP integration.
+
+**Install:**
+```shell
+/plugin install copilot-customization@thomas-rohde-plugins
+```
+
+**Keywords:** copilot, github-copilot, customization, instructions, agents, skills, hooks, mcp
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -70,12 +103,10 @@ marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json     # Marketplace configuration
 ├── plugins/
-│   └── drawio/             # DrawIO plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json
-│       ├── commands/
-│       ├── skills/
-│       └── README.md
+│   ├── archimate/           # ArchiMate modeling plugin
+│   ├── copilot-customization/ # GitHub Copilot customization plugin
+│   ├── drawio/              # DrawIO diagram plugin
+│   └── jarchi/              # jArchi scripting plugin
 └── README.md               # This file
 ```
 
