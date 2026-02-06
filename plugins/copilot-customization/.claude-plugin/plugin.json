@@ -1,0 +1,9 @@
+{
+  "name": "copilot-customization",
+  "version": "1.0.0",
+  "description": "Create, scaffold, and configure GitHub Copilot customizations for VS Code projects, including instructions, prompts, agents, skills, hooks, and MCP integration",
+  "author": {
+    "name": "Claude Code Plugin"
+  },
+  "keywords": ["copilot", "github-copilot", "customization", "instructions", "agents", "skills", "hooks", "mcp"]
+}

@@ -1,12 +1,6 @@
 ---
 name: copilot-customization
-description: >
-  Create, scaffold, and configure GitHub Copilot customizations for VS Code projects.
-  Covers custom instructions (.instructions.md), prompt files (.prompt.md), custom agents
-  (.agent.md), agent skills (SKILL.md folders), hooks (.github/hooks/), and MCP server
-  integration. Use when asked to "set up copilot", "create an agent", "add instructions",
-  "create a prompt", "scaffold a skill", "configure hooks", "customize copilot", or when
-  building any GitHub Copilot customization for VS Code or GitHub.com.
+description: Create, scaffold, and configure GitHub Copilot customizations for VS Code projects. Covers custom instructions (.instructions.md), prompt files (.prompt.md), custom agents (.agent.md), agent skills (SKILL.md folders), hooks (.github/hooks/), and MCP server integration. Use when asked to "set up copilot", "create an agent", "add instructions", "create a prompt", "scaffold a skill", "configure hooks", "customize copilot", or when building any GitHub Copilot customization for VS Code or GitHub.com.
 ---
 
 # GitHub Copilot Customization Skill
