@@ -1,0 +1,10 @@
+{
+  "name": "improve-skill",
+  "version": "1.0.0",
+  "description": "Analyze and improve existing Claude Code skills using research-backed SkillsBench findings — audit, score, and optimize skills for maximum effectiveness",
+  "author": {
+    "name": "Thomas Klok Rohde",
+    "email": "thomas@rohde.name"
+  },
+  "keywords": ["skills", "skillsbench", "improve", "optimize", "audit", "skill-improvement", "best-practices"]
+}

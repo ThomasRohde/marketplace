@@ -60,6 +60,19 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["copilot", "github-copilot", "customization", "instructions", "agents", "skills", "hooks", "mcp"],
       "category": "productivity"
+    },
+    {
+      "name": "improve-skill",
+      "source": "./plugins/improve-skill",
+      "description": "Analyze and improve existing Claude Code skills using research-backed SkillsBench findings — audit, score, and optimize skills for maximum effectiveness",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["skills", "skillsbench", "improve", "optimize", "audit", "skill-improvement", "best-practices"],
+      "category": "productivity"
     }
   ]
 }
