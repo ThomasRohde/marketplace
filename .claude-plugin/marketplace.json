@@ -75,6 +75,19 @@
       "category": "productivity"
     },
     {
+      "name": "plugin-integrator",
+      "source": "./plugins/plugin-integrator",
+      "description": "Package standalone skills into properly structured plugins and register them in the Claude Code plugin marketplace",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["plugins", "marketplace", "skills", "integration", "scaffolding", "packaging"],
+      "category": "productivity"
+    },
+    {
       "name": "skill-creator",
       "source": "./plugins/skill-creator",
       "description": "Create new skills, modify and improve existing skills, and measure skill performance with iterative eval-driven development loops",

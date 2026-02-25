@@ -78,6 +78,17 @@ Create, scaffold, and configure GitHub Copilot customizations for VS Code projec
 
 **Keywords:** copilot, github-copilot, customization, instructions, agents, skills, hooks, mcp
 
+### plugin-integrator
+
+Package standalone skills into properly structured plugins and register them in the Claude Code plugin marketplace.
+
+**Install:**
+```shell
+/plugin install plugin-integrator@thomas-rohde-plugins
+```
+
+**Keywords:** plugins, marketplace, skills, integration, scaffolding, packaging
+
 ### improve-skill
 
 Analyze and improve existing Claude Code skills using research-backed SkillsBench findings — audit, score, and optimize skills for maximum effectiveness.
@@ -129,6 +140,7 @@ marketplace/
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
 │   ├── drawio/              # DrawIO diagram plugin
 │   ├── improve-skill/       # Skill improvement plugin
+│   ├── plugin-integrator/   # Skill-to-plugin integration
 │   ├── jarchi/              # jArchi scripting plugin
 │   └── skill-creator/       # Skill creation & eval plugin
 └── README.md               # This file

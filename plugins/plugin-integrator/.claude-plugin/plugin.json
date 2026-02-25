@@ -1,0 +1,9 @@
+{
+  "name": "plugin-integrator",
+  "version": "1.0.0",
+  "description": "Package standalone skills into properly structured plugins and register them in the Claude Code plugin marketplace",
+  "author": {
+    "name": "Thomas Klok Rohde"
+  },
+  "keywords": ["plugins", "marketplace", "skills", "integration", "scaffolding", "packaging"]
+}
