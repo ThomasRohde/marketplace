@@ -78,6 +78,28 @@ Create, scaffold, and configure GitHub Copilot customizations for VS Code projec
 
 **Keywords:** copilot, github-copilot, customization, instructions, agents, skills, hooks, mcp
 
+### improve-skill
+
+Analyze and improve existing Claude Code skills using research-backed SkillsBench findings — audit, score, and optimize skills for maximum effectiveness.
+
+**Install:**
+```shell
+/plugin install improve-skill@thomas-rohde-plugins
+```
+
+**Keywords:** skills, skillsbench, improve, optimize, audit, skill-improvement, best-practices
+
+### skill-creator
+
+Create new skills, modify and improve existing skills, and measure skill performance with iterative eval-driven development loops.
+
+**Install:**
+```shell
+/plugin install skill-creator@thomas-rohde-plugins
+```
+
+**Keywords:** skills, skill-creation, evals, benchmarking, iteration, testing
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -106,7 +128,9 @@ marketplace/
 │   ├── archimate/           # ArchiMate modeling plugin
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
 │   ├── drawio/              # DrawIO diagram plugin
-│   └── jarchi/              # jArchi scripting plugin
+│   ├── improve-skill/       # Skill improvement plugin
+│   ├── jarchi/              # jArchi scripting plugin
+│   └── skill-creator/       # Skill creation & eval plugin
 └── README.md               # This file
 ```
 
