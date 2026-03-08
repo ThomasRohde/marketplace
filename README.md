@@ -111,6 +111,17 @@ Create new skills, modify and improve existing skills, and measure skill perform
 
 **Keywords:** skills, skill-creation, evals, benchmarking, iteration, testing
 
+### sapphire-design
+
+Approximate Danske Bank's Sapphire design system using plain CSS and HTML — no `@danske/sapphire-*` packages required. Includes complete design tokens, 20+ component patterns, and 700+ icons.
+
+**Install:**
+```shell
+/plugin install sapphire-design@thomas-rohde-plugins
+```
+
+**Keywords:** sapphire, danske-bank, design-system, css, tokens, components, ui, fintech
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -142,6 +153,7 @@ marketplace/
 │   ├── improve-skill/       # Skill improvement plugin
 │   ├── plugin-integrator/   # Skill-to-plugin integration
 │   ├── jarchi/              # jArchi scripting plugin
+│   ├── sapphire-design/     # Sapphire design system plugin
 │   └── skill-creator/       # Skill creation & eval plugin
 └── README.md               # This file
 ```
