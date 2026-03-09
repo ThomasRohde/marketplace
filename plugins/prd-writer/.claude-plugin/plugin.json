@@ -1,0 +1,9 @@
+{
+  "name": "prd-writer",
+  "version": "1.0.0",
+  "description": "Write enterprise-ready, agent-executable Product Requirements Documents (PRDs) through interactive guided sessions with ambiguity tracking",
+  "author": {
+    "name": "Thomas Klok Rohde"
+  },
+  "keywords": ["prd", "product-requirements", "agentic", "planning", "requirements", "enterprise", "specifications"]
+}

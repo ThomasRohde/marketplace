@@ -89,6 +89,17 @@ Package standalone skills into properly structured plugins and register them in 
 
 **Keywords:** plugins, marketplace, skills, integration, scaffolding, packaging
 
+### prd-writer
+
+Write enterprise-ready, agent-executable Product Requirements Documents (PRDs) through interactive guided sessions with ambiguity tracking.
+
+**Install:**
+```shell
+/plugin install prd-writer@thomas-rohde-plugins
+```
+
+**Keywords:** prd, product-requirements, agentic, planning, requirements, enterprise, specifications
+
 ### improve-skill
 
 Analyze and improve existing Claude Code skills using research-backed SkillsBench findings — audit, score, and optimize skills for maximum effectiveness.
@@ -152,6 +163,7 @@ marketplace/
 │   ├── drawio/              # DrawIO diagram plugin
 │   ├── improve-skill/       # Skill improvement plugin
 │   ├── plugin-integrator/   # Skill-to-plugin integration
+│   ├── prd-writer/          # PRD writing with ambiguity tracking
 │   ├── jarchi/              # jArchi scripting plugin
 │   ├── sapphire-design/     # Sapphire design system plugin
 │   └── skill-creator/       # Skill creation & eval plugin
