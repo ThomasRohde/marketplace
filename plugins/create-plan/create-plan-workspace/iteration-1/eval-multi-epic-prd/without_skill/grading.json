@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "multi-epic-prd",
+  "configuration": "without_skill",
+  "expectations": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections", "passed": false, "evidence": "Missing: Progress (with checkboxes), Surprises & Discoveries, Decision Log, Outcomes & Retrospective, Idempotence and Recovery, Artifacts and Notes, Interfaces and Dependencies. Has Overview, Assumptions, Tasks, File Manifest, Validation Checkpoints, Risk Mitigation, Definition of Done instead."},
+    {"text": "Progress section uses checkbox format", "passed": false, "evidence": "No Progress section. Has a Definition of Done checklist at the end but it lists acceptance criteria, not work progress tracking."},
+    {"text": "Plan is self-contained with no external references", "passed": true, "evidence": "Self-contained, all information embedded."},
+    {"text": "Plan uses concrete repository-relative file paths", "passed": true, "evidence": "Comprehensive file manifest with full paths and epic/task references for each file"},
+    {"text": "Plan includes exact runnable shell commands", "passed": true, "evidence": "npm install, npx prisma validate, npx prisma migrate dev, npm test, npm run lint, npm run build"},
+    {"text": "Validation is phrased as observable behavior", "passed": true, "evidence": "Validation checkpoints table with commands and timing. Each task has specific response codes and behaviors."},
+    {"text": "Technical terms are defined in plain language", "passed": false, "evidence": "Uses JWT, bcrypt, RS256, Prisma, RBAC, ORM, middleware without plain-language definitions. Assumes technical reader."}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "small-prd",
+  "prompt": "Create an execution plan from this PRD file: create-plan-workspace/test-prds/small-prd.md",
+  "assertions": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections (Purpose, Progress, Surprises & Discoveries, Decision Log, Outcomes & Retrospective, Context, Plan of Work, Concrete Steps, Validation, Idempotence, Artifacts, Interfaces)"},
+    {"text": "Progress section uses checkbox format (- [ ] or - [x])"},
+    {"text": "Plan is self-contained with no external references (no 'see the PRD', 'refer to docs')"},
+    {"text": "Plan uses concrete repository-relative file paths (e.g., src/routes/health.ts)"},
+    {"text": "Plan includes exact runnable shell commands"},
+    {"text": "Validation is phrased as observable behavior (HTTP responses, test output) not internal attributes"},
+    {"text": "Technical terms (Express, Router, pg.Pool, Jest, supertest) are defined in plain language"}
+  ]
+}

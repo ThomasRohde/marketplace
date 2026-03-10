@@ -1,0 +1,16 @@
+{
+  "eval_id": 2,
+  "eval_name": "ambiguous-prd",
+  "prompt": "Create a plan from this PRD: create-plan-workspace/test-prds/ambiguous-prd.md",
+  "assertions": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections"},
+    {"text": "Progress section uses checkbox format (- [ ] or - [x])"},
+    {"text": "Plan is self-contained with no external references"},
+    {"text": "Plan uses concrete repository-relative file paths"},
+    {"text": "Plan includes exact runnable shell commands"},
+    {"text": "Validation is phrased as observable behavior"},
+    {"text": "Technical terms are defined in plain language"},
+    {"text": "Plan explicitly flags the PRD's unresolved ambiguities"},
+    {"text": "Ambiguities are resolved with decisions documented in the Decision Log"}
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "eval_id": 0,
+  "eval_name": "small-prd",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections", "passed": true, "evidence": "All sections present: Purpose/Big Picture, Progress, Surprises & Discoveries, Decision Log, Outcomes & Retrospective, Context and Orientation, Plan of Work, Concrete Steps, Validation and Acceptance, Idempotence and Recovery, Artifacts and Notes, Interfaces and Dependencies"},
+    {"text": "Progress section uses checkbox format", "passed": true, "evidence": "7 items using '- [ ]' format covering route creation, wiring, tests, lint, manual verification, and build"},
+    {"text": "Plan is self-contained with no external references", "passed": true, "evidence": "All knowledge embedded. Defines Express patterns, explains pg.Pool, describes the codebase structure inline. No references to 'see the PRD' or external docs."},
+    {"text": "Plan uses concrete repository-relative file paths", "passed": true, "evidence": "Uses src/routes/health.ts, src/app.ts, src/db/pool.ts, src/__tests__/health.test.ts throughout"},
+    {"text": "Plan includes exact runnable shell commands", "passed": true, "evidence": "Includes: npm install, npm run lint, npm test, npm run build, curl -s http://localhost:3000/health, ls src/routes/health.ts"},
+    {"text": "Validation is phrased as observable behavior", "passed": true, "evidence": "Acceptance criteria include 'curl http://localhost:3000/health returns HTTP 200 with body {\"status\":\"healthy\"...}' and exact test output expectations"},
+    {"text": "Technical terms are defined in plain language", "passed": true, "evidence": "Defines: Express.js, Router, pg.Pool, supertest, Jest — each with plain-language explanations and examples of how they manifest in this project"}
+  ]
+}

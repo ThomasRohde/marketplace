@@ -1,0 +1,10 @@
+{
+  "name": "blackbox-test",
+  "version": "1.0.0",
+  "description": "Run isolated blackbox tests of any CLI tool — a zero-knowledge subagent explores, stress-tests, and reports bugs without reading source code",
+  "author": {
+    "name": "Thomas Klok Rohde",
+    "email": "thomas@rohde.name"
+  },
+  "keywords": ["blackbox", "testing", "qa", "cli", "exploratory", "smoke-test", "blind-test"]
+}

@@ -155,6 +155,17 @@ Approximate Danske Bank's Sapphire design system using plain CSS and HTML — no
 
 **Keywords:** sapphire, danske-bank, design-system, css, tokens, components, ui, fintech
 
+### blackbox-test
+
+Run isolated blackbox tests of any CLI tool — a zero-knowledge subagent explores, stress-tests, and reports bugs without reading source code. Works with any tech stack.
+
+**Install:**
+```shell
+/plugin install blackbox-test@thomas-rohde-plugins
+```
+
+**Keywords:** blackbox, testing, qa, cli, exploratory, smoke-test, blind-test
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -190,7 +201,8 @@ marketplace/
 │   ├── prd-writer/          # PRD writing with ambiguity tracking
 │   ├── jarchi/              # jArchi scripting plugin
 │   ├── sapphire-design/     # Sapphire design system plugin
-│   └── skill-creator/       # Skill creation & eval plugin
+│   ├── skill-creator/       # Skill creation & eval plugin
+│   └── blackbox-test/       # Blackbox CLI testing plugin
 └── README.md               # This file
 ```
 

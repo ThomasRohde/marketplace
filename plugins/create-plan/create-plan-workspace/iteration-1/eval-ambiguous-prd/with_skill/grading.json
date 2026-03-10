@@ -1,0 +1,16 @@
+{
+  "eval_id": 2,
+  "eval_name": "ambiguous-prd",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections", "passed": true, "evidence": "All sections present: Purpose, Progress, Surprises & Discoveries, Decision Log (9 entries), Outcomes & Retrospective, Context and Orientation, Plan of Work, Concrete Steps (18 steps across 3 milestones), Validation and Acceptance, Idempotence and Recovery, Artifacts and Notes, Interfaces and Dependencies"},
+    {"text": "Progress section uses checkbox format", "passed": true, "evidence": "Progress section organized by 3 milestones with checkbox items using '- [ ]' format, each with granular sub-steps"},
+    {"text": "Plan is self-contained with no external references", "passed": true, "evidence": "All context embedded. Explains WebSocket, Socket.IO, Toast, exponential backoff, migration. Provides full assumed directory structure."},
+    {"text": "Plan uses concrete repository-relative file paths", "passed": true, "evidence": "Uses src/server/websocket.ts, src/client/hooks/useSocket.ts, src/client/components/NotificationBell.tsx, etc."},
+    {"text": "Plan includes exact runnable shell commands", "passed": true, "evidence": "npm install socket.io@^4.7, npm run migrate, npm test, npm run build"},
+    {"text": "Validation is phrased as observable behavior", "passed": true, "evidence": "Concrete validation for each FR: WebSocket connection visible in dev tools, bell shows count, toast appears within 2 seconds, preference toggle prevents notification delivery"},
+    {"text": "Technical terms are defined in plain language", "passed": true, "evidence": "Defines: WebSocket, Socket.IO, Toast notification, Notification bell, Exponential backoff, Migration — each with clear explanations"},
+    {"text": "Plan explicitly flags the PRD's unresolved ambiguities", "passed": true, "evidence": "Prominent 'Ambiguity Notice' section at the top lists all 7 ambiguities with numbered entries"},
+    {"text": "Ambiguities are resolved with decisions documented in the Decision Log", "passed": true, "evidence": "All 7 ambiguities have corresponding Decision Log entries tagged 'Ambiguity Resolution' with rationale. E.g., React chosen for frontend, PostgreSQL for DB, Socket.IO for WebSockets, exponential backoff defined."}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "eval_id": 2,
+  "eval_name": "ambiguous-prd",
+  "configuration": "without_skill",
+  "expectations": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections", "passed": false, "evidence": "Missing: Progress (as living-document checkboxes), Surprises & Discoveries, Decision Log (has Assumptions table instead), Outcomes & Retrospective, Idempotence and Recovery, Artifacts and Notes. Has Overview, Assumptions, Architecture Overview, Database Schema, Phased Implementation, Definition of Done instead."},
+    {"text": "Progress section uses checkbox format", "passed": false, "evidence": "No Progress section. Individual tasks have acceptance criteria checkboxes but there is no centralized progress tracker."},
+    {"text": "Plan is self-contained with no external references", "passed": true, "evidence": "All context embedded. Architecture diagram and data flow explanation included."},
+    {"text": "Plan uses concrete repository-relative file paths", "passed": true, "evidence": "Uses server/src/websocket/socketHub.ts, client/src/components/notifications/NotificationBell.tsx, etc."},
+    {"text": "Plan includes exact runnable shell commands", "passed": true, "evidence": "npm install, npm run dev, npm test, npm run build commands included"},
+    {"text": "Validation is phrased as observable behavior", "passed": true, "evidence": "Each task has specific acceptance criteria with observable behaviors"},
+    {"text": "Technical terms are defined in plain language", "passed": false, "evidence": "Uses WebSocket, Socket.IO, Redis pub/sub, ARIA, exponential backoff without plain-language definitions for a novice reader"},
+    {"text": "Plan explicitly flags the PRD's unresolved ambiguities", "passed": true, "evidence": "Section 2 'Assumptions (Resolving PRD Ambiguities)' with a table listing all 7 ambiguities"},
+    {"text": "Ambiguities are resolved with decisions documented in the Decision Log", "passed": false, "evidence": "Ambiguities are listed in an Assumptions table with rationale, but there is no formal Decision Log section. The assumptions are mixed into the planning narrative rather than being a trackable, living-document section."}
+  ]
+}

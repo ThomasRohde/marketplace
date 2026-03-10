@@ -1,0 +1,48 @@
+{
+  "skill_name": "create-plan",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "pass_rate": {"mean": 1.0, "stddev": 0.0},
+      "time_seconds": {"mean": 169.6, "stddev": 45.3},
+      "total_tokens": {"mean": 26131, "stddev": 3409}
+    },
+    {
+      "name": "without_skill",
+      "pass_rate": {"mean": 0.478, "stddev": 0.066},
+      "time_seconds": {"mean": 117.6, "stddev": 54.2},
+      "total_tokens": {"mean": 16875, "stddev": 3310}
+    }
+  ],
+  "delta": {
+    "pass_rate": "+52.2pp",
+    "time_seconds": "+44%",
+    "total_tokens": "+55%"
+  },
+  "per_eval": [
+    {
+      "eval_name": "small-prd",
+      "with_skill": {"pass_rate": 1.0, "time_seconds": 118.2, "total_tokens": 22727},
+      "without_skill": {"pass_rate": 0.571, "time_seconds": 59.4, "total_tokens": 13047}
+    },
+    {
+      "eval_name": "multi-epic-prd",
+      "with_skill": {"pass_rate": 1.0, "time_seconds": 203.9, "total_tokens": 29544},
+      "without_skill": {"pass_rate": 0.429, "time_seconds": 128.5, "total_tokens": 18898}
+    },
+    {
+      "eval_name": "ambiguous-prd",
+      "with_skill": {"pass_rate": 1.0, "time_seconds": 186.8, "total_tokens": 26121},
+      "without_skill": {"pass_rate": 0.444, "time_seconds": 164.8, "total_tokens": 18680}
+    }
+  ],
+  "analyst_observations": [
+    "The skill achieves 100% pass rate across all assertions and all test cases, vs 43-57% for the baseline.",
+    "The three assertions that consistently fail without the skill are: mandatory living-document sections (Progress, Surprises, Decision Log, Outcomes), checkbox-based progress tracking, and plain-language jargon definitions. These are the skill's primary value-add.",
+    "The skill costs ~55% more tokens and ~44% more time on average. This is expected since the with-skill outputs are significantly longer and more structured (371 lines for small PRD vs 265 without skill).",
+    "Both configurations perform well on: concrete file paths, runnable commands, observable outcomes, and self-containment. These appear to be baseline capabilities rather than skill-driven improvements.",
+    "For the ambiguous PRD, both configurations flag the ambiguities — but only the skill version documents resolutions in a formal Decision Log. The baseline uses an assumptions table that is not a living-document section.",
+    "The skill's strongest differentiator is producing plans that are 'restartable' — a stateless agent can pick up the plan mid-implementation because Progress, Decision Log, and Surprises sections exist for tracking state."
+  ]
+}

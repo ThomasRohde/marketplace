@@ -1,0 +1,14 @@
+{
+  "eval_id": 1,
+  "eval_name": "multi-epic-prd",
+  "configuration": "with_skill",
+  "expectations": [
+    {"text": "Plan contains all 12 mandatory ExecPlan sections", "passed": true, "evidence": "All sections present: Purpose, Progress, Surprises & Discoveries, Decision Log (7 entries), Outcomes & Retrospective, Context and Orientation, Plan of Work, Concrete Steps (30 numbered steps), Validation and Acceptance (11 curl-based checks), Idempotence and Recovery, Artifacts and Notes, Interfaces and Dependencies"},
+    {"text": "Progress section uses checkbox format", "passed": true, "evidence": "Progress section organized by 5 milestones with ~25 checkbox items total using '- [ ]' format"},
+    {"text": "Plan is self-contained with no external references", "passed": true, "evidence": "All context embedded. Explains Prisma, JWT, RS256, Express middleware, SendGrid in detail. No references to external docs."},
+    {"text": "Plan uses concrete repository-relative file paths", "passed": true, "evidence": "Comprehensive: prisma/schema.prisma, src/config/env.ts, src/middleware/auth.ts, src/middleware/rbac.ts, src/routes/auth.ts, src/services/auth.service.ts, etc."},
+    {"text": "Plan includes exact runnable shell commands", "passed": true, "evidence": "npm install commands with specific packages, npx prisma generate, npx prisma migrate dev, npm test, curl requests with full headers and JSON bodies"},
+    {"text": "Validation is phrased as observable behavior", "passed": true, "evidence": "11 acceptance checks with exact curl commands and expected HTTP status codes and JSON responses (register returns 201, login returns 200 with tokens, member gets 403 on admin endpoint, etc.)"},
+    {"text": "Technical terms are defined in plain language", "passed": true, "evidence": "Defines: Prisma/ORM, JWT, RS256 vs symmetric signing, SHA-256 hashing, bcrypt, Express middleware, SendGrid — each with explanations of what they do and how they manifest in this project"}
+  ]
+}

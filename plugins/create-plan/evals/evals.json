@@ -1,0 +1,23 @@
+{
+  "skill_name": "create-plan",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "Create an execution plan from this PRD file: create-plan-workspace/test-prds/small-prd.md",
+      "expected_output": "A self-contained PLAN.md with all mandatory ExecPlan sections, concrete file paths, commands, and observable validation steps for a health check endpoint",
+      "files": ["create-plan-workspace/test-prds/small-prd.md"]
+    },
+    {
+      "id": 1,
+      "prompt": "I have a multi-epic PRD for a user authentication system. Please turn it into implementation plans: create-plan-workspace/test-prds/multi-epic-prd.md",
+      "expected_output": "Multiple ExecPlans (one per epic or a well-structured single plan with distinct milestones) covering all 5 epics, each with self-contained context, concrete steps, and validation",
+      "files": ["create-plan-workspace/test-prds/multi-epic-prd.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "Create a plan from this PRD: create-plan-workspace/test-prds/ambiguous-prd.md",
+      "expected_output": "The skill should flag the ambiguities (unspecified framework, TBD database, vague acceptance criteria) before proceeding, and either resolve them or note them prominently in the plan",
+      "files": ["create-plan-workspace/test-prds/ambiguous-prd.md"]
+    }
+  ]
+}
