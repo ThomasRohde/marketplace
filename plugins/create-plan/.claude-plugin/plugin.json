@@ -1,0 +1,9 @@
+{
+  "name": "create-plan",
+  "version": "1.0.0",
+  "description": "Generate self-contained, agent-executable Execution Plans (ExecPlans) from PRD files",
+  "author": {
+    "name": "Thomas Klok Rohde"
+  },
+  "keywords": ["execplan", "execution-plan", "prd", "planning", "implementation", "agentic", "milestones"]
+}

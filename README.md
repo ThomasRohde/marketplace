@@ -67,6 +67,17 @@ ArchiMate enterprise architecture modeling assistance for element selection, rel
 
 **Keywords:** archimate, enterprise-architecture, modeling, archi, togaf
 
+### create-plan
+
+Generate self-contained, agent-executable Execution Plans (ExecPlans) from PRD files that any coding agent or human novice can follow end-to-end.
+
+**Install:**
+```shell
+/plugin install create-plan@thomas-rohde-plugins
+```
+
+**Keywords:** execplan, execution-plan, prd, planning, implementation, agentic, milestones
+
 ### copilot-customization
 
 Create, scaffold, and configure GitHub Copilot customizations for VS Code projects, including instructions, prompts, agents, skills, hooks, and MCP integration.
@@ -159,6 +170,7 @@ marketplace/
 │   └── marketplace.json     # Marketplace configuration
 ├── plugins/
 │   ├── archimate/           # ArchiMate modeling plugin
+│   ├── create-plan/           # PRD-to-ExecPlan generation
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
 │   ├── drawio/              # DrawIO diagram plugin
 │   ├── improve-skill/       # Skill improvement plugin
