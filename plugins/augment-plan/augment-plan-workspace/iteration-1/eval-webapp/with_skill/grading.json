@@ -1,0 +1,42 @@
+{
+  "eval_id": 2,
+  "eval_name": "webapp-scaffolding-only",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md",
+      "passed": true,
+      "evidence": "Milestone 0 explicitly lists: 'Create README.md with project overview...' (line 12), 'Create ARCHITECTURE.md with stack rationale...' (line 14), 'Create AGENTS.md with project overview for agents...' (line 19). All three are present."
+    },
+    {
+      "text": "Plan does NOT add structured JSON envelope or CLI-specific contract (since this is a web app, not a CLI)",
+      "passed": true,
+      "evidence": "No JSON envelope, CLI contract, or structured CLI response format is mentioned. Decision log explicitly states: 'Skip CLI augmentation entirely... No command-line interface is exposed to users or agents. The CLI manifest does not apply.' (lines 61-63)."
+    },
+    {
+      "text": "Plan does NOT define ERR_ prefixed error codes or exit code ranges (no CLI)",
+      "passed": true,
+      "evidence": "No ERR_ prefixed error codes or exit code ranges appear anywhere in the plan. The decision log confirms CLI augmentation was skipped (line 61)."
+    },
+    {
+      "text": "Plan includes a step to create AGENTS.md with project guidance",
+      "passed": true,
+      "evidence": "Step 0.8 (line 207) details creating AGENTS.md with project overview, where to look first, authoritative files, coding rules, architectural invariants, validation instructions, and when to stop."
+    },
+    {
+      "text": "Plan includes a step to set up CI workflow (e.g., .github/workflows/ci.yml)",
+      "passed": true,
+      "evidence": "Step 0.16 (line 283) creates .github/workflows/ci.yml with lint, type-check (tsc --noEmit), and test steps using GitHub Actions."
+    },
+    {
+      "text": "Plan includes a step to configure linting and/or formatting tools",
+      "passed": true,
+      "evidence": "Step 0.14 configures Prettier (.prettierrc, line 263). Step 0.15 configures ESLint with TypeScript and React plugins (line 274). Both are explicitly detailed."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps for scaffolding",
+      "passed": true,
+      "evidence": "Progress section (lines 11-31) contains 'Milestone 0 -- Scaffold Repository Structure and Guidance Files' with 19 unchecked items covering README, ARCHITECTURE, AGENTS, CI, linting, formatting, and validation steps."
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "eval_id": 3,
+  "eval_name": "partial-cli-gap-filling",
+  "prompt": "I have a plan for a config file manager CLI at augment-plan-workspace/test-plans/partial-cli-plan.md. The CLI currently just prints formatted text output. Please augment the plan with proper CLI design and scaffolding.",
+  "assertions": [
+    { "text": "Plan contains a scaffolding milestone for repo structure and guidance files", "type": "content_check" },
+    { "text": "Plan addresses transforming the existing text/Rich output to structured JSON output on stdout", "type": "content_check" },
+    { "text": "Plan defines an error code taxonomy with ERR_ prefixed codes", "type": "content_check" },
+    { "text": "Plan adds --dry-run support to the set command (which mutates config files)", "type": "content_check" },
+    { "text": "Plan includes backup support before writing config files", "type": "content_check" },
+    { "text": "Plan mentions atomic writes (temp file + rename pattern)", "type": "content_check" },
+    { "text": "Plan includes Python-specific implementation hints (Pydantic, Click, or Python idioms)", "type": "content_check" },
+    { "text": "Plan mentions isatty() detection or terminal-vs-pipe output switching", "type": "content_check" },
+    { "text": "Progress section has been updated with new unchecked steps", "type": "content_check" }
+  ]
+}

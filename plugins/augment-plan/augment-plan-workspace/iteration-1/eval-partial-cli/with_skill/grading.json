@@ -1,0 +1,52 @@
+{
+  "eval_id": 3,
+  "eval_name": "partial-cli-gap-filling",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone for repo structure and guidance files",
+      "passed": true,
+      "evidence": "Milestone 0 in Progress (lines 13-27) is titled 'Scaffold Repository Structure and Guidance Files' and includes steps for pyproject.toml, README.md, PROJECT.md, ARCHITECTURE.md, TESTING.md, CONTRIBUTING.md, CHANGELOG.md, AGENTS.md, .editorconfig, .gitignore, ruff config, and CI workflow."
+    },
+    {
+      "text": "Plan addresses transforming the existing text/Rich output to structured JSON output on stdout",
+      "passed": true,
+      "evidence": "Plan of Work states: 'Currently, the commands print their output as formatted text tables or colored YAML. The augmented plan replaces this with a structured JSON envelope on stdout (with optional human-readable text mode for terminals) and moves decorative output to stderr.' (line 242). Note in Step 0.1: 'Rich is removed from dependencies. Structured JSON output replaces Rich-based pretty printing.' (line 283)."
+    },
+    {
+      "text": "Plan defines an error code taxonomy with ERR_ prefixed codes",
+      "passed": true,
+      "evidence": "Error code taxonomy table (lines 198-207) lists ERR_VALIDATION_MISSING_OPTION, ERR_VALIDATION_INVALID_KEY_PATH, ERR_VALIDATION_SCHEMA_FAIL, ERR_IO_FILE_NOT_FOUND, ERR_IO_WRITE_FAILED, ERR_INTERNAL_UNEXPECTED, etc. All prefixed with ERR_."
+    },
+    {
+      "text": "Plan adds --dry-run support to the set command (which mutates config files)",
+      "passed": true,
+      "evidence": "Milestone 3 progress: 'Add --dry-run flag to set that previews the change without writing' (line 57). Step 3.2 shows implementation with '--dry-run' flag (line 726). Step 3.3 tests dry-run behavior (line 795)."
+    },
+    {
+      "text": "Plan includes backup support before writing config files",
+      "passed": true,
+      "evidence": "Milestone 3 progress: 'Add --backup flag to set that creates a timestamped copy before writing' (line 58). Step 3.1 implements create_backup() function (lines 709-715). Step 3.2 includes backup logic in set command (lines 774-776)."
+    },
+    {
+      "text": "Plan mentions atomic writes (temp file + rename pattern)",
+      "passed": true,
+      "evidence": "Milestone 3 progress: 'Implement atomic writes (write to temp file, fsync, rename)' (line 58). Step 3.1 implements save_config_atomic() with tempfile, fsync, and os.replace (lines 697-707)."
+    },
+    {
+      "text": "Plan includes Python-specific implementation hints (Pydantic, Click, or Python idioms)",
+      "passed": true,
+      "evidence": "Plan uses Pydantic for envelope models (CLIError and Envelope classes in Step 1.1, lines 175-192), Click decorators throughout (@click.group, @click.command, @click.option), and Python idioms like sys.stdout.isatty(), os.environ.get(), model_dump(). Decision log mentions 'Use Pydantic for the response envelope model' (line 92)."
+    },
+    {
+      "text": "Plan mentions isatty() detection or terminal-vs-pipe output switching",
+      "passed": true,
+      "evidence": "Milestone 1 progress: 'Add isatty() detection for automatic output mode switching' (line 37). Step 1.3 implements _detect_output_mode() checking sys.stdout.isatty() (lines 409-419). Output mode precedence documented (lines 217-220)."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps",
+      "passed": true,
+      "evidence": "Progress section (lines 12-69) contains 5 milestones (0-4) with all unchecked items covering scaffolding, CLI contract/foundations, read commands, mutation command with safety rails, and integration testing."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "eval_id": 3,
+  "eval_name": "partial-cli-gap-filling",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone for repo structure and guidance files",
+      "passed": true,
+      "evidence": "Phase 0 'Project Scaffolding' (steps 1-5) creates pyproject.toml, .pre-commit-config.yaml, CI workflow, README.md, and docs/architecture.md. However, it is not a formal milestone in the Progress section -- the progress items are flat checkboxes, not grouped by milestone."
+    },
+    {
+      "text": "Plan addresses transforming the existing text/Rich output to structured JSON output on stdout",
+      "passed": true,
+      "evidence": "Context states: 'The original plan produces only formatted text output. This augmented plan adds: Structured output: every read command supports --output text|json|yaml so output is machine-parseable.' (lines 65-67). OutputRenderer class handles text/JSON/YAML modes (steps 7, lines 250-282)."
+    },
+    {
+      "text": "Plan defines an error code taxonomy with ERR_ prefixed codes",
+      "passed": false,
+      "evidence": "The plan defines exit code constants (EXIT_SUCCESS=0, EXIT_GENERAL_ERROR=1, EXIT_FILE_NOT_FOUND=3, etc.) and typed exception classes (CfgctlError, FileNotFoundError, etc.) but does NOT use ERR_-prefixed error codes. The error codes are class names and numeric exit codes, not string codes with ERR_ prefix."
+    },
+    {
+      "text": "Plan adds --dry-run support to the set command (which mutates config files)",
+      "passed": false,
+      "evidence": "No --dry-run flag is mentioned for the set command. Step 12 (set command implementation, lines 367-387) does not include a --dry-run option. The --dry-run is not listed in the set command's options."
+    },
+    {
+      "text": "Plan includes backup support before writing config files",
+      "passed": false,
+      "evidence": "No backup support is mentioned for the set command. The Idempotence and Recovery section mentions atomic writes via temp file + rename (line 548), but there is no --backup flag or backup file creation."
+    },
+    {
+      "text": "Plan mentions atomic writes (temp file + rename pattern)",
+      "passed": true,
+      "evidence": "Idempotence and Recovery section states: 'write the updated config to a temporary file in the same directory, then atomically rename it over the original... use tempfile.NamedTemporaryFile(dir=..., delete=False) followed by os.replace()' (lines 548-549)."
+    },
+    {
+      "text": "Plan includes Python-specific implementation hints (Pydantic, Click, or Python idioms)",
+      "passed": true,
+      "evidence": "Plan uses Click decorators (@click.group, @click.command, @click.option) throughout steps 10-14. Uses Python-specific patterns: Rich for text formatting, Click's CliRunner for testing, logging module with sys.stderr, pytest fixtures. References ruff, pyproject.toml, pip install. Does not use Pydantic."
+    },
+    {
+      "text": "Plan mentions isatty() detection or terminal-vs-pipe output switching",
+      "passed": false,
+      "evidence": "No mention of isatty(), TTY detection, or automatic output mode switching based on terminal vs pipe. The plan uses an explicit --output flag (text/json/yaml) with text as default, but does not auto-detect the terminal environment."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps",
+      "passed": true,
+      "evidence": "Progress section (lines 11-25) has 15 unchecked items covering project setup, linting/formatting, pre-commit hooks, structured output, exit codes, all four commands, testing, CI, documentation, and final verification. Augmented items include 'Configure linting (ruff) and formatting', 'structured output layer', and 'exit code conventions'."
+    }
+  ]
+}

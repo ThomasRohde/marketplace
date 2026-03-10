@@ -1,0 +1,14 @@
+{
+  "eval_id": 2,
+  "eval_name": "webapp-scaffolding-only",
+  "prompt": "I have a plan for a React web app dashboard at augment-plan-workspace/test-plans/webapp-plan.md. Can you augment this plan? Save the augmented version.",
+  "assertions": [
+    { "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md", "type": "content_check" },
+    { "text": "Plan does NOT add structured JSON envelope or CLI-specific contract (since this is a web app, not a CLI)", "type": "negative_check" },
+    { "text": "Plan does NOT define ERR_ prefixed error codes or exit code ranges (no CLI)", "type": "negative_check" },
+    { "text": "Plan includes a step to create AGENTS.md with project guidance", "type": "content_check" },
+    { "text": "Plan includes a step to set up CI workflow (e.g., .github/workflows/ci.yml)", "type": "content_check" },
+    { "text": "Plan includes a step to configure linting and/or formatting tools", "type": "content_check" },
+    { "text": "Progress section has been updated with new unchecked steps for scaffolding", "type": "content_check" }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "augment-plan",
+  "version": "1.0.0",
+  "description": "Augment existing Execution Plans with agent-first CLI design requirements and project scaffolding guidance",
+  "author": {
+    "name": "Thomas Klok Rohde"
+  },
+  "keywords": ["augment", "plan", "cli", "scaffold", "agent-first", "execplan", "cli-manifest", "structured-output"]
+}

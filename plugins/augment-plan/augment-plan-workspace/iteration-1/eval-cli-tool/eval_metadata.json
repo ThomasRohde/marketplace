@@ -1,0 +1,17 @@
+{
+  "eval_id": 1,
+  "eval_name": "cli-tool-full-augmentation",
+  "prompt": "I have an execution plan for a database migration CLI tool at augment-plan-workspace/test-plans/cli-tool-plan.md. Please augment it with CLI design requirements and project scaffolding. Save the augmented plan.",
+  "assertions": [
+    { "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md", "type": "content_check" },
+    { "text": "Plan specifies a structured JSON envelope for all CLI command responses", "type": "content_check" },
+    { "text": "Plan defines an error code taxonomy with ERR_ prefixed codes", "type": "content_check" },
+    { "text": "Plan specifies distinct exit code ranges per error category (not just 0/1)", "type": "content_check" },
+    { "text": "Plan includes a guide subcommand that returns CLI schema as JSON", "type": "content_check" },
+    { "text": "Plan adds --dry-run support to mutating commands (apply, rollback)", "type": "content_check" },
+    { "text": "Plan includes change records with before/after state for mutations", "type": "content_check" },
+    { "text": "Plan includes fingerprint-based conflict detection for the plan/apply pattern", "type": "content_check" },
+    { "text": "Plan mentions LLM=true environment variable support", "type": "content_check" },
+    { "text": "Progress section has been updated with new unchecked steps for the added milestones", "type": "content_check" }
+  ]
+}

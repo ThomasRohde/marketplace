@@ -1,0 +1,57 @@
+{
+  "eval_id": 1,
+  "eval_name": "cli-tool-full-augmentation",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md",
+      "passed": false,
+      "evidence": "The plan includes steps to create README.md (step 17) and docs/ARCHITECTURE.md (step 18), but there is no mention of AGENTS.md anywhere in the plan."
+    },
+    {
+      "text": "Plan specifies a structured JSON envelope for all CLI command responses",
+      "passed": true,
+      "evidence": "The plan specifies a JSON envelope under 'Structured Output': '{\"success\": true, \"command\": \"status\", \"data\": { ... }, \"errors\": []}' (lines 114-119). OutputEnvelope<T> is defined in interfaces (line 484)."
+    },
+    {
+      "text": "Plan defines an error code taxonomy with ERR_ prefixed codes",
+      "passed": false,
+      "evidence": "The plan defines custom error classes (DatabaseConnectionError, MigrationConflictError, InvalidArgumentError) and mentions 'machine-readable error code string' in the CliError interface (line 483), but does not define an explicit ERR_-prefixed error code taxonomy."
+    },
+    {
+      "text": "Plan specifies distinct exit code ranges per error category (not just 0/1)",
+      "passed": true,
+      "evidence": "Exit codes table (lines 127-134): 0=Success, 1=General error, 2=Database connection failure, 3=Migration conflict, 4=Invalid arguments. These are distinct per category, not just 0/1."
+    },
+    {
+      "text": "Plan includes a guide subcommand that returns CLI schema as JSON",
+      "passed": false,
+      "evidence": "No 'guide' subcommand is mentioned anywhere in the plan. The plan describes help via Commander.js --help but not a dedicated schema-returning guide command."
+    },
+    {
+      "text": "Plan adds --dry-run support to mutating commands (apply, rollback)",
+      "passed": true,
+      "evidence": "Global flags table includes '--dry-run: Show what would be done without making changes (apply/rollback only)' (line 155). Steps 11 and 12 mention '--dry-run' support for apply and rollback respectively."
+    },
+    {
+      "text": "Plan includes change records with before/after state for mutations",
+      "passed": false,
+      "evidence": "The plan does not define structured before/after change records for mutations. The apply and rollback commands return results but no structured before/after state is specified."
+    },
+    {
+      "text": "Plan includes fingerprint-based conflict detection for the plan/apply pattern",
+      "passed": false,
+      "evidence": "No mention of fingerprints, hashes, or conflict detection anywhere in the plan."
+    },
+    {
+      "text": "Plan mentions LLM=true environment variable support",
+      "passed": false,
+      "evidence": "No mention of LLM=true or any LLM-related environment variable. The plan mentions NO_COLOR convention (line 112) but not LLM mode."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps for the added milestones",
+      "passed": true,
+      "evidence": "Progress section (lines 11-22) has 12 unchecked items covering setup, scaffolding, all four commands, output, testing, documentation, and CI. These include augmented items like 'Configure project scaffolding (linting, formatting, CI, git hooks)' and 'Implement structured output and error handling'."
+    }
+  ]
+}

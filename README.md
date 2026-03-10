@@ -133,6 +133,17 @@ Create new skills, modify and improve existing skills, and measure skill perform
 
 **Keywords:** skills, skill-creation, evals, benchmarking, iteration, testing
 
+### augment-plan
+
+Augment existing Execution Plans with agent-first CLI design requirements and project scaffolding guidance.
+
+**Install:**
+```shell
+/plugin install augment-plan@thomas-rohde-plugins
+```
+
+**Keywords:** augment, plan, cli, scaffold, agent-first, execplan, cli-manifest
+
 ### sapphire-design
 
 Approximate Danske Bank's Sapphire design system using plain CSS and HTML — no `@danske/sapphire-*` packages required. Includes complete design tokens, 20+ component patterns, and 700+ icons.
@@ -170,6 +181,7 @@ marketplace/
 │   └── marketplace.json     # Marketplace configuration
 ├── plugins/
 │   ├── archimate/           # ArchiMate modeling plugin
+│   ├── augment-plan/        # Plan augmentation with CLI & scaffolding
 │   ├── create-plan/           # PRD-to-ExecPlan generation
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
 │   ├── drawio/              # DrawIO diagram plugin

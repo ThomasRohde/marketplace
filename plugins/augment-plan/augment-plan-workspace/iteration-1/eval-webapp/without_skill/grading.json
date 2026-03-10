@@ -1,0 +1,42 @@
+{
+  "eval_id": 2,
+  "eval_name": "webapp-scaffolding-only",
+  "configuration": "without_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md",
+      "passed": true,
+      "evidence": "Milestone 0 in Progress lists: 'Create README.md...' (line 12), 'Create ARCHITECTURE.md...' (line 14), 'Create AGENTS.md...' (line 19). Concrete Steps 0.1, 0.3, 0.8 provide full details for each."
+    },
+    {
+      "text": "Plan does NOT add structured JSON envelope or CLI-specific contract (since this is a web app, not a CLI)",
+      "passed": true,
+      "evidence": "No structured JSON envelope, CLI contract, or CLI-specific patterns are present. Decision log states: 'CLI augmentation not applied -- this is a web application, not a CLI tool... CLI manifest principles (structured envelope, error codes, exit codes, guide command) do not apply.' (lines 60-62)."
+    },
+    {
+      "text": "Plan does NOT define ERR_ prefixed error codes or exit code ranges (no CLI)",
+      "passed": true,
+      "evidence": "No ERR_ prefixed error codes or exit code ranges appear anywhere in the plan. Only standard HTTP status codes are mentioned (200, 401) for the web API."
+    },
+    {
+      "text": "Plan includes a step to create AGENTS.md with project guidance",
+      "passed": true,
+      "evidence": "Step 0.8 (line 215) creates AGENTS.md with project overview, where to look first, authoritative files, coding rules (functional components, React Query hooks, no any types), architectural invariants, validation instructions, ambiguity handling, and when to stop."
+    },
+    {
+      "text": "Plan includes a step to set up CI workflow (e.g., .github/workflows/ci.yml)",
+      "passed": true,
+      "evidence": "Step 0.18 (line 318) creates .github/workflows/ci.yml with lint, typecheck, test, and format:check steps. Full YAML specification provided."
+    },
+    {
+      "text": "Plan includes a step to configure linting and/or formatting tools",
+      "passed": true,
+      "evidence": "Step 0.14 configures Prettier (.prettierrc) with format and format:check scripts (line 273). Step 0.15 configures ESLint with TypeScript and React plugins (line 287). Both steps are detailed."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps for scaffolding",
+      "passed": true,
+      "evidence": "Progress section (lines 11-33) contains 'Milestone 0: Scaffold Repository Structure and Guidance Files' with 21 unchecked items covering all scaffolding files, quality tooling, CI, and validation steps."
+    }
+  ]
+}

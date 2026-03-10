@@ -127,6 +127,19 @@
       "category": "productivity"
     },
     {
+      "name": "augment-plan",
+      "source": "./plugins/augment-plan",
+      "description": "Augment existing Execution Plans with agent-first CLI design requirements and project scaffolding guidance",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["augment", "plan", "cli", "scaffold", "agent-first", "execplan", "cli-manifest"],
+      "category": "productivity"
+    },
+    {
       "name": "sapphire-design",
       "source": "./plugins/sapphire-design",
       "description": "Approximate Danske Bank's Sapphire design system using plain CSS and HTML — no @danske/sapphire-* packages required. Includes complete design tokens, 20+ component patterns, and 700+ icons.",

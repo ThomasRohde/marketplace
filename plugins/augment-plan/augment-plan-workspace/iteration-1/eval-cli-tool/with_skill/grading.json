@@ -1,0 +1,57 @@
+{
+  "eval_id": 1,
+  "eval_name": "cli-tool-full-augmentation",
+  "configuration": "with_skill",
+  "expectations": [
+    {
+      "text": "Plan contains a scaffolding milestone that creates README.md, ARCHITECTURE.md, and AGENTS.md",
+      "passed": true,
+      "evidence": "Milestone 0 explicitly lists steps to create README.md, ARCHITECTURE.md, and AGENTS.md (lines 13, 15, 20 in Progress; steps 7, 9, 14 in Concrete Steps)."
+    },
+    {
+      "text": "Plan specifies a structured JSON envelope for all CLI command responses",
+      "passed": true,
+      "evidence": "The plan defines an Envelope<T> interface with schema_version, request_id, ok, command, result, warnings, errors, and metrics fields (lines 186-210). States 'Every dbmig command returns a structured JSON envelope on stdout' (line 183)."
+    },
+    {
+      "text": "Plan defines an error code taxonomy with ERR_ prefixed codes",
+      "passed": true,
+      "evidence": "Error Code Taxonomy table (lines 216-226) lists ERR_VALIDATION_EMPTY_NAME, ERR_IO_CONNECTION, ERR_CONFLICT_FINGERPRINT, ERR_INTERNAL_UNEXPECTED, etc. All prefixed with ERR_."
+    },
+    {
+      "text": "Plan specifies distinct exit code ranges per error category (not just 0/1)",
+      "passed": true,
+      "evidence": "Exit Code Ranges table (lines 230-237) defines: 0=Success, 10=Validation, 20=Permission, 40=Conflict, 50=I/O, 90=Internal."
+    },
+    {
+      "text": "Plan includes a guide subcommand that returns CLI schema as JSON",
+      "passed": true,
+      "evidence": "Step 22 and Milestone 1 progress include 'Implement src/commands/guide.ts -- the dbmig guide command. Returns JSON listing all commands with their flags, input expectations, dotted IDs, error codes, exit code mapping, and examples' (line 398)."
+    },
+    {
+      "text": "Plan adds --dry-run support to mutating commands (apply, rollback)",
+      "passed": true,
+      "evidence": "Milestone 4 step: 'Support --dry-run to list migrations that would be applied without executing them' (line 65). Milestone 5 step: 'Support --dry-run to show what would be rolled back without executing' (line 76). Also create command supports --dry-run (line 49)."
+    },
+    {
+      "text": "Plan includes change records with before/after state for mutations",
+      "passed": true,
+      "evidence": "Create command returns 'before: null' and 'after: { name, timestamp, upPath, downPath }' (line 48). Apply returns 'change records with before/after state for each applied migration' (line 64). Rollback returns 'a change record with before (applied state) and after (reverted state)' (line 75)."
+    },
+    {
+      "text": "Plan includes fingerprint-based conflict detection for the plan/apply pattern",
+      "passed": true,
+      "evidence": "Milestone 4 step: 'Implement fingerprint-based conflict detection: record state fingerprint before apply, reject if stale' (line 67). Error code ERR_CONFLICT_FINGERPRINT is defined. Status command returns fingerprint (line 57)."
+    },
+    {
+      "text": "Plan mentions LLM=true environment variable support",
+      "passed": true,
+      "evidence": "Milestone 1 progress: 'Add isatty() detection and LLM=true environment variable support in src/output.ts' (line 36). Output Mode Rules: 'LLM=true environment variable (forces JSON, suppresses banners/progress)' (line 255)."
+    },
+    {
+      "text": "Progress section has been updated with new unchecked steps for the added milestones",
+      "passed": true,
+      "evidence": "Progress section (lines 9-86) contains seven milestones (0-6) with all unchecked (- [ ]) items for scaffolding, CLI contract, create, status, apply, rollback, and integration tests."
+    }
+  ]
+}

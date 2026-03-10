@@ -1,0 +1,23 @@
+{
+  "skill_name": "augment-plan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have an execution plan for a database migration CLI tool at augment-plan-workspace/test-plans/cli-tool-plan.md. Please augment it with CLI design requirements and project scaffolding. Save the augmented plan to augment-plan-workspace/test-plans/cli-tool-plan-augmented.md",
+      "expected_output": "The plan should be augmented with: (1) A scaffolding milestone creating README, ARCHITECTURE.md, AGENTS.md, quality infra. (2) A CLI foundations milestone covering structured JSON envelope, error code taxonomy, exit code ranges, guide command, TOON, LLM=true support. (3) Since this is a mutation CLI (apply/rollback), also dry-run support, change records, safety flags, backup, atomic writes. (4) Since it has a plan/apply pattern, fingerprinting and plan/validate/apply/verify workflow. (5) Updated Progress, Decision Log, and Context sections.",
+      "files": ["augment-plan-workspace/test-plans/cli-tool-plan.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "I have a plan for a React web app dashboard at augment-plan-workspace/test-plans/webapp-plan.md. Can you augment this plan? Save to augment-plan-workspace/test-plans/webapp-plan-augmented.md",
+      "expected_output": "The plan should be augmented with scaffolding only (no CLI augmentation since this is a web app). Should add a scaffolding milestone with README, ARCHITECTURE.md, AGENTS.md, TESTING.md, CONTRIBUTING.md, .editorconfig, .gitignore, CI workflow, linter/formatter config. Should NOT add any CLI-specific milestones (no envelope, no error codes, no guide command).",
+      "files": ["augment-plan-workspace/test-plans/webapp-plan.md"]
+    },
+    {
+      "id": 3,
+      "prompt": "I have a plan for a config file manager CLI at augment-plan-workspace/test-plans/partial-cli-plan.md. The CLI currently just prints formatted text output. Please augment the plan with proper CLI design and scaffolding. Write the result to augment-plan-workspace/test-plans/partial-cli-plan-augmented.md",
+      "expected_output": "The plan should be augmented with: (1) Scaffolding milestone. (2) CLI design that transforms the existing text-output commands into structured-envelope commands. Since this CLI mutates config files (the set command), it should get Parts I-III of the CLI manifest. The augmentation should specifically note that the current text output (Rich pretty-printing) needs to become JSON on stdout with human formatting on stderr or when isatty(). Should add dry-run to the set command, backup before write, and atomic writes. Python-specific hints (Pydantic for envelope, orjson, Click integration).",
+      "files": ["augment-plan-workspace/test-plans/partial-cli-plan.md"]
+    }
+  ]
+}
