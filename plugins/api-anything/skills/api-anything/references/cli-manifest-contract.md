@@ -63,7 +63,7 @@ Every CLI must implement `mycli guide` that returns:
     "description": "...",
     "auth": {
       "methods": ["api-key", "oauth2-client-credentials"],
-      "setup": "mycli auth setup --profile dev"
+      "setup": "mycli auth setup --env test"
     },
     "commands": [
       {
@@ -101,7 +101,7 @@ Define a fixed error code registry. Error codes are strings, not HTTP status cod
       "profile": "prod"
     },
     "recoverable": true,
-    "suggestion": "Run: mycli auth refresh --profile prod"
+    "suggestion": "Run: mycli auth refresh --env prod"
   }
 }
 ```

@@ -114,8 +114,8 @@ Implementation:
 4. Exchange code + code_verifier for tokens at token_url
 5. Store tokens in secure local storage (OS keychain preferred, encrypted file fallback)
 6. Refresh using refresh_token when access_token expires
-7. Provide `mycli auth login --profile <name>` command to initiate the flow
-8. Provide `mycli auth logout --profile <name>` to revoke/clear tokens
+7. Provide `mycli auth login --env <name>` command to initiate the flow
+8. Provide `mycli auth logout --env <name>` to revoke/clear tokens
 
 ### OpenID Connect discovery
 
@@ -166,18 +166,39 @@ Implementation: inject configured headers on every request. This covers API gate
 
 ## Environment profiles
 
+Enterprise environments typically follow the pattern `test` → `syst` (system test) → `prod`. The CLI must always be generated from the **production spec's perspective** — prod defines the canonical command surface, schemas, and contracts. Non-prod environments may have subset functionality or relaxed auth, but the CLI shape reflects prod.
+
+When the user provides multiple endpoints, generate a `--env` flag that selects the target environment at runtime:
+
+```bash
+mycli customer list --env test       # hits test endpoint
+mycli customer list --env syst       # hits system test endpoint
+mycli customer list --env prod       # hits production endpoint
+mycli customer list                  # hits default (see precedence below)
+```
+
 Generated CLIs must support named profiles for different environments:
 
 ```yaml
 # ~/.mycli/config.yaml
-profiles:
-  dev:
-    base_url: https://api-dev.example.com
+environments:
+  test:
+    base_url: https://api-test.example.com
     auth:
       method: api-key
       header_name: X-API-Key
     env_vars:
-      MYCLI_API_KEY: dev-key-here
+      MYCLI_API_KEY: test-key-here
+
+  syst:
+    base_url: https://api-syst.example.com
+    auth:
+      method: oauth2-client-credentials
+      token_url: https://auth-syst.example.com/oauth/token
+      scopes: [read:all, write:all]
+    env_vars:
+      MYCLI_CLIENT_ID: syst-client-id
+      MYCLI_CLIENT_SECRET: # read from OS keychain
 
   prod:
     base_url: https://api.example.com
@@ -189,21 +210,23 @@ profiles:
       MYCLI_CLIENT_ID: prod-client-id
       MYCLI_CLIENT_SECRET: # read from OS keychain
 
-default_profile: dev
+default_env: test
 ```
 
-Profile selection:
-1. `--profile prod` flag (highest priority)
-2. `MYCLI_PROFILE` environment variable
-3. `default_profile` from config file
-4. Fall back to error if no profile is configured
+Environment selection precedence:
+1. `--env prod` flag (highest priority)
+2. `MYCLI_ENV` environment variable
+3. `default_env` from config file
+4. Fall back to error if no environment is configured
+
+The `--env` flag is a global flag available on every command. It selects the base URL, auth config, and any environment-specific overrides.
 
 Commands for profile management:
-- `mycli auth setup --profile <name>` — interactive profile configuration
-- `mycli auth test --profile <name>` — verify auth works against the API
-- `mycli auth refresh --profile <name>` — refresh tokens
+- `mycli auth setup --env <name>` — interactive environment auth configuration
+- `mycli auth test --env <name>` — verify auth works against the API
+- `mycli auth refresh --env <name>` — refresh tokens
 - `mycli auth list` — list configured profiles
-- `mycli auth whoami --profile <name>` — show current identity
+- `mycli auth whoami --env <name>` — show current identity
 
 ## Policy overlay
 
@@ -240,8 +263,8 @@ The config file lives at `~/.mycli/config.yaml` (or `$MYCLI_CONFIG_DIR/config.ya
 
 ```yaml
 version: 1
-default_profile: dev
-profiles:
+default_env: test
+environments:
   <name>:
     base_url: <string>
     auth: <auth-config>
@@ -260,13 +283,13 @@ Sensitive values (secrets, tokens) should be stored in the OS keychain or encryp
 ### Auth command tree
 
 ```
-mycli auth setup    --profile <name>    # Configure a profile
-mycli auth test     --profile <name>    # Verify auth works
-mycli auth refresh  --profile <name>    # Refresh tokens
-mycli auth login    --profile <name>    # Interactive login (OAuth/OIDC)
-mycli auth logout   --profile <name>    # Clear tokens
-mycli auth list                         # List profiles
-mycli auth whoami   --profile <name>    # Show current identity
+mycli auth setup    --env <name>    # Configure an environment
+mycli auth test     --env <name>    # Verify auth works
+mycli auth refresh  --env <name>    # Refresh tokens
+mycli auth login    --env <name>    # Interactive login (OAuth/OIDC)
+mycli auth logout   --env <name>    # Clear tokens
+mycli auth list                         # List environments
+mycli auth whoami   --env <name>    # Show current identity
 ```
 
 All auth commands return the standard JSON envelope.

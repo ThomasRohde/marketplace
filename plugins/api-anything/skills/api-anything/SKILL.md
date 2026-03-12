@@ -125,7 +125,7 @@ Key principles:
 1. **Derive auth from the spec** — extract `securitySchemes` and `security` requirements
 2. **Assume the spec is incomplete** — enterprise specs routinely omit auth details, use wrong scheme names, or describe gateway auth inaccurately
 3. **Provide a policy overlay** — generate a `config.yaml` or `.myclirc` that lets operators patch auth settings without modifying code
-4. **Support environment profiles** — `dev`, `test`, `uat`, `prod` with different base URLs, scopes, certs, token endpoints
+4. **Support environment profiles** — `test`, `syst`, `prod` with different base URLs, scopes, certs, token endpoints. When the user provides multiple endpoints, generate a `--env` flag (accepting `test`, `syst`, `prod`) that selects the target environment at runtime. Always generate the CLI from the production spec's perspective — prod is the canonical source of truth for command shapes, schemas, and contracts. Non-prod environments may have subset functionality or relaxed auth, but the CLI surface should reflect prod.
 5. **Separate auth discovery from runtime** — config/setup is distinct from per-request auth injection
 
 Generate auth configuration that handles:

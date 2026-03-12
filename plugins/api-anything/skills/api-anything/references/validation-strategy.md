@@ -214,7 +214,7 @@ test_large_response_is_not_truncated
 npm install -g . # or pip install -e . or go install ./...
 
 # Invoke as subprocess and capture output
-OUTPUT=$(mycli customer list --profile test --format json 2>/dev/null)
+OUTPUT=$(mycli customer list --env test --format json 2>/dev/null)
 EXIT_CODE=$?
 
 # Assert

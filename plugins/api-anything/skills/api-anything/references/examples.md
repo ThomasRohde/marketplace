@@ -114,15 +114,23 @@ A customer management API with OAuth2 client credentials, pagination, enum filte
 ```yaml
 # ~/.customer-cli/config.yaml
 version: 1
-default_profile: dev
-profiles:
-  dev:
-    base_url: https://api-dev.example.com/v2
+default_env: test
+environments:
+  test:
+    base_url: https://api-test.example.com/v2
     auth:
       method: oauth2-client-credentials
-      token_url: https://auth-dev.example.com/oauth/token
+      token_url: https://auth-test.example.com/oauth/token
       scopes: [read:customers, write:customers, read:orders]
     timeout_ms: 10000
+
+  syst:
+    base_url: https://api-syst.example.com/v2
+    auth:
+      method: oauth2-client-credentials
+      token_url: https://auth-syst.example.com/oauth/token
+      scopes: [read:customers, write:customers, read:orders]
+    timeout_ms: 15000
 
   prod:
     base_url: https://api.example.com/v2
@@ -136,21 +144,23 @@ profiles:
 
 ### Generated command tree
 
+The CLI is generated from the **production** spec — prod defines the canonical command surface. The `--env` flag selects which environment to target at runtime.
+
 ```
 customer-cli guide
 customer-cli spec
-customer-cli auth setup --profile <name>
-customer-cli auth test --profile <name>
-customer-cli auth refresh --profile <name>
+customer-cli auth setup --env <name>
+customer-cli auth test --env <name>
+customer-cli auth refresh --env <name>
 customer-cli auth list
-customer-cli auth whoami --profile <name>
+customer-cli auth whoami --env <name>
 
-customer-cli customer list [--status active|inactive|suspended] [--limit 20] [--cursor <token>]
-customer-cli customer get --id <id>
-customer-cli customer create --data '...' [--dry-run]
-customer-cli customer update --id <id> --data '...' [--dry-run]
-customer-cli customer delete --id <id> [--dry-run] [--force]
-customer-cli customer search --query '...' [--limit 20]
+customer-cli customer list [--env test|syst|prod] [--status active|inactive|suspended] [--limit 20] [--cursor <token>]
+customer-cli customer get --id <id> [--env test|syst|prod]
+customer-cli customer create --data '...' [--dry-run] [--env test|syst|prod]
+customer-cli customer update --id <id> --data '...' [--dry-run] [--env test|syst|prod]
+customer-cli customer delete --id <id> [--dry-run] [--force] [--env test|syst|prod]
+customer-cli customer search --query '...' [--limit 20] [--env test|syst|prod]
 
 customer-cli customer orders list --customer-id <id> [--status pending|shipped|delivered] [--limit 20]
 customer-cli customer orders get --customer-id <id> --order-id <id>
@@ -159,23 +169,23 @@ customer-cli customer orders get --customer-id <id> --order-id <id>
 ### Example session
 
 ```bash
-# Set up auth for dev
-$ export MYCLI_CLIENT_ID=dev-client-id
-$ export MYCLI_CLIENT_SECRET=dev-client-secret
-$ customer-cli auth test --profile dev
+# Set up auth for test environment
+$ export MYCLI_CLIENT_ID=test-client-id
+$ export MYCLI_CLIENT_SECRET=test-client-secret
+$ customer-cli auth test --env test
 {
   "ok": true,
   "command": "auth.test",
   "result": {
     "authenticated": true,
-    "identity": "dev-client-id",
+    "identity": "test-client-id",
     "scopes": ["read:customers", "write:customers", "read:orders"],
     "token_expires_in": 3599
   }
 }
 
-# List with pagination using cursor
-$ customer-cli customer list --profile prod --limit 2
+# List with pagination using cursor (targeting prod)
+$ customer-cli customer list --env prod --limit 2
 {
   "ok": true,
   "command": "customer.list",
@@ -194,7 +204,7 @@ $ customer-cli customer list --profile prod --limit 2
 }
 
 # Get next page
-$ customer-cli customer list --profile prod --limit 2 --cursor "eyJpZCI6ImN1c3RfMDAyIn0="
+$ customer-cli customer list --env prod --limit 2 --cursor "eyJpZCI6ImN1c3RfMDAyIn0="
 
 # Nested resource: list orders for a customer
 $ customer-cli customer orders list --customer-id cust_001 --status pending
@@ -298,7 +308,7 @@ This shows how an agent would use the plan/validate/apply/verify workflow to saf
 
 ```bash
 # Step 1: Plan the deletion
-$ customer-cli customer delete --id cust_123 --plan --profile prod
+$ customer-cli customer delete --id cust_123 --plan --env prod
 {
   "ok": true,
   "command": "customer.delete",
@@ -321,7 +331,7 @@ $ customer-cli customer delete --id cust_123 --plan --profile prod
 }
 
 # Step 2: Validate (re-check preconditions)
-$ customer-cli customer delete --id cust_123 --validate --plan-id plan_del_abc123 --profile prod
+$ customer-cli customer delete --id cust_123 --validate --plan-id plan_del_abc123 --env prod
 {
   "ok": true,
   "command": "customer.delete",
@@ -334,7 +344,7 @@ $ customer-cli customer delete --id cust_123 --validate --plan-id plan_del_abc12
 }
 
 # Step 3: Apply
-$ customer-cli customer delete --id cust_123 --apply --plan-id plan_del_abc123 --force --profile prod
+$ customer-cli customer delete --id cust_123 --apply --plan-id plan_del_abc123 --force --env prod
 {
   "ok": true,
   "command": "customer.delete",
@@ -348,7 +358,7 @@ $ customer-cli customer delete --id cust_123 --apply --plan-id plan_del_abc123 -
 }
 
 # Step 4: Verify
-$ customer-cli customer delete --id cust_123 --verify --plan-id plan_del_abc123 --profile prod
+$ customer-cli customer delete --id cust_123 --verify --plan-id plan_del_abc123 --env prod
 {
   "ok": true,
   "command": "customer.delete",
