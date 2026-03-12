@@ -6,7 +6,7 @@ A curated collection of Claude Code plugins by Thomas Klok Rohde.
 
 ### Add the Marketplace
 
-Once this marketplace is hosted on GitHub, users can add it with:
+Users can add the marketplace with:
 
 ```shell
 /plugin marketplace add ThomasRohde/marketplace
@@ -166,6 +166,17 @@ Run isolated blackbox tests of any CLI tool — a zero-knowledge subagent explor
 
 **Keywords:** blackbox, testing, qa, cli, exploratory, smoke-test, blind-test
 
+### api-anything
+
+Generate enterprise-ready, agent-first CLIs from OpenAPI/Swagger specs with normalized commands, enterprise auth profiles, structured output contracts, and multi-layered validation.
+
+**Install:**
+```shell
+/plugin install api-anything@thomas-rohde-plugins
+```
+
+**Keywords:** openapi, swagger, cli, api, rest, agent-first, enterprise, code-generation, auth, oas
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -202,7 +213,8 @@ marketplace/
 │   ├── jarchi/              # jArchi scripting plugin
 │   ├── sapphire-design/     # Sapphire design system plugin
 │   ├── skill-creator/       # Skill creation & eval plugin
-│   └── blackbox-test/       # Blackbox CLI testing plugin
+│   ├── blackbox-test/       # Blackbox CLI testing plugin
+│   └── api-anything/        # OpenAPI/Swagger to agent-first CLI generator
 └── README.md               # This file
 ```
 

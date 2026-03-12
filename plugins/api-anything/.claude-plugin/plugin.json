@@ -1,0 +1,9 @@
+{
+  "name": "api-anything",
+  "version": "1.0.0",
+  "description": "Generate enterprise-ready, agent-first CLIs from OpenAPI/Swagger specs with normalized commands, enterprise auth profiles, structured output contracts, and multi-layered validation",
+  "author": {
+    "name": "Thomas Klok Rohde"
+  },
+  "keywords": ["openapi", "swagger", "cli", "api", "rest", "agent-first", "enterprise", "code-generation", "auth", "oas"]
+}

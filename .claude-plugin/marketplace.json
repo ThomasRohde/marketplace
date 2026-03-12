@@ -164,6 +164,19 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["blackbox", "testing", "qa", "cli", "exploratory", "smoke-test", "blind-test"],
       "category": "testing"
+    },
+    {
+      "name": "api-anything",
+      "source": "./plugins/api-anything",
+      "description": "Generate enterprise-ready, agent-first CLIs from OpenAPI/Swagger specs with normalized commands, enterprise auth profiles, structured output contracts, and multi-layered validation",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["openapi", "swagger", "cli", "api", "rest", "agent-first", "enterprise", "code-generation", "auth", "oas"],
+      "category": "productivity"
     }
   ]
 }
