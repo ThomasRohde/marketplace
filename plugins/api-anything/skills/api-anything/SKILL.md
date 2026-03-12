@@ -20,11 +20,9 @@ Transform an OpenAPI / Swagger specification into a production-grade, agent-firs
 
 ## Governing contract
 
-Every CLI produced by this skill must conform to the **CLI-MANIFEST** — the normative design contract for agent-first CLIs:
+Every CLI produced by this skill must conform to the **CLI-MANIFEST** — the normative design contract for agent-first CLIs. The full manifest is embedded in `references/cli-manifest-contract.md`. Read it before generating any CLI code.
 
-> https://gist.githubusercontent.com/ThomasRohde/d4e99da015786674dbfd0233efb4f809/raw/42bf9031c89e79e3a5780e53ccf520234a74a4bd/CLI-MANIFEST.md
-
-Fetch and read this document before generating any CLI code. It defines the output envelope, error taxonomy, exit codes, read/write separation, `guide` command, `LLM=true` handling, mutation safety, and transactional workflow patterns that the generated CLI must implement.
+The manifest defines 23 principles across 5 parts (Foundations, Read & Discover, Safe Mutation, Transactional Workflows, Multi-Agent Coordination). It covers the output envelope, error taxonomy, exit codes, read/write separation, `guide` command, `LLM=true` handling, mutation safety, and transactional workflow patterns that the generated CLI must implement.
 
 ## When to use this skill
 
