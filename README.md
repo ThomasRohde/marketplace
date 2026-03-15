@@ -177,6 +177,28 @@ Generate enterprise-ready, agent-first CLIs from OpenAPI/Swagger specs with norm
 
 **Keywords:** openapi, swagger, cli, api, rest, agent-first, enterprise, code-generation, auth, oas
 
+### copilot-manager
+
+Discover, audit, reconcile, modify, and delete GitHub Copilot customizations across both Copilot IDE (VS Code) and Copilot CLI environments.
+
+**Install:**
+```shell
+/plugin install copilot-manager@thomas-rohde-plugins
+```
+
+**Keywords:** copilot, copilot-cli, copilot-ide, customization, discovery, reconciliation, audit, management
+
+### autoresearch
+
+Autonomous agent-driven optimization loop — iteratively modify an artifact, evaluate against a scalar metric, and keep improvements. Works with any domain: code performance, prompt engineering, config tuning, SQL, builds, and more.
+
+**Install:**
+```shell
+/plugin install autoresearch@thomas-rohde-plugins
+```
+
+**Keywords:** autoresearch, optimization, hill-climbing, autonomous, iterative, benchmark, performance, tuning
+
 ## Managing Updates
 
 Update your local copy of this marketplace:
@@ -202,19 +224,21 @@ marketplace/
 ├── .claude-plugin/
 │   └── marketplace.json     # Marketplace configuration
 ├── plugins/
+│   ├── api-anything/        # OpenAPI/Swagger to agent-first CLI generator
 │   ├── archimate/           # ArchiMate modeling plugin
 │   ├── augment-plan/        # Plan augmentation with CLI & scaffolding
-│   ├── create-plan/           # PRD-to-ExecPlan generation
+│   ├── autoresearch/        # Autonomous optimization loop
+│   ├── blackbox-test/       # Blackbox CLI testing plugin
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
+│   ├── copilot-manager/     # Copilot customization management
+│   ├── create-plan/         # PRD-to-ExecPlan generation
 │   ├── drawio/              # DrawIO diagram plugin
 │   ├── improve-skill/       # Skill improvement plugin
+│   ├── jarchi/              # jArchi scripting plugin
 │   ├── plugin-integrator/   # Skill-to-plugin integration
 │   ├── prd-writer/          # PRD writing with ambiguity tracking
-│   ├── jarchi/              # jArchi scripting plugin
 │   ├── sapphire-design/     # Sapphire design system plugin
-│   ├── skill-creator/       # Skill creation & eval plugin
-│   ├── blackbox-test/       # Blackbox CLI testing plugin
-│   └── api-anything/        # OpenAPI/Swagger to agent-first CLI generator
+│   └── skill-creator/       # Skill creation & eval plugin
 └── README.md               # This file
 ```
 

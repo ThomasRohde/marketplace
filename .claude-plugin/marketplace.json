@@ -190,6 +190,19 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["copilot", "copilot-cli", "copilot-ide", "customization", "discovery", "reconciliation", "audit", "management"],
       "category": "productivity"
+    },
+    {
+      "name": "autoresearch",
+      "source": "./plugins/autoresearch",
+      "description": "Autonomous agent-driven optimization loop — iteratively modify an artifact, evaluate against a scalar metric, and keep improvements. Works with any domain: code performance, prompt engineering, config tuning, SQL, builds, and more.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["autoresearch", "optimization", "hill-climbing", "autonomous", "iterative", "benchmark", "performance", "tuning"],
+      "category": "productivity"
     }
   ]
 }

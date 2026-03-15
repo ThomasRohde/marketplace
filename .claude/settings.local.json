@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/tmp/integration_analysis.txt:*)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
