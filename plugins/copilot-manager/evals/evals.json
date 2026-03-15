@@ -1,0 +1,125 @@
+{
+  "skill_name": "copilot-manager",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "What copilot customizations do I have in this repo?",
+      "expected_output": "A structured inventory table listing all discovered copilot files grouped by kind (guidance, agents, skills, prompts, hooks, mcp, settings), with target visibility (IDE/CLI/both) and scope for each.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "finds-copilot-instructions",
+          "type": "contains",
+          "value": "copilot-instructions.md",
+          "description": "Report must identify .github/copilot-instructions.md"
+        },
+        {
+          "name": "finds-agents",
+          "type": "contains",
+          "value": "planner",
+          "description": "Report must discover the planner agent"
+        },
+        {
+          "name": "finds-skills",
+          "type": "contains",
+          "value": "refactor",
+          "description": "Report must discover the refactor skill"
+        },
+        {
+          "name": "finds-prompts",
+          "type": "contains",
+          "value": "prompt",
+          "description": "Report must discover prompt files"
+        },
+        {
+          "name": "finds-hooks",
+          "type": "contains",
+          "value": "hook",
+          "description": "Report must discover hook files"
+        },
+        {
+          "name": "finds-mcp",
+          "type": "contains",
+          "value": "mcp",
+          "description": "Report must discover MCP configurations"
+        },
+        {
+          "name": "classifies-target",
+          "type": "regex",
+          "value": "(IDE|CLI|both|Both|IDE.*CLI|Copilot IDE|Copilot CLI)",
+          "description": "Report must classify artifacts by target visibility"
+        },
+        {
+          "name": "structured-output",
+          "type": "regex",
+          "value": "\\|.*\\|.*\\|",
+          "description": "Report uses table format for structured presentation"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Are there any conflicts between my Copilot IDE and Copilot CLI configs? I think they might be out of sync.",
+      "expected_output": "An audit report identifying conflicts, lossy mappings (prompts only visible to IDE, commands only visible to CLI), MCP drift between .vscode/mcp.json and .github/mcp.json absence, cross-read warnings for CLAUDE.md/GEMINI.md, and specific reconciliation recommendations.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "identifies-lossy-mapping",
+          "type": "regex",
+          "value": "(lossy|prompt.*CLI|CLI.*prompt|not.*visible|only.*IDE|gap)",
+          "description": "Report identifies that .prompt.md files are IDE-only (lossy for CLI)"
+        },
+        {
+          "name": "identifies-cross-read",
+          "type": "regex",
+          "value": "(cross.?read|CLAUDE\\.md.*Copilot|Copilot.*reads.*CLAUDE|GEMINI)",
+          "description": "Report warns about CLAUDE.md/GEMINI.md being cross-read by IDE"
+        },
+        {
+          "name": "identifies-mcp-situation",
+          "type": "regex",
+          "value": "(mcp|MCP)",
+          "description": "Report addresses MCP configuration status"
+        },
+        {
+          "name": "provides-recommendations",
+          "type": "regex",
+          "value": "(recommend|suggest|consider|should|could|action|fix|resolve|reconcil)",
+          "description": "Report includes actionable reconciliation recommendations"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Delete the copilot agent called 'planner' — I don't use it anymore.",
+      "expected_output": "A deletion report showing: the file found (.github/agents/planner.agent.md), its content summary, any references to 'planner' in other files, confirmation of deletion, and cleanup status.",
+      "files": [],
+      "assertions": [
+        {
+          "name": "finds-planner-file",
+          "type": "contains",
+          "value": "planner",
+          "description": "Report identifies the planner agent file"
+        },
+        {
+          "name": "shows-content-summary",
+          "type": "regex",
+          "value": "(content|description|summary|frontmatter|name|tools)",
+          "description": "Report shows a summary of the file content before deletion"
+        },
+        {
+          "name": "checks-references",
+          "type": "regex",
+          "value": "(reference|handoff|mention|depend|used by|no.*reference|not.*referenced)",
+          "description": "Report checks for references to planner in other files"
+        },
+        {
+          "name": "confirms-deletion",
+          "type": "regex",
+          "value": "(delet|remov|clean)",
+          "description": "Report confirms the file was deleted or removed"
+        }
+      ]
+    }
+  ]
+}

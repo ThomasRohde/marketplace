@@ -1,0 +1,23 @@
+{
+  "name": "copilot-manager",
+  "version": "1.0.0",
+  "description": "Discover, audit, reconcile, modify, and delete GitHub Copilot customizations across both Copilot IDE (VS Code) and Copilot CLI environments",
+  "author": {
+    "name": "Thomas Klok Rohde",
+    "email": "thomas@rohde.name"
+  },
+  "keywords": [
+    "copilot",
+    "copilot-cli",
+    "copilot-ide",
+    "customization",
+    "discovery",
+    "reconciliation",
+    "audit",
+    "management",
+    "instructions",
+    "agents",
+    "skills",
+    "mcp"
+  ]
+}
