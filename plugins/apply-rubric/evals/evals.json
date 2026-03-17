@@ -1,0 +1,20 @@
+{
+  "skill_name": "apply-rubric",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Apply the solution architecture rubric (tmp/profiles/solution-architecture.v1.yaml) to the example payments API solution architecture. Use the evaluation example in tmp/examples/ as reference for what the artifact looks like — just evaluate it as if you had the real document.",
+      "expected_output": "A YAML evaluation record with criterion_results for all core + profile criteria, dimension_results, gate check, overall status, and a markdown narrative report. Should identify the three-pass agent pattern in the evaluators list."
+    },
+    {
+      "id": 2,
+      "prompt": "I have an ADR at docs/adr-0042-switch-to-event-sourcing.md that I want to evaluate against our ADR rubric at tmp/profiles/adr.v1.yaml. Can you run the full three-pass evaluation?",
+      "expected_output": "Should compose core meta-rubric + ADR profile, spawn extractor/evaluator/challenger agents, and produce evaluation record and narrative report. Should handle the case where the artifact file doesn't exist gracefully."
+    },
+    {
+      "id": 3,
+      "prompt": "Evaluate this solution architecture against both the solution architecture profile and the security overlay. The artifact is comprehensive — about 80 pages with 12 sections covering context, logical, integration, deployment, security, and operational views.",
+      "expected_output": "Should select parallel evaluation strategy (multiple evaluator agents) due to artifact comprehensiveness. Should compose core + solution architecture profile + security overlay. Should produce combined evaluation record."
+    }
+  ]
+}

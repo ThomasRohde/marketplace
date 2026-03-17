@@ -1,0 +1,259 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/earos/evaluation.schema.json",
+  "title": "EAROS Evaluation Record Schema",
+  "type": "object",
+  "required": [
+    "evaluation_id",
+    "rubric_id",
+    "rubric_version",
+    "artifact_ref",
+    "evaluation_date",
+    "evaluators",
+    "status",
+    "criterion_results",
+    "dimension_results",
+    "summary"
+  ],
+  "properties": {
+    "evaluation_id": {
+      "type": "string"
+    },
+    "rubric_id": {
+      "type": "string"
+    },
+    "rubric_version": {
+      "type": "string"
+    },
+    "artifact_ref": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "artifact_type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "artifact_type": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "uri": {
+          "type": "string"
+        }
+      }
+    },
+    "evaluation_date": {
+      "type": "string"
+    },
+    "evaluators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "role",
+          "mode"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "human",
+              "agent",
+              "hybrid",
+              "challenge-agent"
+            ]
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "conditional_pass",
+        "rework_required",
+        "reject",
+        "not_reviewable"
+      ]
+    },
+    "overall_score": {
+      "type": "number"
+    },
+    "gate_failures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "criterion_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "criterion_id",
+          "score",
+          "judgment_type",
+          "confidence",
+          "evidence_sufficiency",
+          "rationale"
+        ],
+        "properties": {
+          "criterion_id": {
+            "type": "string"
+          },
+          "score": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "enum": [
+                  "N/A",
+                  "PASS",
+                  "FAIL"
+                ]
+              }
+            ]
+          },
+          "judgment_type": {
+            "type": "string",
+            "enum": [
+              "observed",
+              "inferred",
+              "external",
+              "mixed"
+            ]
+          },
+          "confidence": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ]
+          },
+          "evidence_sufficiency": {
+            "type": "string",
+            "enum": [
+              "insufficient",
+              "partial",
+              "sufficient",
+              "strong"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "location": {
+                  "type": "string"
+                },
+                "excerpt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "missing_information": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "recommended_actions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "dimension_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "dimension_id",
+          "score",
+          "summary"
+        ],
+        "properties": {
+          "dimension_id": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "summary": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "strengths",
+        "weaknesses",
+        "risks",
+        "next_actions"
+      ],
+      "properties": {
+        "strengths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weaknesses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "next_actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "decision_narrative": {
+          "type": "string"
+        }
+      }
+    },
+    "approval": {
+      "type": "object"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "earos-rubric",
+  "version": "1.0.0",
+  "description": "Create architecture evaluation rubrics (profiles and overlays) conforming to the Enterprise Architecture Rubric Operational Standard (EAROS)",
+  "author": {
+    "name": "Thomas Klok Rohde",
+    "email": "thomas@rohde.name"
+  },
+  "keywords": [
+    "earos",
+    "rubric",
+    "architecture-evaluation",
+    "scoring",
+    "profile",
+    "overlay",
+    "architecture-review",
+    "governance",
+    "quality",
+    "enterprise-architecture"
+  ]
+}

@@ -1,0 +1,134 @@
+rubric_id: EAROS-ADR-001
+version: 1.0.0
+kind: profile
+title: Architecture Decision Record Profile
+status: approved
+artifact_type: architecture_decision_record
+inherits:
+- EAROS-CORE-001@1.0.0
+purpose:
+- decision_review
+- decision_quality_review
+- knowledge_retention_review
+stakeholders:
+- architect
+- engineering_lead
+- maintainers
+- governance
+viewpoints:
+- decision
+- context
+- consequence
+dimensions:
+- id: AD1
+  name: Decision clarity
+  criteria:
+  - id: ADR-01
+    question: Is the decision stated as a clear, testable, singular decision rather
+      than a vague discussion topic?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: major
+      failure_effect: Cannot pass above conditional_pass
+    required_evidence:
+    - decision statement
+    - status
+    - date or trigger context
+    scoring_guide:
+      '0': No decision
+      '1': Topic only
+      '2': Partly clear decision
+      '3': Clear decision with scope
+      '4': Clear, bounded, and testable decision
+    anti_patterns:
+    - ADR as meeting notes
+    - Multiple unrelated decisions in one record
+    remediation_hints:
+    - Split the ADR
+    - Rewrite the decision in one sentence
+- id: AD2
+  name: Option space and consequences
+  criteria:
+  - id: ADR-02
+    question: Does the ADR capture meaningful alternatives and the consequences of
+      the chosen decision?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - alternatives
+    - pros and cons
+    - consequences
+    - reversibility
+    scoring_guide:
+      '0': No alternatives or consequences
+      '1': Superficial mention
+      '2': Partial treatment
+      '3': Meaningful alternatives and consequences
+      '4': Strong rationale with explicit tradeoffs and reversibility
+    anti_patterns:
+    - Consequences only positive
+    - No reversal conditions
+    remediation_hints:
+    - Add rejected options
+    - Document downside and triggers
+- id: AD3
+  name: Decision durability and traceability
+  criteria:
+  - id: ADR-03
+    question: Can a future reader understand why the decision was made and when it
+      should be revisited?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - context
+    - drivers
+    - review trigger
+    - links to related artifacts
+    scoring_guide:
+      '0': No durable context
+      '1': Weak historical trace
+      '2': Some future usefulness
+      '3': Mostly durable and traceable
+      '4': Durable, traceable, and reviewable over time
+    anti_patterns:
+    - Decision depends on oral history
+    - No revisit conditions
+    remediation_hints:
+    - Add context and links
+    - Define revisit triggers
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: Escalate when ADR-01 < 3 for strategic or cross-team
+      decisions
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report

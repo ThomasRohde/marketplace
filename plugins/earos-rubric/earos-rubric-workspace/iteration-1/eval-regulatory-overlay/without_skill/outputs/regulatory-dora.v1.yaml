@@ -1,0 +1,706 @@
+# ==============================================================================
+# DORA Regulatory Compliance Overlay - Architecture Artifact Evaluation Rubric
+# ==============================================================================
+# Regulation: Digital Operational Resilience Act (EU) 2022/2554
+# Purpose:    Evaluate whether architecture artifacts adequately address DORA
+#             obligations and map specific controls to design elements.
+# Usage:      Attach this overlay to any architecture artifact (HLD, LLD,
+#             solution design, integration pattern, platform blueprint) to
+#             assess regulatory coverage.
+# Version:    1.0.0
+# Date:       2026-03-17
+# Audience:   Risk & Compliance Architects, Architecture Board, Compliance Officers
+# ==============================================================================
+
+rubric:
+  metadata:
+    id: regulatory-dora-overlay-v1
+    name: "DORA Compliance Overlay for Architecture Artifacts"
+    version: "1.0.0"
+    regulation:
+      name: "Digital Operational Resilience Act"
+      reference: "Regulation (EU) 2022/2554"
+      effective_date: "2025-01-17"
+      supervisory_authorities:
+        - EBA (European Banking Authority)
+        - ESMA (European Securities and Markets Authority)
+        - EIOPA (European Insurance and Occupational Pensions Authority)
+    applicable_to:
+      - solution_architecture_documents
+      - high_level_designs
+      - low_level_designs
+      - integration_patterns
+      - platform_blueprints
+      - cloud_architecture_decisions
+      - vendor_integration_designs
+      - disaster_recovery_plans
+      - security_architecture_documents
+    scoring:
+      method: weighted_average
+      scale:
+        0: "Not Addressed - No evidence of control consideration in the artifact"
+        1: "Mentioned - Control is referenced but not mapped to design elements"
+        2: "Partially Mapped - Some design elements address the control but gaps remain"
+        3: "Fully Mapped - Controls are explicitly mapped to design elements with rationale"
+        4: "Evidenced - Mapped controls include testable acceptance criteria and traceability"
+      passing_threshold: 2.5
+      minimum_per_dimension: 2
+
+  # ============================================================================
+  # PILLAR 1: ICT RISK MANAGEMENT (DORA Articles 5-16)
+  # ============================================================================
+  dimensions:
+
+    - id: DORA-P1
+      name: "ICT Risk Management Framework Alignment"
+      dora_articles: [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+      weight: 0.25
+      description: >
+        Evaluates whether the architecture artifact demonstrates alignment with
+        the ICT risk management framework obligations, including identification,
+        protection, detection, response, and recovery capabilities.
+
+      criteria:
+
+        - id: DORA-P1-C1
+          name: "ICT Risk Identification and Classification"
+          dora_article: "Art. 8 - Identification"
+          weight: 0.15
+          question: >
+            Does the artifact identify and classify the ICT assets, systems, and
+            dependencies involved, including their criticality to business functions?
+          evidence_examples:
+            - "Asset inventory mapping showing ICT systems and their classification"
+            - "Business function to ICT system dependency map"
+            - "Criticality assessment of each component (critical/important/standard)"
+            - "Data flow diagrams showing information asset boundaries"
+          scoring_guidance:
+            0: "No ICT asset identification or classification present"
+            1: "Systems are listed but not classified by criticality or business function"
+            2: "Systems classified but dependency mapping is incomplete"
+            3: "Full asset inventory with criticality, dependencies, and business function mapping"
+            4: "Above plus risk ratings per asset, automated discovery evidence, and review cadence"
+
+        - id: DORA-P1-C2
+          name: "Protection and Prevention Measures"
+          dora_article: "Art. 9 - Protection and prevention"
+          weight: 0.20
+          question: >
+            Does the architecture define specific protection and prevention measures
+            for ICT systems, including access controls, encryption, network security,
+            and patch management approaches?
+          evidence_examples:
+            - "Access control model (RBAC/ABAC) mapped to architecture components"
+            - "Encryption standards specified for data at rest and in transit"
+            - "Network segmentation and firewall rules in the design"
+            - "Patch management and vulnerability management integration points"
+            - "Security hardening standards referenced for each technology layer"
+          scoring_guidance:
+            0: "No protection measures described"
+            1: "Generic security statement (e.g., 'security best practices will be followed')"
+            2: "Some controls specified but not mapped to all architecture components"
+            3: "Comprehensive controls mapped to each component with standards referenced"
+            4: "Above plus automated enforcement mechanisms and continuous compliance checks"
+
+        - id: DORA-P1-C3
+          name: "Detection Capabilities"
+          dora_article: "Art. 10 - Detection"
+          weight: 0.15
+          question: >
+            Does the architecture include anomaly detection, monitoring, and alerting
+            mechanisms for ICT-related incidents and threats?
+          evidence_examples:
+            - "Monitoring architecture showing log aggregation and SIEM integration"
+            - "Anomaly detection rules or ML-based detection capabilities"
+            - "Alert routing and escalation paths defined in the design"
+            - "Threat detection coverage mapped to MITRE ATT&CK or similar framework"
+          scoring_guidance:
+            0: "No detection or monitoring capabilities described"
+            1: "Monitoring mentioned but no specifics on what is monitored or how"
+            2: "Logging and basic monitoring defined but detection logic not specified"
+            3: "Comprehensive detection with specific rules, thresholds, and alert routing"
+            4: "Above plus threat intelligence integration and automated correlation"
+
+        - id: DORA-P1-C4
+          name: "Response and Recovery Design"
+          dora_article: "Art. 11, 12 - Response and recovery"
+          weight: 0.20
+          question: >
+            Does the architecture embed response and recovery capabilities including
+            failover, backup, restoration procedures, and communication protocols?
+          evidence_examples:
+            - "RTO and RPO targets defined per component and validated against business needs"
+            - "Failover architecture with active-passive or active-active design"
+            - "Backup strategy including frequency, retention, and restoration testing"
+            - "Incident response runbooks referenced or embedded in the design"
+            - "Communication channels for crisis coordination"
+          scoring_guidance:
+            0: "No response or recovery considerations in the design"
+            1: "RTO/RPO mentioned without failover or backup architecture"
+            2: "Backup and failover designed but not all critical components covered"
+            3: "Full response/recovery design with RTO/RPO, failover, backup, and runbooks"
+            4: "Above plus automated failover testing evidence and recovery drill results"
+
+        - id: DORA-P1-C5
+          name: "ICT Change Management Integration"
+          dora_article: "Art. 9(4)(e) - Change management"
+          weight: 0.15
+          question: >
+            Does the artifact address how changes to the ICT system will be managed,
+            tested, and approved in compliance with the ICT change management policy?
+          evidence_examples:
+            - "Change management process integrated into CI/CD pipeline design"
+            - "Pre-production testing environments specified in the architecture"
+            - "Approval gates and rollback mechanisms defined"
+            - "Impact assessment process for changes to critical functions"
+          scoring_guidance:
+            0: "No change management considerations"
+            1: "Change management referenced but not designed into the architecture"
+            2: "Some change controls present but gaps in testing or approval flows"
+            3: "Full change management lifecycle embedded with testing, approval, and rollback"
+            4: "Above plus automated regression testing, canary deployments, and audit trail"
+
+        - id: DORA-P1-C6
+          name: "ICT Business Continuity"
+          dora_article: "Art. 11 - ICT business continuity policy"
+          weight: 0.15
+          question: >
+            Does the architecture support the ICT business continuity policy with
+            documented continuity arrangements for critical or important functions?
+          evidence_examples:
+            - "Business continuity scenarios mapped to architecture failover capabilities"
+            - "Geographic redundancy or multi-region deployment design"
+            - "Degraded mode operations defined (what works when X fails)"
+            - "Dependencies on third parties identified with continuity provisions"
+          scoring_guidance:
+            0: "No business continuity considerations"
+            1: "Continuity mentioned but no architectural provisions"
+            2: "Some redundancy designed but not for all critical paths"
+            3: "Full continuity design with scenarios, degraded modes, and dependency coverage"
+            4: "Above plus regular continuity testing evidence and lessons-learned integration"
+
+    # ============================================================================
+    # PILLAR 2: ICT-RELATED INCIDENT MANAGEMENT (DORA Articles 17-23)
+    # ============================================================================
+
+    - id: DORA-P2
+      name: "ICT-Related Incident Management and Reporting"
+      dora_articles: [17, 18, 19, 20, 21, 22, 23]
+      weight: 0.20
+      description: >
+        Evaluates whether the architecture supports the incident management lifecycle
+        including detection, classification, escalation, reporting to competent
+        authorities, and root cause analysis.
+
+      criteria:
+
+        - id: DORA-P2-C1
+          name: "Incident Detection and Classification"
+          dora_article: "Art. 17, 18 - ICT-related incident management process"
+          weight: 0.25
+          question: >
+            Does the architecture support automated incident detection and provide
+            mechanisms for classifying incidents according to the DORA classification
+            criteria (clients affected, duration, geographic spread, data losses,
+            criticality of services)?
+          evidence_examples:
+            - "Incident detection triggers mapped to architecture monitoring points"
+            - "Classification criteria embedded in alerting rules"
+            - "Automated severity assignment based on impact parameters"
+            - "Integration with incident management platform (e.g., ServiceNow, PagerDuty)"
+          scoring_guidance:
+            0: "No incident detection or classification capabilities"
+            1: "Incidents detected but no DORA-aligned classification mechanism"
+            2: "Detection and basic classification present but not all DORA criteria covered"
+            3: "Full detection with DORA-compliant classification covering all required criteria"
+            4: "Above plus automated classification with ML-assisted triage and correlation"
+
+        - id: DORA-P2-C2
+          name: "Regulatory Reporting Enablement"
+          dora_article: "Art. 19 - Reporting of major ICT-related incidents"
+          weight: 0.30
+          question: >
+            Does the architecture support the generation of regulatory incident
+            reports (initial notification within 4 hours of classification,
+            intermediate report within 72 hours, final report within 1 month)
+            with the required data fields?
+          evidence_examples:
+            - "Data model supports all fields required for DORA incident report templates"
+            - "Automated report generation capability from incident data"
+            - "Timeline tracking for SLA compliance on reporting deadlines"
+            - "Integration point with competent authority reporting channels"
+            - "Audit trail of report submissions and amendments"
+          scoring_guidance:
+            0: "No regulatory reporting capability in the design"
+            1: "Reporting mentioned but no data model or integration defined"
+            2: "Partial data model or manual reporting process described"
+            3: "Full reporting capability with data model, timelines, and authority integration"
+            4: "Above plus automated deadline tracking, pre-populated templates, and submission audit"
+
+        - id: DORA-P2-C3
+          name: "Root Cause Analysis Support"
+          dora_article: "Art. 17(3) - Post-incident reviews"
+          weight: 0.20
+          question: >
+            Does the architecture provide sufficient observability and forensic
+            capability to support post-incident root cause analysis?
+          evidence_examples:
+            - "Distributed tracing architecture for request path reconstruction"
+            - "Log retention policy meeting investigation timeline requirements"
+            - "Immutable audit logs for forensic integrity"
+            - "Correlation IDs across service boundaries"
+          scoring_guidance:
+            0: "No observability or forensic capabilities"
+            1: "Basic logging present but insufficient for root cause analysis"
+            2: "Logging and some tracing, but gaps in correlation or retention"
+            3: "Full observability stack with tracing, correlation, and adequate retention"
+            4: "Above plus automated root cause suggestion and incident knowledge base integration"
+
+        - id: DORA-P2-C4
+          name: "Incident Communication Channels"
+          dora_article: "Art. 17(2) - Communication to clients and stakeholders"
+          weight: 0.25
+          question: >
+            Does the architecture include communication mechanisms for notifying
+            affected clients, staff, and stakeholders during and after incidents?
+          evidence_examples:
+            - "Status page or client notification service in the architecture"
+            - "Internal escalation and communication flow diagram"
+            - "Multi-channel notification capability (email, SMS, in-app)"
+            - "Template-driven communication for consistent messaging"
+          scoring_guidance:
+            0: "No incident communication architecture"
+            1: "Communication referenced but no mechanisms designed"
+            2: "Some notification capability but not all stakeholder channels covered"
+            3: "Multi-channel notification with templates and escalation flows"
+            4: "Above plus automated status updates, client-specific impact messaging, and audit trail"
+
+    # ============================================================================
+    # PILLAR 3: DIGITAL OPERATIONAL RESILIENCE TESTING (DORA Articles 24-27)
+    # ============================================================================
+
+    - id: DORA-P3
+      name: "Digital Operational Resilience Testing"
+      dora_articles: [24, 25, 26, 27]
+      weight: 0.20
+      description: >
+        Evaluates whether the architecture is designed to be testable for digital
+        operational resilience, including support for threat-led penetration testing
+        (TLPT) and regular resilience testing programs.
+
+      criteria:
+
+        - id: DORA-P3-C1
+          name: "Testability by Design"
+          dora_article: "Art. 24 - General requirements for testing"
+          weight: 0.25
+          question: >
+            Is the architecture designed to support regular resilience testing
+            including vulnerability assessments, network security assessments,
+            performance testing, and end-to-end testing?
+          evidence_examples:
+            - "Test environments that mirror production architecture"
+            - "Test injection points for fault simulation"
+            - "Performance testing hooks and baseline definitions"
+            - "Vulnerability scanning integration in the deployment pipeline"
+          scoring_guidance:
+            0: "No testability considerations in the design"
+            1: "Testing mentioned but no architectural provisions for testability"
+            2: "Some test infrastructure but not covering all resilience test types"
+            3: "Full testability design with environments, injection points, and scanning"
+            4: "Above plus chaos engineering framework and automated resilience test suites"
+
+        - id: DORA-P3-C2
+          name: "Threat-Led Penetration Testing (TLPT) Readiness"
+          dora_article: "Art. 26, 27 - Advanced testing using TLPT"
+          weight: 0.30
+          question: >
+            Does the architecture support threat-led penetration testing (TLPT)
+            as required for critical financial entities, including TIBER-EU
+            compatible red-team testing on live production systems?
+          evidence_examples:
+            - "TLPT scope boundaries clearly defined in the architecture"
+            - "Kill-switch or safe-abort mechanisms for live testing"
+            - "Monitoring capability to observe red-team activity without interference"
+            - "Data isolation or masking to protect live client data during tests"
+            - "Evidence collection mechanisms for TLPT reporting"
+          scoring_guidance:
+            0: "No TLPT considerations"
+            1: "Penetration testing acknowledged but no architectural support for TLPT"
+            2: "Some testing support but no live-system testing provisions"
+            3: "Full TLPT-ready design with scope, kill-switches, monitoring, and data protection"
+            4: "Above plus automated TLPT evidence collection and integration with TIBER-EU framework"
+
+        - id: DORA-P3-C3
+          name: "Scenario-Based Resilience Testing"
+          dora_article: "Art. 25 - Testing of ICT tools and systems"
+          weight: 0.25
+          question: >
+            Does the architecture define scenarios for resilience testing that cover
+            likely disruption events including infrastructure failure, cyber attacks,
+            and third-party service unavailability?
+          evidence_examples:
+            - "Failure scenario catalog mapped to architecture components"
+            - "Chaos engineering experiments defined for each critical path"
+            - "Third-party failure simulation capability"
+            - "Blast radius analysis for each failure scenario"
+          scoring_guidance:
+            0: "No failure scenarios defined"
+            1: "Some failure modes acknowledged but no structured scenario testing"
+            2: "Partial scenario coverage, missing some critical failure modes"
+            3: "Comprehensive scenario catalog with blast radius and mitigation for each"
+            4: "Above plus automated scenario execution, GameDay schedules, and regression tracking"
+
+        - id: DORA-P3-C4
+          name: "Test Evidence and Remediation Tracking"
+          dora_article: "Art. 24(6) - Remediation of vulnerabilities"
+          weight: 0.20
+          question: >
+            Does the architecture support capturing test results, tracking
+            remediation of identified vulnerabilities, and reporting test outcomes
+            to the management body?
+          evidence_examples:
+            - "Test results data store with structured findings schema"
+            - "Remediation tracking integration (e.g., JIRA, risk register)"
+            - "Dashboard or reporting mechanism for management body visibility"
+            - "Trend analysis capability for resilience posture over time"
+          scoring_guidance:
+            0: "No test evidence or remediation tracking"
+            1: "Test results captured but no structured tracking or reporting"
+            2: "Some tracking present but no management reporting or trend analysis"
+            3: "Full evidence capture, remediation tracking, and management reporting"
+            4: "Above plus automated SLA tracking on remediation and predictive risk scoring"
+
+    # ============================================================================
+    # PILLAR 4: THIRD-PARTY ICT RISK MANAGEMENT (DORA Articles 28-44)
+    # ============================================================================
+
+    - id: DORA-P4
+      name: "ICT Third-Party Risk Management"
+      dora_articles: [28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44]
+      weight: 0.25
+      description: >
+        Evaluates whether the architecture adequately addresses third-party ICT
+        service provider risks, including concentration risk, contractual
+        requirements, exit strategies, and sub-outsourcing chains.
+
+      criteria:
+
+        - id: DORA-P4-C1
+          name: "Third-Party Dependency Mapping"
+          dora_article: "Art. 28 - General principles"
+          weight: 0.20
+          question: >
+            Does the artifact identify and map all third-party ICT service providers
+            in the architecture, including cloud providers, SaaS platforms, managed
+            services, and data providers?
+          evidence_examples:
+            - "Complete third-party dependency register for the architecture"
+            - "Criticality classification of each third-party dependency"
+            - "Data flows to/from each third-party provider"
+            - "Sub-outsourcing chain visibility (fourth-party dependencies)"
+          scoring_guidance:
+            0: "No third-party dependencies identified"
+            1: "Some vendors mentioned but no structured dependency mapping"
+            2: "Dependencies listed but criticality or data flows not fully mapped"
+            3: "Complete dependency map with criticality, data flows, and sub-outsourcing"
+            4: "Above plus automated dependency discovery and real-time risk scoring"
+
+        - id: DORA-P4-C2
+          name: "Concentration Risk Assessment"
+          dora_article: "Art. 29 - Preliminary assessment of ICT concentration risk"
+          weight: 0.25
+          question: >
+            Does the architecture assess and mitigate ICT concentration risk,
+            including over-reliance on a single provider, geographic concentration,
+            and lack of substitutability?
+          evidence_examples:
+            - "Concentration risk analysis showing provider dependency percentages"
+            - "Multi-cloud or multi-vendor strategy where appropriate"
+            - "Geographic distribution analysis of third-party service locations"
+            - "Substitutability assessment for each critical third-party service"
+            - "Impact analysis if a critical third party becomes unavailable"
+          scoring_guidance:
+            0: "No concentration risk considerations"
+            1: "Concentration risk acknowledged but no analysis performed"
+            2: "Partial analysis covering some providers but not systematic"
+            3: "Systematic concentration risk analysis with mitigation strategies"
+            4: "Above plus quantified risk metrics and board-level concentration risk reporting"
+
+        - id: DORA-P4-C3
+          name: "Contractual and Compliance Requirements"
+          dora_article: "Art. 30 - Key contractual provisions"
+          weight: 0.20
+          question: >
+            Does the architecture reference or enforce the key contractual provisions
+            required by DORA for ICT third-party agreements, including audit rights,
+            data location, security measures, and incident notification obligations?
+          evidence_examples:
+            - "Contractual requirements checklist mapped to each third-party integration"
+            - "Data residency requirements enforced in the architecture"
+            - "Audit right provisions and access mechanisms designed"
+            - "SLA definitions aligned with DORA requirements"
+            - "Incident notification chain from third party to entity to regulator"
+          scoring_guidance:
+            0: "No contractual requirements referenced"
+            1: "Generic SLAs mentioned but no DORA-specific contractual provisions"
+            2: "Some DORA contractual provisions addressed but gaps remain"
+            3: "All key DORA contractual provisions mapped to architecture and third parties"
+            4: "Above plus automated SLA monitoring and contractual compliance dashboards"
+
+        - id: DORA-P4-C4
+          name: "Exit Strategy and Portability"
+          dora_article: "Art. 28(8) - Exit strategies"
+          weight: 0.20
+          question: >
+            Does the architecture include exit strategies for critical third-party
+            providers, ensuring data portability, service continuity during
+            transition, and avoidance of vendor lock-in?
+          evidence_examples:
+            - "Exit plan for each critical third-party provider"
+            - "Data portability mechanisms (export formats, APIs, migration tools)"
+            - "Transition timeline estimates with resource requirements"
+            - "Abstraction layers or interfaces to minimize vendor lock-in"
+            - "Alternative provider assessment for critical services"
+          scoring_guidance:
+            0: "No exit strategy or portability considerations"
+            1: "Exit strategy mentioned but no architectural provisions"
+            2: "Some portability features but not all critical dependencies covered"
+            3: "Full exit strategy with portability, transition plans, and abstraction layers"
+            4: "Above plus tested migration procedures and documented transition runbooks"
+
+        - id: DORA-P4-C5
+          name: "Third-Party Monitoring and Oversight"
+          dora_article: "Art. 28(5) - Monitoring of third-party arrangements"
+          weight: 0.15
+          question: >
+            Does the architecture enable ongoing monitoring and oversight of
+            third-party ICT service providers, including performance monitoring,
+            security posture assessment, and compliance verification?
+          evidence_examples:
+            - "Third-party performance monitoring integration in the architecture"
+            - "Security posture monitoring of third-party interfaces"
+            - "Compliance attestation collection and tracking mechanism"
+            - "Third-party risk reassessment triggers built into the design"
+          scoring_guidance:
+            0: "No third-party monitoring capabilities"
+            1: "Basic uptime monitoring only"
+            2: "Performance monitoring present but no security or compliance monitoring"
+            3: "Comprehensive monitoring covering performance, security, and compliance"
+            4: "Above plus automated risk scoring and real-time compliance deviation alerts"
+
+    # ============================================================================
+    # PILLAR 5: INFORMATION SHARING (DORA Article 45)
+    # ============================================================================
+
+    - id: DORA-P5
+      name: "Information Sharing Arrangements"
+      dora_articles: [45]
+      weight: 0.10
+      description: >
+        Evaluates whether the architecture supports participation in cyber threat
+        information sharing arrangements among financial entities and with
+        competent authorities.
+
+      criteria:
+
+        - id: DORA-P5-C1
+          name: "Threat Intelligence Integration"
+          dora_article: "Art. 45 - Information-sharing arrangements"
+          weight: 0.40
+          question: >
+            Does the architecture integrate with cyber threat intelligence (CTI)
+            sources and sharing platforms to support DORA information sharing
+            obligations?
+          evidence_examples:
+            - "CTI feed integration (STIX/TAXII or equivalent)"
+            - "Threat intelligence platform in the architecture"
+            - "Automated IOC ingestion and correlation capabilities"
+            - "Membership in financial sector ISAC reflected in design"
+          scoring_guidance:
+            0: "No threat intelligence integration"
+            1: "Threat intelligence mentioned but no integration designed"
+            2: "Some CTI feeds integrated but no sharing capability"
+            3: "Full CTI integration with both consumption and contribution capabilities"
+            4: "Above plus automated enrichment, contextualization, and cross-entity sharing"
+
+        - id: DORA-P5-C2
+          name: "Data Anonymization and Confidentiality"
+          dora_article: "Art. 45(2) - Protection of shared information"
+          weight: 0.30
+          question: >
+            Does the architecture ensure that shared threat and incident information
+            is appropriately anonymized and that confidentiality protections are
+            maintained, including PII and business-sensitive data?
+          evidence_examples:
+            - "Anonymization or pseudonymization mechanisms for shared data"
+            - "Traffic Light Protocol (TLP) or equivalent classification enforcement"
+            - "Access controls on shared intelligence data"
+            - "Data loss prevention for outbound threat intelligence sharing"
+          scoring_guidance:
+            0: "No confidentiality protections for information sharing"
+            1: "Confidentiality acknowledged but no mechanisms designed"
+            2: "Some protections present but not systematic"
+            3: "Full anonymization and confidentiality framework for shared information"
+            4: "Above plus automated classification, TLP enforcement, and audit trail"
+
+        - id: DORA-P5-C3
+          name: "Regulatory Communication Channels"
+          dora_article: "Art. 45 - Sharing with competent authorities"
+          weight: 0.30
+          question: >
+            Does the architecture include secure communication channels for sharing
+            information with competent authorities and designated cyber threat
+            intelligence sharing communities?
+          evidence_examples:
+            - "Secure reporting portal integration for competent authority submissions"
+            - "Encrypted communication channels for sensitive data exchange"
+            - "Automated report formatting for regulatory submissions"
+            - "Audit trail for all regulatory communications"
+          scoring_guidance:
+            0: "No regulatory communication channels"
+            1: "Manual communication processes only"
+            2: "Some secure channels but not all regulatory reporting covered"
+            3: "Full secure communication architecture for all regulatory reporting"
+            4: "Above plus automated submission, acknowledgment tracking, and SLA monitoring"
+
+  # ============================================================================
+  # CROSS-CUTTING CONCERNS
+  # ============================================================================
+
+  cross_cutting:
+
+    - id: DORA-CC1
+      name: "Governance and Accountability"
+      description: >
+        The architecture artifact must demonstrate clear governance and
+        accountability structures aligned with DORA requirements.
+      checkpoint_questions:
+        - "Is the management body's responsibility for ICT risk clearly reflected?"
+        - "Are roles and responsibilities for ICT risk management defined?"
+        - "Is there a named ICT risk owner for this architecture?"
+        - "Does the artifact reference the entity's ICT risk management framework?"
+      required: true
+
+    - id: DORA-CC2
+      name: "Proportionality Assessment"
+      description: >
+        DORA applies proportionally based on entity size, nature, scale, and
+        complexity. The architecture should reflect appropriate proportionality.
+      checkpoint_questions:
+        - "Is the level of control proportionate to the risk and criticality?"
+        - "Are simplified requirements applied where the entity qualifies?"
+        - "Is the cost-benefit of controls assessed and documented?"
+      required: true
+
+    - id: DORA-CC3
+      name: "Regulatory Traceability Matrix"
+      description: >
+        A traceability matrix should map DORA articles and RTS requirements
+        to specific design decisions in the architecture artifact.
+      checkpoint_questions:
+        - "Is there a control-to-design mapping table in the artifact?"
+        - "Can each DORA obligation be traced to a specific architectural element?"
+        - "Are gaps explicitly acknowledged with remediation plans?"
+      required: true
+      template:
+        columns:
+          - dora_article
+          - rts_reference
+          - control_objective
+          - architecture_element
+          - implementation_status
+          - evidence_reference
+          - gap_remediation_plan
+
+  # ============================================================================
+  # EVALUATION WORKFLOW
+  # ============================================================================
+
+  evaluation_workflow:
+    description: >
+      Recommended process for applying this overlay to an architecture artifact.
+
+    steps:
+      - step: 1
+        name: "Scope Determination"
+        description: >
+          Determine which DORA pillars are applicable based on the artifact type
+          and the criticality of the function it supports.
+        actions:
+          - "Identify the business function(s) the architecture supports"
+          - "Classify functions as critical/important or standard per DORA Art. 3"
+          - "Determine if the entity is subject to TLPT requirements"
+          - "Identify all third-party ICT providers in scope"
+
+      - step: 2
+        name: "Evidence Collection"
+        description: >
+          Gather evidence from the architecture artifact against each applicable
+          criterion.
+        actions:
+          - "Review the artifact against each criterion in applicable dimensions"
+          - "Document specific evidence (page numbers, diagram references, etc.)"
+          - "Flag missing evidence with the artifact owner"
+
+      - step: 3
+        name: "Scoring"
+        description: >
+          Score each criterion using the 0-4 scale and calculate dimension and
+          overall scores.
+        actions:
+          - "Score each criterion independently"
+          - "Calculate weighted dimension scores"
+          - "Calculate overall weighted score"
+          - "Verify minimum thresholds are met per dimension"
+
+      - step: 4
+        name: "Gap Analysis and Remediation"
+        description: >
+          Identify gaps, prioritize remediation, and set timelines.
+        actions:
+          - "List all criteria scoring below 2 (Partially Mapped)"
+          - "Prioritize gaps by risk and regulatory exposure"
+          - "Assign remediation owners and target dates"
+          - "Schedule re-evaluation after remediation"
+
+      - step: 5
+        name: "Architecture Board Review"
+        description: >
+          Present findings to the architecture board with recommendations.
+        actions:
+          - "Prepare evaluation summary with scores and gaps"
+          - "Present to architecture board for approval or remediation mandate"
+          - "Record board decision and any accepted residual risks"
+          - "Update the entity's register of information per DORA Art. 28(3)"
+
+  # ============================================================================
+  # OUTPUT TEMPLATES
+  # ============================================================================
+
+  output:
+    evaluation_report:
+      sections:
+        - title: "Executive Summary"
+          content: "Overall DORA compliance score, pass/fail status, critical gaps"
+        - title: "Scope and Applicability"
+          content: "Which pillars were evaluated and why"
+        - title: "Dimension Scores"
+          content: "Score per dimension with commentary"
+        - title: "Detailed Findings"
+          content: "Per-criterion scores, evidence, and observations"
+        - title: "Gap Register"
+          content: "All gaps with severity, owner, and remediation timeline"
+        - title: "Regulatory Traceability Matrix"
+          content: "DORA article to design element mapping"
+        - title: "Recommendations"
+          content: "Prioritized actions for compliance improvement"
+        - title: "Appendices"
+          content: "Evidence references, reviewer details, methodology notes"
+
+    risk_ratings:
+      critical: "Score below 1.0 on any dimension - Immediate remediation required"
+      high: "Score between 1.0 and 2.0 on any dimension - Remediation within 30 days"
+      medium: "Score between 2.0 and 2.5 on any dimension - Remediation within 90 days"
+      low: "Score between 2.5 and 3.0 - Enhancement within next review cycle"
+      compliant: "Score 3.0 or above across all dimensions - Meets DORA requirements"

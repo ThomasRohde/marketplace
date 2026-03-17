@@ -1,0 +1,52 @@
+evaluation_id: EVAL-0001
+rubric_id: EAROS-XXX-001
+rubric_version: 1.0.0
+artifact_ref:
+  id: ART-0001
+  title: Replace with artifact title
+  artifact_type: replace_me
+  owner: replace_me
+  uri: replace_me
+evaluation_date: '2026-03-16'
+evaluators:
+- name: Lead reviewer
+  role: architect
+  mode: human
+- name: Rubric evaluator
+  role: assistant
+  mode: agent
+- name: Challenge reviewer
+  role: assistant
+  mode: challenge-agent
+status: conditional_pass
+overall_score: 2.9
+gate_failures: []
+criterion_results:
+- criterion_id: NEW-01
+  score: 2
+  judgment_type: observed
+  confidence: medium
+  evidence_sufficiency: partial
+  evidence_refs:
+  - location: Section 2.1
+    excerpt: Purpose is stated, but audience is unclear.
+  rationale: Partial criterion satisfaction.
+  missing_information:
+  - Missing stakeholder mapping
+  recommended_actions:
+  - Add stakeholder-concern table
+dimension_results:
+- dimension_id: PX1
+  score: 2.0
+  summary: Partial evidence; needs stronger treatment.
+summary:
+  strengths:
+  - Core purpose exists
+  weaknesses:
+  - Evidence is incomplete
+  risks:
+  - Ambiguous decision basis
+  next_actions:
+  - Revise artifact and re-evaluate
+  decision_narrative: The artifact is reviewable but not yet strong enough for a clean
+    pass.

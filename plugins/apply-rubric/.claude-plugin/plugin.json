@@ -1,0 +1,23 @@
+{
+  "name": "apply-rubric",
+  "version": "1.0.0",
+  "description": "Apply EAROS rubrics to architecture artifacts using the three-pass agent evaluation pattern (Extractor, Evaluator, Challenger) with optional parallel evaluators for comprehensive artifacts",
+  "author": {
+    "name": "Thomas Klok Rohde",
+    "email": "thomas@rohde.name"
+  },
+  "keywords": [
+    "earos",
+    "rubric",
+    "evaluation",
+    "architecture-review",
+    "scoring",
+    "evidence",
+    "three-pass",
+    "extractor",
+    "evaluator",
+    "challenger",
+    "governance",
+    "enterprise-architecture"
+  ]
+}

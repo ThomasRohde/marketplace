@@ -1,0 +1,556 @@
+rubric_id: EAROS-OVR-REG-001
+version: 1.0.0
+kind: overlay
+title: DORA Regulatory Compliance Overlay
+status: draft
+artifact_type: any
+inherits:
+  - EAROS-CORE-001@1.0.0
+purpose:
+  - regulatory_compliance_review
+  - governance_gate_review
+  - audit_evidence_review
+  - dora_control_mapping_assurance
+stakeholders:
+  - risk_and_compliance_architect
+  - compliance_officer
+  - risk_manager
+  - architecture_board
+  - internal_audit
+  - ict_risk_function
+applicability:
+  description: >
+    Applies to any architecture artifact produced within or for a financial
+    entity subject to the EU Digital Operational Resilience Act (DORA,
+    Regulation (EU) 2022/2554). Particularly relevant for artifacts
+    covering ICT systems, third-party service arrangements, incident
+    management, and digital operational resilience testing.
+  conditions:
+    - entity is an EU-regulated financial services organisation
+    - artifact describes or impacts ICT infrastructure, services, or operations
+    - artifact involves third-party ICT service providers (including cloud)
+    - artifact is subject to architecture board or governance gate review
+dimensions:
+  - id: REG1
+    name: ICT risk management framework alignment
+    description: >
+      Evaluates whether the architecture artifact demonstrates alignment with
+      DORA Chapter II requirements for ICT risk management, including risk
+      identification, protection, detection, response, recovery, and learning.
+      Architects frequently mention "ICT risk" without mapping specific controls
+      to architectural decisions, which has led to repeated audit findings.
+    weight: 1.2
+    criteria:
+      - id: REG-01
+        question: >
+          Does the artifact identify material ICT risks and map them to specific
+          architectural controls, with clear ownership and residual risk
+          assessment, as required by DORA Articles 5-16?
+        description: >
+          DORA requires financial entities to have a comprehensive ICT risk
+          management framework. Architecture artifacts must demonstrate that ICT
+          risks have been identified and that the design includes specific
+          controls (not just aspirational statements) with designated owners.
+          This criterion catches the common failure mode where architects
+          acknowledge DORA obligations but do not actually trace controls to
+          their design decisions.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: critical
+          failure_effect: >
+            Reject or escalate to compliance officer. Architecture artifacts
+            for DORA-regulated entities that lack ICT risk-to-control mapping
+            cannot proceed through governance gates. Audit has previously
+            flagged this as a material deficiency.
+        required_evidence:
+          - ICT risk register or risk assessment section referencing the artifact
+          - control mapping table linking identified risks to architectural decisions
+          - control ownership assignment (role or team, not individual)
+          - residual risk statement for each material risk
+          - reference to DORA Chapter II articles or RTS/ITS provisions
+        scoring_guide:
+          '0': >
+            No ICT risk identification or control mapping. DORA is not mentioned
+            or is mentioned only as a generic compliance requirement without any
+            design response.
+          '1': >
+            ICT risks are acknowledged at a high level (e.g., "we will comply
+            with DORA") but no specific risks are identified, no controls are
+            mapped to the architecture, and no ownership is assigned.
+          '2': >
+            Some ICT risks are identified and partially mapped to architectural
+            controls, but the mapping is incomplete: some controls lack owners,
+            residual risk is not assessed, or significant risk categories from
+            DORA Articles 5-16 are missing.
+          '3': >
+            Material ICT risks are identified with clear control mappings,
+            ownership is assigned, and residual risk is stated. Minor gaps
+            remain (e.g., one risk category underspecified, or detection and
+            learning mechanisms not yet detailed).
+          '4': >
+            Comprehensive ICT risk-to-control mapping. All material risks are
+            identified per DORA Articles 5-16, controls are traced to specific
+            architectural decisions, ownership is explicit, residual risk is
+            assessed, and the artifact references applicable RTS/ITS. Detection,
+            response, recovery, and learning mechanisms are all addressed.
+        anti_patterns:
+          - Generic statement "architecture is DORA-compliant" without control mapping
+          - Risk register exists but is disconnected from architectural decisions
+          - Controls listed without designated owners
+          - Only protection controls addressed; detection, response, recovery, and learning omitted
+          - Copy-pasted DORA article text without artifact-specific mapping
+        remediation_hints:
+          - Create a risk-control-decision traceability table with columns for risk ID, DORA article, control description, architectural decision, owner, and residual risk
+          - Ensure all five ICT risk management functions are addressed (identify, protect, detect, respond and recover, learn)
+          - Assign control ownership to specific roles or teams, not "IT" or "the project"
+          - Reference specific DORA articles and applicable RTS/ITS, not just "DORA"
+      - id: REG-02
+        question: >
+          Does the artifact demonstrate that ICT asset classification and
+          dependency mapping have been performed, and are these reflected in
+          the architectural design, as required by DORA Article 8?
+        description: >
+          DORA Article 8 requires financial entities to identify, classify,
+          and document all ICT assets and their dependencies. Architecture
+          artifacts must show that the design accounts for these dependencies
+          and that critical ICT assets supporting critical or important
+          functions are explicitly identified.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Caps status at conditional_pass. Architecture artifacts that do not
+            demonstrate ICT asset classification and dependency awareness cannot
+            receive unconditional approval.
+        required_evidence:
+          - ICT asset inventory or reference to asset register
+          - dependency mapping or diagram showing upstream/downstream ICT dependencies
+          - classification of assets by criticality (supporting critical or important functions)
+          - identification of single points of failure in the dependency chain
+        scoring_guide:
+          '0': >
+            No ICT asset identification or dependency mapping. The artifact
+            treats the technology landscape as a black box.
+          '1': >
+            ICT assets are mentioned but not classified or mapped. Dependencies
+            are not documented. No reference to which assets support critical
+            or important functions.
+          '2': >
+            Partial asset inventory and some dependency mapping exist, but
+            classification by criticality is missing or incomplete. Single
+            points of failure are not identified.
+          '3': >
+            ICT assets are identified and classified by criticality. Dependencies
+            are mapped. Critical or important function linkage is shown. Minor
+            gaps remain (e.g., some indirect dependencies not traced).
+          '4': >
+            Complete ICT asset classification with full dependency mapping.
+            Critical and important function linkage is explicit. Single points
+            of failure are identified with mitigation. Asset register reference
+            is current and traceable.
+        anti_patterns:
+          - Architecture diagrams show components without dependency or criticality information
+          - Asset register exists separately but architecture artifact does not reference it
+          - All assets treated as equally critical (no classification)
+          - Dependencies shown at service level only, ignoring infrastructure dependencies
+        remediation_hints:
+          - Add a dependency map with criticality annotations
+          - Cross-reference the enterprise ICT asset register
+          - Explicitly tag which assets support critical or important business functions per DORA Article 3
+          - Identify and document single points of failure with planned mitigations
+
+  - id: REG2
+    name: Third-party ICT risk management
+    description: >
+      Evaluates whether the architecture artifact addresses DORA Chapter V
+      requirements for managing ICT third-party risk, including concentration
+      risk, exit strategies, and contractual assurance. This is a persistent
+      audit finding area: architects design solutions using third-party
+      services without documenting the regulatory risk implications.
+    weight: 1.2
+    criteria:
+      - id: REG-03
+        question: >
+          Does the artifact identify all ICT third-party service providers
+          involved in the design and assess concentration risk, exit strategy
+          feasibility, and contractual compliance with DORA Articles 28-30?
+        description: >
+          DORA Chapter V mandates that financial entities manage ICT third-party
+          risk throughout the lifecycle. Architecture artifacts that introduce or
+          depend on third-party ICT services must identify those providers,
+          assess concentration risk, and demonstrate that exit strategies are
+          architecturally feasible (not just contractually promised).
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: critical
+          failure_effect: >
+            Reject or escalate to compliance and risk. Designs that introduce
+            third-party ICT dependencies without DORA-compliant risk assessment
+            represent a material regulatory gap. This has been the source of
+            multiple audit findings.
+        required_evidence:
+          - inventory of third-party ICT service providers used in the design
+          - concentration risk assessment (single-provider dependency, geographic, substitutability)
+          - exit strategy or portability analysis for critical third-party services
+          - contractual requirement mapping against DORA Article 30 provisions
+          - subcontracting chain visibility (key subcontractors identified)
+        scoring_guide:
+          '0': >
+            Third-party ICT providers are used but not identified or assessed.
+            No mention of concentration risk, exit strategy, or contractual
+            DORA requirements.
+          '1': >
+            Third-party providers are listed but without risk assessment.
+            Concentration risk, exit strategies, and contractual compliance
+            are not addressed. Provider selection appears driven solely by
+            technical preference.
+          '2': >
+            Some third-party providers are identified with partial risk
+            assessment. Concentration risk is acknowledged but not quantified.
+            Exit strategy is mentioned but not architecturally validated.
+            Contractual mapping is incomplete.
+          '3': >
+            All material third-party ICT providers are identified. Concentration
+            risk is assessed. Exit strategies are described and appear
+            architecturally feasible. Contractual DORA compliance is addressed.
+            Minor gaps remain (e.g., subcontracting chain not fully visible).
+          '4': >
+            Comprehensive third-party risk assessment. All providers identified
+            with concentration risk quantified. Exit strategies are
+            architecturally validated (not just contractual). DORA Article 30
+            contractual provisions are mapped. Subcontracting chain is visible.
+            Critical ICT third-party service providers (CTPPs) flagged for
+            Oversight Framework implications.
+        anti_patterns:
+          - Cloud or SaaS provider used without any regulatory risk assessment
+          - Exit strategy described only as "we can switch provider" without architectural evidence
+          - Concentration risk ignored because "everyone uses this provider"
+          - Contractual compliance assumed rather than verified against DORA Article 30
+          - Subcontractors of critical providers unknown or unassessed
+        remediation_hints:
+          - Create a third-party ICT provider register for the design with DORA Article 28 attributes
+          - Perform and document concentration risk assessment including geographic, substitutability, and criticality dimensions
+          - Validate exit strategy architecturally (data portability, API abstraction, deployment independence)
+          - Map contractual provisions against DORA Article 30 requirements
+          - Identify key subcontractors in the service chain
+
+  - id: REG3
+    name: ICT incident management and reporting readiness
+    description: >
+      Evaluates whether the architecture artifact incorporates incident
+      detection, classification, reporting, and communication mechanisms as
+      required by DORA Chapter III. Architecture designs that do not embed
+      incident management capabilities create operational blind spots that
+      lead to reporting failures and regulatory sanctions.
+    weight: 1.0
+    criteria:
+      - id: REG-04
+        question: >
+          Does the artifact incorporate or reference ICT incident detection,
+          classification, and reporting mechanisms consistent with DORA
+          Articles 17-23, including major ICT-related incident reporting
+          timelines?
+        description: >
+          DORA Chapter III requires financial entities to establish incident
+          management processes, classify ICT-related incidents, and report
+          major incidents to competent authorities within specified timelines.
+          Architecture artifacts must show that the design supports these
+          obligations, not just that a separate incident management process
+          exists.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Caps status at conditional_pass. Designs without incident
+            management integration may proceed conditionally but must
+            demonstrate incident readiness before production deployment.
+        required_evidence:
+          - incident detection mechanisms embedded in or referenced by the architecture
+          - incident classification approach aligned with DORA Article 18 criteria
+          - reporting workflow or integration with central incident reporting function
+          - incident communication channels for stakeholders and authorities
+          - reference to major ICT-related incident reporting timelines
+        scoring_guide:
+          '0': >
+            No incident management consideration. The architecture assumes
+            incidents will be handled by someone else without any design
+            provisions.
+          '1': >
+            Incident management is mentioned (e.g., "incidents will be managed
+            per policy") but no detection, classification, or reporting
+            mechanisms are embedded in the design.
+          '2': >
+            Some incident detection is designed (e.g., monitoring, alerting)
+            but classification, reporting integration, and timeline awareness
+            are missing or incomplete. The design does not connect to the
+            entity's DORA reporting obligations.
+          '3': >
+            Incident detection, classification, and reporting integration are
+            addressed. The architecture connects to the central incident
+            management function. Major incident reporting timelines are
+            acknowledged. Minor gaps (e.g., communication channels for
+            client notification not detailed).
+          '4': >
+            Comprehensive incident management integration. Detection mechanisms
+            are designed for the specific ICT services. Classification aligns
+            with DORA Article 18 criteria. Reporting workflows meet timeline
+            requirements. Communication channels cover authorities, management,
+            and affected clients. Post-incident review mechanisms are included.
+        anti_patterns:
+          - Monitoring will be added later without architectural provision
+          - Incident management treated as purely operational with no architectural hooks
+          - Detection limited to availability monitoring; no security incident detection
+          - Reporting timelines not known or referenced by the architecture team
+        remediation_hints:
+          - Design detection mechanisms specific to the ICT services in scope (availability, integrity, confidentiality)
+          - Map incident classification criteria from DORA Article 18 and applicable RTS
+          - Integrate reporting workflow with the entity's central incident management function
+          - Document major incident reporting timelines and ensure the architecture supports them
+          - Include post-incident review and learning mechanisms in the design
+
+  - id: REG4
+    name: Digital operational resilience testing
+    description: >
+      Evaluates whether the architecture artifact addresses DORA Chapter IV
+      requirements for digital operational resilience testing, including
+      provisions for threat-led penetration testing (TLPT) where applicable.
+      Architectures that are not designed for testability create barriers to
+      regulatory compliance and operational assurance.
+    weight: 1.0
+    criteria:
+      - id: REG-05
+        question: >
+          Does the artifact demonstrate that the architecture is designed for
+          digital operational resilience testing, including testability
+          provisions and, where applicable, threat-led penetration testing
+          (TLPT) readiness per DORA Articles 24-27?
+        description: >
+          DORA Chapter IV requires financial entities to maintain a digital
+          operational resilience testing programme. Architecture artifacts must
+          show that the design supports testability, including the ability to
+          conduct scenario-based testing, failover testing, and (for significant
+          entities) threat-led penetration testing.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Caps status at conditional_pass. Architectures that are not designed
+            for resilience testing cannot demonstrate DORA compliance and must
+            be remediated before governance approval.
+        required_evidence:
+          - testability provisions in the architecture (test environments, isolation, data masking)
+          - resilience testing scenarios relevant to the design (failover, degradation, recovery)
+          - TLPT readiness assessment (for critical or important functions)
+          - reference to the entity's digital operational resilience testing programme
+          - evidence that testing will cover the full ICT service stack, not just the application layer
+        scoring_guide:
+          '0': >
+            No resilience testing consideration. The architecture makes no
+            provision for testing operational resilience.
+          '1': >
+            Testing is mentioned in passing (e.g., "will be tested") but no
+            testability provisions are designed, no testing scenarios are
+            identified, and TLPT is not considered.
+          '2': >
+            Some testability is designed (e.g., test environments exist) but
+            resilience testing scenarios are generic or incomplete. TLPT
+            readiness is not assessed. Testing scope does not cover the full
+            ICT stack.
+          '3': >
+            Testability provisions are designed. Resilience testing scenarios
+            are relevant and specific. TLPT readiness is assessed where
+            applicable. The architecture connects to the entity's testing
+            programme. Minor gaps remain (e.g., third-party service testing
+            not fully addressed).
+          '4': >
+            Comprehensive testability design. Resilience testing scenarios
+            cover failover, degradation, and recovery for all critical paths.
+            TLPT readiness is explicitly assessed for critical functions.
+            Testing programme integration is clear. Third-party service testing
+            is addressed. Testing covers application, infrastructure, and
+            network layers.
+        anti_patterns:
+          - Testing is out of scope for architecture — DORA makes it in scope
+          - Only functional testing addressed; no resilience or security testing
+          - Test environments not architecturally provisioned
+          - TLPT dismissed without assessing whether the function is critical or important
+          - Third-party services excluded from testing scope
+        remediation_hints:
+          - Design test environments and isolation mechanisms into the architecture
+          - Define resilience testing scenarios specific to the ICT services (failover, switchover, degradation)
+          - Assess TLPT applicability based on critical or important function classification
+          - Integrate with the entity's digital operational resilience testing programme
+          - Include third-party ICT services in testing scope where feasible
+
+  - id: REG5
+    name: ICT information sharing and regulatory communication
+    description: >
+      Evaluates whether the architecture artifact addresses DORA Article 45
+      provisions for information sharing arrangements and whether the design
+      supports regulatory communication obligations. Also covers the
+      traceability of DORA compliance decisions within the artifact itself,
+      ensuring the architecture board and auditors can verify compliance
+      without relying on external knowledge.
+    weight: 0.8
+    criteria:
+      - id: REG-06
+        question: >
+          Does the artifact document how DORA compliance decisions were made,
+          which articles and RTS/ITS were considered, and how the architecture
+          supports the entity's information sharing and regulatory communication
+          obligations?
+        description: >
+          DORA requires financial entities to participate in information sharing
+          arrangements (Article 45) and maintain clear regulatory communication
+          channels. More broadly, architecture artifacts must be self-documenting
+          regarding regulatory compliance: an auditor or architecture board
+          member should be able to trace DORA compliance from the artifact
+          itself without needing to interview the architect.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - DORA compliance decision log or traceability section within the artifact
+          - specific DORA article references mapped to design decisions
+          - identification of applicable RTS/ITS and how they influenced the design
+          - information sharing arrangement provisions (where applicable)
+          - regulatory reporting data flow (what data the architecture produces for regulatory purposes)
+        scoring_guide:
+          '0': >
+            No DORA compliance traceability. The artifact contains no record
+            of which DORA requirements were considered or how compliance
+            decisions were made.
+          '1': >
+            DORA is referenced generically (e.g., "this design is DORA
+            compliant") but no specific articles, RTS/ITS, or compliance
+            decisions are documented. An auditor could not verify compliance
+            from the artifact.
+          '2': >
+            Some DORA articles are referenced and some compliance decisions
+            are documented, but traceability is incomplete. Information sharing
+            and regulatory communication provisions are not addressed.
+          '3': >
+            DORA compliance decisions are documented with article references.
+            Applicable RTS/ITS are identified. Regulatory communication
+            provisions are addressed. An auditor could largely verify compliance
+            from the artifact. Minor gaps in information sharing provisions.
+          '4': >
+            Full DORA compliance traceability. All relevant articles and
+            RTS/ITS are mapped to design decisions. Information sharing
+            arrangements are addressed. Regulatory reporting data flows
+            are documented. The artifact is self-contained for audit purposes.
+        anti_patterns:
+          - DORA compliance confirmed without any article-level traceability
+          - Compliance rationale exists only in the architect's head or in meeting notes
+          - Information sharing dismissed as "not our responsibility"
+          - Regulatory reporting needs not considered in the data architecture
+        remediation_hints:
+          - Add a DORA compliance traceability section listing each applicable article and the design response
+          - Document which RTS/ITS were considered and how they influenced design decisions
+          - Address information sharing provisions per Article 45, even if only to document applicability assessment
+          - Identify regulatory reporting data flows the architecture must support
+          - Ensure the artifact is auditable without requiring architect interviews
+
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: append_to_base_rubric
+  thresholds:
+    critical_regulatory_failure: >
+      Reject or escalate to compliance officer when REG-01 (ICT risk-control
+      mapping) or REG-03 (third-party ICT risk) scores 0 or 1. These represent
+      material DORA compliance gaps that cannot be accepted at any governance
+      gate.
+    major_regulatory_gap: >
+      Cap at conditional_pass when REG-02 (ICT asset classification), REG-04
+      (incident management), or REG-05 (resilience testing) scores below 2.
+      These represent significant gaps that must be remediated before
+      unconditional approval.
+    escalation_to_compliance: >
+      Escalate to compliance officer for human review whenever any criterion
+      in this overlay scores below 3 for artifacts supporting critical or
+      important business functions as defined by the entity's DORA
+      classification.
+    escalation_to_audit: >
+      Flag for internal audit review whenever the overlay is applied to an
+      artifact that has previously received audit findings related to DORA
+      compliance.
+  na_policy: >
+    Exclude N/A criteria from denominator. Evaluator must justify N/A with
+    a specific explanation of why the DORA requirement is not applicable to
+    this artifact. For REG-01 and REG-03, N/A is only valid when the artifact
+    genuinely does not involve ICT systems or third-party ICT providers.
+  confidence_policy: >
+    Report confidence separately; do not alter score mathematically.
+    For regulatory compliance criteria, low confidence should trigger
+    escalation to compliance officer regardless of score.
+
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+    - yaml
+    - json
+    - markdown-report
+
+calibration:
+  required_before_production: true
+  minimum_examples: 3
+  recommended_reviewers:
+    - 2 compliance officers with DORA expertise
+    - 1 domain architect
+    - 1 evaluator agent
+    - 1 challenger agent
+  calibration_notes: >
+    Calibration must include at least one artifact that previously received
+    DORA-related audit findings, to validate that the overlay would have
+    caught the deficiency. Calibration should also include one artifact
+    with strong DORA compliance to ensure the scoring guide does not
+    over-penalise compliant designs.
+
+metadata:
+  regulatory_framework: DORA (EU Regulation 2022/2554)
+  applicable_chapters:
+    - Chapter II (ICT risk management)
+    - Chapter III (ICT-related incident management, classification, and reporting)
+    - Chapter IV (Digital operational resilience testing)
+    - Chapter V (Managing of ICT third-party risk)
+    - Article 45 (Information sharing arrangements)
+  design_method: D (Risk-centered)
+  design_rationale: >
+    Method D (risk-centered) was selected because this overlay exists to
+    manage a specific class of risk: regulatory non-compliance with DORA.
+    The overlay identifies risk classes (ICT risk, third-party risk, incident
+    risk, testing gaps), defines mandatory controls as hard gates, and ensures
+    residual risk visibility. This aligns with the EAROS recommendation that
+    regulatory concerns are better served as overlays than as criteria
+    embedded in individual profiles.
+  origin_context: >
+    Created in response to repeated audit findings where architecture reviews
+    at a European bank failed to verify DORA-mandated controls. The overlay
+    was designed to be attachable to any architecture artifact type (solution
+    architecture, integration design, platform strategy, etc.) to ensure
+    DORA compliance is systematically evaluated regardless of the artifact
+    being reviewed.
+
+change_log:
+  - version: 1.0.0
+    date: '2026-03-17'
+    change_type: major
+    description: >
+      Initial creation of DORA regulatory compliance overlay. Includes 5
+      dimensions covering ICT risk management, third-party risk, incident
+      management, resilience testing, and information sharing. Designed
+      using EAROS Method D (risk-centered). Contains 2 critical gates
+      (REG-01, REG-03), 3 major gates (REG-02, REG-04, REG-05), and 1
+      non-gate criterion (REG-06).

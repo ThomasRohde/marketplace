@@ -1,0 +1,144 @@
+rubric_id: EAROS-SOL-001
+version: 1.0.0
+kind: profile
+title: Solution Architecture Profile
+status: approved
+artifact_type: solution_architecture
+inherits:
+- EAROS-CORE-001@1.0.0
+purpose:
+- design_review
+- architecture_board_review
+- delivery_readiness_review
+stakeholders:
+- solution_architect
+- product_owner
+- engineering_lead
+- security
+- operations
+- data
+viewpoints:
+- context
+- logical
+- integration
+- deployment
+- security
+- operating_model
+dimensions:
+- id: SD1
+  name: Solution optioning and rationale
+  weight: 1.0
+  criteria:
+  - id: SOL-01
+    question: Does the artifact explain the chosen option and the rejected alternatives
+      at a decision-useful level?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: major
+      failure_effect: Cannot pass above conditional_pass
+    required_evidence:
+    - option comparison
+    - selection rationale
+    - decision criteria
+    scoring_guide:
+      '0': No alternatives or rationale
+      '1': Choice asserted only
+      '2': Alternatives mentioned but weakly compared
+      '3': Clear rationale and meaningful comparison
+      '4': Decision is explicit, evidence-backed, and tied to business and quality
+        concerns
+    anti_patterns:
+    - Single option dressed as comparison
+    - Cost and risk ignored
+    remediation_hints:
+    - Add option table
+    - Explain why rejected options failed
+- id: SD2
+  name: Quality attribute treatment
+  weight: 1.0
+  criteria:
+  - id: SOL-02
+    question: Are key quality attributes and non-functional requirements translated
+      into architectural mechanisms or constraints?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: critical
+      failure_effect: Reject when material NFRs are absent or untraceable
+    required_evidence:
+    - NFR list
+    - quality attribute scenarios
+    - design responses
+    scoring_guide:
+      '0': No material NFR treatment
+      '1': NFRs listed but not used
+      '2': Partial architectural response
+      '3': Most material NFRs handled in the design
+      '4': Quality attribute response is explicit, traceable, and credible
+    anti_patterns:
+    - Performance/security/availability mentioned only in prose
+    - No mechanism for resilience
+    remediation_hints:
+    - Add scenario-to-design mapping
+    - Tie mechanisms to NFRs
+- id: SD3
+  name: Delivery and operability readiness
+  weight: 1.0
+  criteria:
+  - id: SOL-03
+    question: Does the solution architecture describe implementation dependencies,
+      operational ownership, and migration implications?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - dependency list
+    - operating model
+    - migration or rollout view
+    scoring_guide:
+      '0': No delivery or operational treatment
+      '1': High-level only
+      '2': Partial readiness view
+      '3': Mostly clear implementation and operability path
+      '4': Ready for execution planning and governance
+    anti_patterns:
+    - Build-time view only
+    - No operational owner
+    remediation_hints:
+    - Add operational responsibilities
+    - Add migration dependencies
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: Escalate to human review when SOL-02 score < 3 for
+      customer-facing or high-risk solutions
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report

@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Output is valid YAML",
+      "passed": true,
+      "evidence": "Parsed successfully"
+    },
+    {
+      "text": "Contains rubric_id field",
+      "passed": true,
+      "evidence": "rubric_id: EAROS-OVR-REG-001"
+    },
+    {
+      "text": "Contains version field",
+      "passed": true,
+      "evidence": "version: 1.0.0"
+    },
+    {
+      "text": "Contains kind field set to 'profile' or 'overlay'",
+      "passed": true,
+      "evidence": "kind: overlay"
+    },
+    {
+      "text": "kind is 'overlay'",
+      "passed": true,
+      "evidence": "kind: overlay, expected: overlay"
+    },
+    {
+      "text": "Inherits from EAROS-CORE-001",
+      "passed": true,
+      "evidence": "inherits: ['EAROS-CORE-001@1.0.0']"
+    },
+    {
+      "text": "Contains dimensions array with >= 1 entry",
+      "passed": true,
+      "evidence": "5 dimensions found"
+    },
+    {
+      "text": "Every criterion has 'question' field",
+      "passed": true,
+      "evidence": "All 6 criteria have questions"
+    },
+    {
+      "text": "Every criterion has 'required_evidence'",
+      "passed": true,
+      "evidence": "All 6 criteria have required_evidence"
+    },
+    {
+      "text": "Every criterion has scoring_guide with 0-4",
+      "passed": true,
+      "evidence": "All 6 have full 0-4 guides"
+    },
+    {
+      "text": "Every criterion has 'anti_patterns'",
+      "passed": true,
+      "evidence": "All 6 have anti_patterns"
+    },
+    {
+      "text": "At least one criterion uses a gate",
+      "passed": true,
+      "evidence": "Gates: ['REG-01', 'REG-02', 'REG-03', 'REG-04', 'REG-05']"
+    },
+    {
+      "text": "Contains scoring section with method and thresholds",
+      "passed": true,
+      "evidence": "method: append_to_base_rubric, thresholds: present"
+    },
+    {
+      "text": "Contains outputs section with evidence/confidence/actions flags",
+      "passed": true,
+      "evidence": "require_evidence_refs: True, require_confidence: True, require_actions: True"
+    },
+    {
+      "text": "artifact_type is 'any'",
+      "passed": true,
+      "evidence": "artifact_type: any"
+    }
+  ]
+}

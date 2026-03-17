@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Output is valid YAML",
+      "passed": true,
+      "evidence": "Parsed successfully"
+    },
+    {
+      "text": "Contains rubric_id field",
+      "passed": false,
+      "evidence": "rubric_id: MISSING"
+    },
+    {
+      "text": "Contains version field",
+      "passed": false,
+      "evidence": "version: MISSING"
+    },
+    {
+      "text": "Contains kind field set to 'profile' or 'overlay'",
+      "passed": false,
+      "evidence": "kind: MISSING"
+    },
+    {
+      "text": "kind is 'overlay'",
+      "passed": false,
+      "evidence": "kind: , expected: overlay"
+    },
+    {
+      "text": "Inherits from EAROS-CORE-001",
+      "passed": false,
+      "evidence": "inherits: []"
+    },
+    {
+      "text": "Contains dimensions array with >= 1 entry",
+      "passed": false,
+      "evidence": "0 dimensions found"
+    },
+    {
+      "text": "Every criterion has 'question' field",
+      "passed": false,
+      "evidence": "Missing in: ['no criteria found']"
+    },
+    {
+      "text": "Every criterion has 'required_evidence'",
+      "passed": false,
+      "evidence": "Missing in: ['no criteria found']"
+    },
+    {
+      "text": "Every criterion has scoring_guide with 0-4",
+      "passed": false,
+      "evidence": "Missing/incomplete in: ['no criteria found']"
+    },
+    {
+      "text": "Every criterion has 'anti_patterns'",
+      "passed": false,
+      "evidence": "Missing in: ['no criteria found']"
+    },
+    {
+      "text": "At least one criterion uses a gate",
+      "passed": false,
+      "evidence": "No gates found"
+    },
+    {
+      "text": "Contains scoring section with method and thresholds",
+      "passed": false,
+      "evidence": "method: MISSING, thresholds: MISSING"
+    },
+    {
+      "text": "Contains outputs section with evidence/confidence/actions flags",
+      "passed": false,
+      "evidence": "require_evidence_refs: MISSING, require_confidence: MISSING, require_actions: MISSING"
+    },
+    {
+      "text": "artifact_type is 'any'",
+      "passed": false,
+      "evidence": "artifact_type: "
+    }
+  ]
+}

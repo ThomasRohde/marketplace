@@ -1,0 +1,60 @@
+rubric_id: EAROS-OVR-DATA-001
+version: 1.0.0
+kind: overlay
+title: Data Overlay
+status: approved
+artifact_type: any
+purpose:
+- data_assurance_review
+- information_architecture_review
+stakeholders:
+- data_architect
+- data_governance
+- risk
+- privacy
+dimensions:
+- id: DAT1
+  name: Information treatment and accountability
+  criteria:
+  - id: DAT-01
+    question: Does the artifact define key information objects, accountability, lifecycle
+      concerns, and material data quality or privacy implications?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - information objects
+    - owners
+    - lifecycle view
+    - quality/privacy considerations
+    scoring_guide:
+      '0': No material data treatment
+      '1': Data mentioned only
+      '2': Partial information treatment
+      '3': Most material information concerns covered
+      '4': Information accountability and lifecycle treatment are clear and decision-useful
+    anti_patterns:
+    - Data flows without ownership
+    - No lifecycle or privacy treatment
+    remediation_hints:
+    - Add information ownership
+    - Describe lifecycle and controls
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: append_to_base_rubric
+  thresholds:
+    escalation: Escalate when material regulated data is present and DAT-01 < 3
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report

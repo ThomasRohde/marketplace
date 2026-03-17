@@ -1,0 +1,79 @@
+{
+  "expectations": [
+    {
+      "text": "Output is valid YAML",
+      "passed": true,
+      "evidence": "Parsed successfully"
+    },
+    {
+      "text": "Contains rubric_id field",
+      "passed": true,
+      "evidence": "rubric_id: EAROS-API-001"
+    },
+    {
+      "text": "Contains version field",
+      "passed": true,
+      "evidence": "version: 0.1.0"
+    },
+    {
+      "text": "Contains kind field set to 'profile' or 'overlay'",
+      "passed": true,
+      "evidence": "kind: profile"
+    },
+    {
+      "text": "kind is 'profile'",
+      "passed": true,
+      "evidence": "kind: profile, expected: profile"
+    },
+    {
+      "text": "Inherits from EAROS-CORE-001",
+      "passed": true,
+      "evidence": "inherits: ['EAROS-CORE-001@1.0.0']"
+    },
+    {
+      "text": "Contains dimensions array with >= 1 entry",
+      "passed": true,
+      "evidence": "4 dimensions found"
+    },
+    {
+      "text": "Every criterion has 'question' field",
+      "passed": true,
+      "evidence": "All 8 criteria have questions"
+    },
+    {
+      "text": "Every criterion has 'required_evidence'",
+      "passed": true,
+      "evidence": "All 8 criteria have required_evidence"
+    },
+    {
+      "text": "Every criterion has scoring_guide with 0-4",
+      "passed": true,
+      "evidence": "All 8 have full 0-4 guides"
+    },
+    {
+      "text": "Every criterion has 'anti_patterns'",
+      "passed": true,
+      "evidence": "All 8 have anti_patterns"
+    },
+    {
+      "text": "At least one criterion uses a gate",
+      "passed": true,
+      "evidence": "Gates: ['API-01', 'API-02', 'API-03', 'API-04', 'API-07']"
+    },
+    {
+      "text": "Contains scoring section with method and thresholds",
+      "passed": true,
+      "evidence": "method: merge_with_inherited_and_apply_core_thresholds, thresholds: present"
+    },
+    {
+      "text": "Contains outputs section with evidence/confidence/actions flags",
+      "passed": true,
+      "evidence": "require_evidence_refs: True, require_confidence: True, require_actions: True"
+    },
+    {
+      "text": "No more than 12 profile-specific criteria",
+      "passed": true,
+      "evidence": "8 criteria found"
+    }
+  ]
+}

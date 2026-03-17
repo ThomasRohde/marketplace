@@ -203,6 +203,32 @@
       "repository": "https://github.com/ThomasRohde/marketplace",
       "keywords": ["autoresearch", "optimization", "hill-climbing", "autonomous", "iterative", "benchmark", "performance", "tuning"],
       "category": "productivity"
+    },
+    {
+      "name": "earos-rubric",
+      "source": "./plugins/earos-rubric",
+      "description": "Create architecture evaluation rubrics (profiles and overlays) conforming to the Enterprise Architecture Rubric Operational Standard (EAROS) through structured interviews with ambiguity reduction",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["earos", "rubric", "architecture-evaluation", "scoring", "profile", "overlay", "architecture-review", "governance", "quality", "enterprise-architecture"],
+      "category": "productivity"
+    },
+    {
+      "name": "apply-rubric",
+      "source": "./plugins/apply-rubric",
+      "description": "Apply EAROS rubrics to architecture artifacts using the three-pass agent evaluation pattern (Extractor, Evaluator, Challenger) with optional parallel evaluators for comprehensive artifacts",
+      "version": "1.0.0",
+      "author": {
+        "name": "Thomas Klok Rohde",
+        "email": "thomas@rohde.name"
+      },
+      "repository": "https://github.com/ThomasRohde/marketplace",
+      "keywords": ["earos", "rubric", "evaluation", "architecture-review", "scoring", "evidence", "three-pass", "extractor", "evaluator", "challenger", "governance"],
+      "category": "productivity"
     }
   ]
 }

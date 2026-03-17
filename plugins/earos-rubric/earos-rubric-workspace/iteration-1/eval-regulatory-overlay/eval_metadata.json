@@ -1,0 +1,22 @@
+{
+  "eval_id": 1,
+  "eval_name": "regulatory-overlay",
+  "prompt": "We need a regulatory compliance overlay that can be attached to any architecture artifact. Our financial services org requires DORA compliance evidence, and we keep finding that architects mention compliance but don't actually map controls to their designs.",
+  "assertions": [
+    {"text": "Output is valid YAML", "type": "programmatic"},
+    {"text": "Contains rubric_id field", "type": "programmatic"},
+    {"text": "Contains version field", "type": "programmatic"},
+    {"text": "Contains kind field set to 'profile' or 'overlay'", "type": "programmatic"},
+    {"text": "kind is 'overlay' (not profile — this is a cross-cutting concern)", "type": "programmatic"},
+    {"text": "Inherits from EAROS-CORE-001 via an 'inherits' field", "type": "programmatic"},
+    {"text": "Contains a dimensions array with at least 1 entry", "type": "programmatic"},
+    {"text": "Every criterion has a 'question' field", "type": "programmatic"},
+    {"text": "Every criterion has 'required_evidence' array", "type": "programmatic"},
+    {"text": "Every criterion has 'scoring_guide' with 0-4 levels", "type": "programmatic"},
+    {"text": "Every criterion has 'anti_patterns' array", "type": "programmatic"},
+    {"text": "At least one criterion uses a gate (gate.enabled: true or gate with severity)", "type": "programmatic"},
+    {"text": "Contains 'scoring' section with 'method' and 'thresholds'", "type": "programmatic"},
+    {"text": "Contains 'outputs' section with require_evidence_refs, require_confidence, require_actions", "type": "programmatic"},
+    {"text": "artifact_type is 'any' (overlays apply to all artifact types)", "type": "programmatic"}
+  ]
+}

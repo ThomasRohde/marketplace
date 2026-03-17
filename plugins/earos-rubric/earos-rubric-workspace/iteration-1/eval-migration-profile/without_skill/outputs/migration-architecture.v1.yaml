@@ -1,0 +1,523 @@
+###############################################################################
+# Migration Architecture Document Rubric
+# Version: 1.0
+# Purpose: Evaluate the quality and completeness of migration architecture
+#          documents produced by teams moving workloads from on-premises
+#          to cloud infrastructure.
+# Organization: Large insurance company, multi-year cloud migration program
+# Review Board: Cloud architects, infrastructure, security, service
+#               management, finance
+###############################################################################
+
+rubric:
+  name: "Migration Architecture Document Review"
+  version: "1.0"
+  description: >
+    Rubric for evaluating migration architecture documents submitted to the
+    cloud migration review board. Designed to ensure teams produce documents
+    that are actionable, risk-aware, and sufficient for cross-functional
+    review and approval.
+
+  scoring:
+    scale:
+      min: 1
+      max: 5
+      labels:
+        1: "Missing / Unacceptable"
+        2: "Incomplete / Major Gaps"
+        3: "Adequate / Meets Minimum"
+        4: "Strong / Well-Developed"
+        5: "Exemplary / Could Serve as Reference"
+    passing_threshold_per_dimension: 3
+    overall_passing_threshold: 3.5
+    blocking_dimensions:
+      - rollback-and-contingency
+      - data-migration-strategy
+      - security-and-compliance
+
+  dimensions:
+
+    ##########################################################################
+    # 1. CURRENT STATE & SCOPE
+    ##########################################################################
+    - id: current-state-and-scope
+      name: "Current-State Documentation & Migration Scope"
+      weight: 0.10
+      description: >
+        Does the document clearly describe the existing on-prem workload,
+        its architecture, and the precise boundary of what is being migrated?
+      reviewers:
+        - cloud-architects
+        - infrastructure
+      criteria:
+        1: >
+          No description of the current-state architecture. The reader cannot
+          determine what is being migrated or why.
+        2: >
+          A high-level mention of the workload exists but lacks component
+          inventory, current hosting details, or clear migration scope
+          boundaries.
+        3: >
+          Current-state architecture is documented with a component inventory,
+          hosting environment details, and a defined migration scope. Minor
+          gaps (e.g., missing version info or capacity figures).
+        4: >
+          Thorough current-state documentation including component inventory
+          with versions, resource utilization data, SLA/SLO baselines,
+          and a clearly delineated migration scope with explicit in-scope
+          and out-of-scope items.
+        5: >
+          All of level 4, plus historical performance data, capacity trends,
+          known technical debt itemized with migration relevance, and a
+          rationale for migration scope decisions tied to business drivers.
+
+    ##########################################################################
+    # 2. TARGET STATE ARCHITECTURE
+    ##########################################################################
+    - id: target-state-architecture
+      name: "Target-State Architecture"
+      weight: 0.10
+      description: >
+        Is the cloud target-state architecture clearly defined with sufficient
+        detail for implementation and review?
+      reviewers:
+        - cloud-architects
+        - infrastructure
+      criteria:
+        1: >
+          Only a single high-level diagram with no supporting text. No
+          service selections, sizing, or network topology.
+        2: >
+          Target-state diagram exists with some cloud service selections,
+          but missing critical details such as compute sizing, storage
+          tiering, networking design, or region/AZ strategy.
+        3: >
+          Target-state architecture includes diagrams, cloud service
+          selections with rationale, compute/storage/network design,
+          and region strategy. Sufficient for an informed review discussion.
+        4: >
+          All of level 3, plus infrastructure-as-code references or
+          patterns, auto-scaling policies, tagging/naming conventions,
+          and alignment to the organization's cloud landing zone standards.
+        5: >
+          All of level 4, plus decision records for key architectural
+          choices (e.g., why PaaS over IaaS for a given tier), performance
+          modeling against current-state baselines, and a clear mapping
+          from every current-state component to its target-state equivalent
+          or retirement justification.
+
+    ##########################################################################
+    # 3. TRANSITION STATE & MIGRATION PATH
+    ##########################################################################
+    - id: transition-state-clarity
+      name: "Transition-State Clarity & Migration Path"
+      weight: 0.15
+      description: >
+        Does the document define the intermediate (hybrid) states the system
+        will pass through during migration, with a clear sequenced path from
+        current to target state?
+      reviewers:
+        - cloud-architects
+        - infrastructure
+        - service-management
+      criteria:
+        1: >
+          No transition states defined. The document jumps from current
+          state to target state with no migration path.
+        2: >
+          A single transition state is mentioned but without detail on
+          duration, traffic routing, data synchronization, or how the
+          hybrid state operates.
+        3: >
+          Transition states are sequenced with descriptions of what
+          changes at each phase. Includes high-level traffic routing
+          and data sync approach during hybrid operation. Phase
+          durations estimated.
+        4: >
+          All of level 3, plus explicit entry/exit criteria for each
+          phase, a decision gate process, smoke-test and validation
+          steps between phases, and identification of the "point of
+          no return" if applicable.
+        5: >
+          All of level 4, plus a detailed cutover runbook with
+          time-boxed steps, communication plan per phase, escalation
+          paths, and evidence of rehearsal or dry-run planning.
+
+    ##########################################################################
+    # 4. DEPENDENCY MAPPING
+    ##########################################################################
+    - id: dependency-mapping
+      name: "Dependency Mapping (On-Prem <-> Cloud)"
+      weight: 0.12
+      description: >
+        Are upstream and downstream dependencies identified, including
+        cross-environment dependencies that will exist during the hybrid
+        transition period?
+      reviewers:
+        - cloud-architects
+        - infrastructure
+        - service-management
+      criteria:
+        1: >
+          No dependency analysis. Dependencies are not mentioned.
+        2: >
+          Some dependencies listed but incomplete. No distinction between
+          hard and soft dependencies. No analysis of cross-environment
+          (on-prem to cloud) dependency behavior during transition.
+        3: >
+          Dependency map covers upstream consumers and downstream services.
+          Hard vs. soft dependencies classified. Cross-environment
+          dependencies during hybrid state are identified with latency
+          and connectivity considerations.
+        4: >
+          All of level 3, plus dependency owners contacted and migration
+          coordination documented. Failure-mode analysis for each
+          cross-environment dependency. API contract or interface
+          compatibility verified.
+        5: >
+          All of level 4, plus a dependency migration sequencing plan
+          (which dependencies migrate when), circuit-breaker or
+          graceful-degradation strategies for cross-environment calls,
+          and a dependency health dashboard or monitoring plan for
+          the transition period.
+
+    ##########################################################################
+    # 5. ROLLBACK & CONTINGENCY
+    ##########################################################################
+    - id: rollback-and-contingency
+      name: "Rollback & Contingency Planning"
+      weight: 0.12
+      description: >
+        Is there a credible plan to revert to the previous state if the
+        migration fails or causes unacceptable issues? This is a blocking
+        dimension -- a score below 3 prevents approval.
+      reviewers:
+        - cloud-architects
+        - infrastructure
+        - service-management
+      criteria:
+        1: >
+          No rollback plan. No contingency measures described.
+        2: >
+          Rollback is mentioned as possible but lacks specifics. No
+          defined triggers, no tested procedure, no data-consistency
+          strategy for rollback.
+        3: >
+          Rollback plan exists for each migration phase with defined
+          triggers (e.g., error-rate threshold, latency threshold).
+          Data rollback approach is described. Estimated rollback
+          time provided.
+        4: >
+          All of level 3, plus rollback procedures have been reviewed
+          or tabletop-tested. Data consistency during rollback is
+          addressed (e.g., handling writes that occurred in cloud
+          during rollback to on-prem). Communication and escalation
+          plan for rollback scenarios documented.
+        5: >
+          All of level 4, plus rollback has been rehearsed in a
+          non-production environment with results documented.
+          Automated rollback scripts or IaC teardown procedures
+          prepared. Post-rollback validation checklist included.
+          "No rollback possible" scenarios explicitly identified with
+          alternative contingency (e.g., fix-forward strategy).
+
+    ##########################################################################
+    # 6. DATA MIGRATION STRATEGY
+    ##########################################################################
+    - id: data-migration-strategy
+      name: "Data Migration Strategy"
+      weight: 0.12
+      description: >
+        How will data be migrated, synchronized, and validated? This is a
+        blocking dimension for approval.
+      reviewers:
+        - cloud-architects
+        - infrastructure
+        - security
+      criteria:
+        1: >
+          No data migration strategy. Data movement is not addressed.
+        2: >
+          Data migration is mentioned (e.g., "we will use tool X") but
+          lacks detail on data volumes, transfer method, sync strategy,
+          downtime requirements, or validation approach.
+        3: >
+          Data migration plan specifies: source and target data stores,
+          data volumes, migration/sync tooling, expected transfer
+          duration, acceptable downtime window, and a validation method
+          (e.g., row counts, checksums). Sensitive data handling noted.
+        4: >
+          All of level 3, plus incremental sync strategy for minimizing
+          cutover downtime, data transformation or schema migration
+          steps documented, data lineage preserved, and a fallback
+          plan if data migration fails mid-stream. PII/PHI handling
+          explicitly addressed per compliance requirements.
+        5: >
+          All of level 4, plus proof-of-concept or pilot migration
+          results documented with throughput metrics. Data reconciliation
+          automated and repeatable. Data access patterns validated
+          against target-state performance. Regulatory data residency
+          requirements confirmed and evidenced.
+
+    ##########################################################################
+    # 7. SECURITY & COMPLIANCE
+    ##########################################################################
+    - id: security-and-compliance
+      name: "Security & Compliance"
+      weight: 0.12
+      description: >
+        Does the migration maintain or improve the security posture, and
+        does it satisfy regulatory and compliance requirements? This is a
+        blocking dimension for approval.
+      reviewers:
+        - security
+        - cloud-architects
+      criteria:
+        1: >
+          Security is not addressed. No mention of identity, network
+          security, encryption, or compliance.
+        2: >
+          Some security considerations mentioned but significant gaps.
+          For example, encryption at rest/in transit not fully addressed,
+          or identity/access model not defined for cloud environment.
+        3: >
+          Security design covers: identity & access management in cloud,
+          network security (VPN/private connectivity, firewalls, NSGs),
+          encryption at rest and in transit, secrets management, and
+          compliance framework mapping (e.g., SOC2, HIPAA, state
+          insurance regulations). Vulnerability scanning approach noted.
+        4: >
+          All of level 3, plus threat model updated for hybrid and
+          target states, security controls mapped to specific compliance
+          requirements, logging and SIEM integration designed, and
+          incident response procedures updated for cloud workload.
+        5: >
+          All of level 4, plus penetration testing or security review
+          planned pre-go-live, zero-trust principles applied, data
+          classification labels enforced via policy, and evidence
+          that security team has formally reviewed and approved the
+          design.
+
+    ##########################################################################
+    # 8. COST MODELING
+    ##########################################################################
+    - id: cost-modeling
+      name: "Cost Modeling & Financial Analysis"
+      weight: 0.08
+      description: >
+        Is there a credible cost model that covers migration costs, run
+        costs, and the hybrid-period cost overlap?
+      reviewers:
+        - finance
+        - cloud-architects
+      criteria:
+        1: >
+          No cost information provided.
+        2: >
+          A rough target-state run-rate estimate exists but no migration
+          costs, no hybrid-period overlap costs, and no comparison to
+          current-state costs.
+        3: >
+          Cost model includes: estimated migration execution costs
+          (tooling, labor, licensing), target-state monthly run costs
+          with service-level breakdown, hybrid-period dual-run costs,
+          and a comparison to current-state TCO. Assumptions stated.
+        4: >
+          All of level 3, plus cost optimization strategies identified
+          (reserved instances, savings plans, right-sizing), cost
+          anomaly monitoring planned, and a break-even timeline
+          calculated. Sensitivity analysis for key variables (e.g.,
+          data egress, traffic growth).
+        5: >
+          All of level 4, plus FinOps tagging and chargeback model
+          defined, cost governance guardrails (budgets, alerts) in
+          place, multi-year projection aligned to capacity planning,
+          and finance team sign-off documented.
+
+    ##########################################################################
+    # 9. OPERATIONAL READINESS
+    ##########################################################################
+    - id: operational-readiness
+      name: "Operational Readiness for Hybrid & Target State"
+      weight: 0.10
+      description: >
+        Is the operations team prepared to support the workload during the
+        hybrid transition and in the cloud target state?
+      reviewers:
+        - service-management
+        - infrastructure
+      criteria:
+        1: >
+          No operational readiness considerations. No mention of
+          monitoring, alerting, on-call, or runbooks.
+        2: >
+          Some operational aspects mentioned but major gaps. For example,
+          monitoring is noted but no specifics on tooling, thresholds,
+          or on-call rotation changes.
+        3: >
+          Operational readiness plan covers: monitoring and alerting
+          design (tools, key metrics, thresholds), on-call team
+          identified and trained, basic runbooks for common failure
+          scenarios, incident management process confirmed for cloud
+          workload, and backup/restore procedures defined.
+        4: >
+          All of level 3, plus observability strategy (logs, metrics,
+          traces) with correlation across on-prem and cloud during
+          hybrid state. SLA/SLO targets defined with measurement
+          method. Capacity management and auto-scaling operational
+          procedures documented. Knowledge transfer plan for ops teams.
+        5: >
+          All of level 4, plus chaos engineering or failure injection
+          testing planned, operational readiness review (ORR) checklist
+          completed, game-day exercises scheduled, and a hyper-care
+          support plan for the post-migration stabilization period
+          with defined exit criteria.
+
+    ##########################################################################
+    # 10. TESTING & VALIDATION
+    ##########################################################################
+    - id: testing-and-validation
+      name: "Testing & Validation Strategy"
+      weight: 0.07
+      description: >
+        Is there a clear plan to validate that the migrated workload
+        functions correctly, performs acceptably, and meets requirements?
+      reviewers:
+        - cloud-architects
+        - service-management
+      criteria:
+        1: >
+          No testing plan. Validation is not addressed.
+        2: >
+          Testing is mentioned generically ("we will test") but no
+          test plan, test types, environments, or acceptance criteria
+          are defined.
+        3: >
+          Test plan covers functional testing, performance/load testing,
+          integration testing with dependencies, and user acceptance
+          testing. Test environments identified. Pass/fail criteria
+          defined for go/no-go decision.
+        4: >
+          All of level 3, plus automated regression test suite
+          identified, performance benchmarks from current state used
+          as comparison baselines, disaster recovery testing included,
+          and a test schedule aligned to migration phases.
+        5: >
+          All of level 4, plus synthetic monitoring or canary testing
+          during and after migration, A/B or shadow traffic validation
+          approach, test results from earlier migration phases used to
+          refine later phases, and production verification testing
+          (PVT) checklist defined for post-cutover.
+
+    ##########################################################################
+    # 11. COMMUNICATION & STAKEHOLDER PLAN
+    ##########################################################################
+    - id: communication-and-stakeholders
+      name: "Communication & Stakeholder Management"
+      weight: 0.05
+      description: >
+        Are stakeholders identified and is there a communication plan for
+        the migration event and ongoing status?
+      reviewers:
+        - service-management
+      criteria:
+        1: >
+          No stakeholder identification or communication plan.
+        2: >
+          Stakeholders partially identified but no communication plan
+          or schedule. No consideration of customer/end-user impact
+          communication.
+        3: >
+          Stakeholder register includes impacted teams, business owners,
+          and end users. Communication plan covers pre-migration
+          notification, during-migration status updates, and
+          post-migration confirmation. Escalation contacts identified.
+        4: >
+          All of level 3, plus communication templates prepared,
+          status dashboard or reporting mechanism defined, and
+          business continuity liaison identified for insurance
+          operations impact.
+        5: >
+          All of level 4, plus rehearsal communication sent during
+          dry run, regulatory notification requirements addressed
+          (if applicable), and post-migration retrospective scheduled.
+
+    ##########################################################################
+    # 12. DOCUMENT QUALITY & COMPLETENESS
+    ##########################################################################
+    - id: document-quality
+      name: "Document Quality & Completeness"
+      weight: 0.05
+      description: >
+        Is the document well-structured, internally consistent, and
+        suitable for review board consumption?
+      reviewers:
+        - all
+      criteria:
+        1: >
+          Document is disorganized, missing major sections, or
+          internally contradictory. Diagrams absent or unreadable.
+        2: >
+          Document has a recognizable structure but significant
+          sections are thin or missing. Diagrams present but
+          inconsistent with text. Terminology used inconsistently.
+        3: >
+          Document follows a logical structure, is internally
+          consistent, includes clear diagrams (current, transition,
+          target states), uses consistent terminology, and provides
+          a document revision history.
+        4: >
+          All of level 3, plus decision log or architecture decision
+          records (ADRs) included, assumptions and constraints
+          explicitly listed, glossary provided, and all diagrams
+          follow organizational diagramming standards.
+        5: >
+          All of level 4, plus peer-reviewed before submission,
+          traceability from requirements to design decisions,
+          linked references to organizational standards and
+          policies, and an executive summary suitable for
+          leadership consumption.
+
+  ##########################################################################
+  # REVIEW PROCESS GUIDANCE
+  ##########################################################################
+  review_process:
+    submission_requirements:
+      - "Document must be submitted at least 5 business days before review board meeting"
+      - "All diagrams must be embedded (not linked to external tools that require access)"
+      - "Author must attend the review board session to present and answer questions"
+
+    approval_rules:
+      - rule: "No blocking dimension may score below 3"
+        blocking_dimensions:
+          - rollback-and-contingency
+          - data-migration-strategy
+          - security-and-compliance
+      - rule: "Weighted overall score must be at least 3.5"
+      - rule: "No more than two dimensions may score below 3"
+
+    outcomes:
+      - outcome: "Approved"
+        condition: "All approval rules met"
+      - outcome: "Conditionally Approved"
+        condition: >
+          Overall score >= 3.5 and blocking dimensions >= 3, but one or
+          two non-blocking dimensions score 2. Team must address gaps
+          within 10 business days.
+      - outcome: "Revise and Resubmit"
+        condition: >
+          Any blocking dimension below 3, or overall score below 3.0,
+          or more than two dimensions below 3. Team must revise and
+          resubmit for the next review cycle.
+
+    feedback_format:
+      per_dimension:
+        - score: "Numeric score (1-5)"
+        - evidence: "Specific references to document sections supporting the score"
+        - gaps: "What is missing or insufficient"
+        - recommendations: "Actionable steps to improve"
+      summary:
+        - overall_score: "Weighted average"
+        - top_risks: "Top 3 risks identified by the review board"
+        - outcome: "Approved / Conditionally Approved / Revise and Resubmit"
+        - next_steps: "Required actions with owners and deadlines"

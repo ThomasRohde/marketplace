@@ -1,0 +1,22 @@
+{
+  "eval_id": 0,
+  "eval_name": "api-design-profile",
+  "prompt": "I need to create a rubric for evaluating our API design documents. We have a recurring problem where API designs get approved but then turn out to be inconsistent with our platform standards and missing error handling contracts. The API governance board reviews these before implementation starts.",
+  "assertions": [
+    {"text": "Output is valid YAML", "type": "programmatic"},
+    {"text": "Contains rubric_id field", "type": "programmatic"},
+    {"text": "Contains version field", "type": "programmatic"},
+    {"text": "Contains kind field set to 'profile' or 'overlay'", "type": "programmatic"},
+    {"text": "kind is 'profile' (not overlay — this is an artifact-specific rubric)", "type": "programmatic"},
+    {"text": "Inherits from EAROS-CORE-001 via an 'inherits' field", "type": "programmatic"},
+    {"text": "Contains a dimensions array with at least 1 entry", "type": "programmatic"},
+    {"text": "Every criterion has a 'question' field", "type": "programmatic"},
+    {"text": "Every criterion has 'required_evidence' array", "type": "programmatic"},
+    {"text": "Every criterion has 'scoring_guide' with 0-4 levels", "type": "programmatic"},
+    {"text": "Every criterion has 'anti_patterns' array", "type": "programmatic"},
+    {"text": "At least one criterion uses a gate (gate.enabled: true or gate with severity)", "type": "programmatic"},
+    {"text": "Contains 'scoring' section with 'method' and 'thresholds'", "type": "programmatic"},
+    {"text": "Contains 'outputs' section with require_evidence_refs, require_confidence, require_actions", "type": "programmatic"},
+    {"text": "No more than 12 profile-specific criteria total", "type": "programmatic"}
+  ]
+}

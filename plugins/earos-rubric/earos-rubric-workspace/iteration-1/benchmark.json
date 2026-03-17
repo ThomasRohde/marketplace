@@ -1,0 +1,91 @@
+{
+  "skill_name": "earos-rubric",
+  "iteration": 1,
+  "configurations": [
+    {
+      "name": "with_skill",
+      "description": "Using the EAROS rubric creator skill",
+      "results": [
+        {
+          "eval_name": "api-design-profile",
+          "pass_rate": 1.0,
+          "passed": 15,
+          "total": 15,
+          "tokens": 34999,
+          "duration_seconds": 269.7
+        },
+        {
+          "eval_name": "regulatory-overlay",
+          "pass_rate": 1.0,
+          "passed": 15,
+          "total": 15,
+          "tokens": 37404,
+          "duration_seconds": 310.7
+        },
+        {
+          "eval_name": "migration-profile",
+          "pass_rate": 1.0,
+          "passed": 15,
+          "total": 15,
+          "tokens": 33268,
+          "duration_seconds": 221.4
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 1.0,
+        "stddev_pass_rate": 0.0,
+        "mean_tokens": 35223.7,
+        "mean_duration_seconds": 267.3
+      }
+    },
+    {
+      "name": "without_skill",
+      "description": "Baseline — no skill, general knowledge only",
+      "results": [
+        {
+          "eval_name": "api-design-profile",
+          "pass_rate": 0.133,
+          "passed": 2,
+          "total": 15,
+          "tokens": 15933,
+          "duration_seconds": 162.0
+        },
+        {
+          "eval_name": "regulatory-overlay",
+          "pass_rate": 0.067,
+          "passed": 1,
+          "total": 15,
+          "tokens": 18666,
+          "duration_seconds": 199.7
+        },
+        {
+          "eval_name": "migration-profile",
+          "pass_rate": 0.133,
+          "passed": 2,
+          "total": 15,
+          "tokens": 15355,
+          "duration_seconds": 156.8
+        }
+      ],
+      "aggregate": {
+        "mean_pass_rate": 0.111,
+        "stddev_pass_rate": 0.031,
+        "mean_tokens": 16651.3,
+        "mean_duration_seconds": 172.8
+      }
+    }
+  ],
+  "delta": {
+    "pass_rate_improvement": 0.889,
+    "token_overhead": 18572.4,
+    "duration_overhead_seconds": 94.5
+  },
+  "analyst_observations": [
+    "The skill achieves 100% EAROS schema conformance across all 3 test cases — the baseline achieves ~11%.",
+    "Baseline outputs use completely different YAML structures (custom field names, different scales, no inheritance) making them incompatible with the EAROS ecosystem.",
+    "The only non-trivial baseline passes are 'valid YAML' and 'criteria count <= 12' (vacuously true when the grader finds 0 criteria in the expected structure).",
+    "The skill adds ~95 seconds and ~18.5k tokens of overhead — this is the cost of reading reference docs and following the structured interview.",
+    "Two of three with-skill outputs had YAML quoting issues (unquoted strings containing double quotes in list items). This is a known LLM YAML generation weakness. The skill should add explicit guidance about quoting strings with special characters.",
+    "All with-skill outputs correctly selected the appropriate rubric type (profile vs overlay) and design method (A for API, D for regulatory, C for migration)."
+  ]
+}

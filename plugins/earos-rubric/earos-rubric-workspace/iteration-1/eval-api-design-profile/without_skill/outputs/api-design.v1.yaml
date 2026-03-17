@@ -1,0 +1,485 @@
+# =============================================================================
+# API Design Document Evaluation Rubric
+# =============================================================================
+# Purpose:  Structured rubric for the API Governance Board to evaluate API
+#           design documents before implementation begins.
+# Audience: Platform architects, security reviewers, API product owners.
+# Scoring:  Each criterion is scored 1-4 (Inadequate / Needs Work / Meets
+#           Standard / Exemplary). A design must score >= 3 on every
+#           "gate" criterion to proceed to implementation.
+# Version:  1.0.0
+# =============================================================================
+
+rubric:
+  name: "API Design Document Evaluation"
+  version: "1.0.0"
+  description: >
+    Evaluates API design documents for completeness, standards compliance,
+    error handling contracts, versioning strategy, platform pattern adherence,
+    and consumer experience before implementation is approved.
+  context:
+    organization_type: "Fintech"
+    review_body: "API Governance Board"
+    review_stage: "Pre-implementation design review"
+    applicable_standards:
+      - "RFC 7807 - Problem Details for HTTP APIs"
+      - "RFC 9110 - HTTP Semantics"
+      - "RFC 6570 - URI Template"
+      - "OpenAPI Specification 3.x"
+      - "Internal Platform API Style Guide"
+
+  scoring:
+    scale:
+      min: 1
+      max: 4
+    levels:
+      1:
+        label: "Inadequate"
+        description: "Missing or fundamentally flawed. Blocks approval."
+      2:
+        label: "Needs Work"
+        description: "Partially addressed but has gaps that must be resolved before implementation."
+      3:
+        label: "Meets Standard"
+        description: "Satisfies requirements with no significant gaps."
+      4:
+        label: "Exemplary"
+        description: "Exceeds expectations; could serve as a reference for other teams."
+    thresholds:
+      approval_minimum_per_criterion: 3
+      gate_criteria_must_pass: true
+      overall_minimum_average: 3.0
+
+  # ===========================================================================
+  # DIMENSIONS
+  # ===========================================================================
+  dimensions:
+
+    # -------------------------------------------------------------------------
+    # 1. REST CONTRACT COMPLETENESS
+    # -------------------------------------------------------------------------
+    - id: "rest-contract-completeness"
+      name: "REST Contract Completeness"
+      weight: 0.20
+      is_gate: true
+      description: >
+        The design document must contain a complete, unambiguous contract that
+        could be handed to any implementation team and produce a conformant API
+        without further clarification.
+      criteria:
+
+        - id: "rcc-01"
+          name: "Resource Identification & URI Design"
+          is_gate: true
+          description: >
+            All resources are clearly identified with consistent, plural-noun
+            URI paths. Hierarchy relationships are expressed through nesting
+            where appropriate. No verbs appear in URIs.
+          scoring_guidance:
+            1: "Resources are not identified, or URIs contain verbs/actions."
+            2: "Some resources listed but URIs are inconsistent or violate REST naming conventions."
+            3: "All resources identified with consistent plural-noun URIs and logical hierarchy."
+            4: "Exemplary URI design with documented rationale for hierarchy choices, plus link relations."
+
+        - id: "rcc-02"
+          name: "HTTP Method Semantics"
+          is_gate: true
+          description: >
+            Each endpoint specifies the HTTP method and the document correctly
+            applies method semantics (GET is safe, PUT is idempotent, etc.).
+          scoring_guidance:
+            1: "Methods are missing or misused (e.g., GET with side effects, POST for retrieval)."
+            2: "Methods listed but some violate HTTP semantics or safety/idempotency contracts."
+            3: "All methods correctly applied with proper safety and idempotency semantics documented."
+            4: "Methods are correct, plus the document explicitly states idempotency guarantees and conditional request support (ETag/If-Match)."
+
+        - id: "rcc-03"
+          name: "Request & Response Schemas"
+          is_gate: true
+          description: >
+            Every endpoint has fully specified request and response schemas
+            including data types, required/optional fields, constraints
+            (min/max, pattern, enum), and example payloads.
+          scoring_guidance:
+            1: "Schemas are missing or only described in prose."
+            2: "Schemas exist but are incomplete (missing types, constraints, or examples)."
+            3: "Full schemas with types, constraints, required/optional markers, and at least one example per endpoint."
+            4: "Full schemas provided in OpenAPI 3.x format with multiple examples covering edge cases, plus JSON Schema validation rules."
+
+        - id: "rcc-04"
+          name: "Query Parameters, Filtering & Pagination"
+          is_gate: false
+          description: >
+            Collection endpoints define pagination strategy, filtering
+            parameters, sorting options, and field selection.
+          scoring_guidance:
+            1: "No pagination or filtering defined for collection endpoints."
+            2: "Pagination mentioned but strategy is vague or inconsistent with platform standard."
+            3: "Cursor-based or offset pagination clearly defined, with filtering and sort parameters documented."
+            4: "Pagination, filtering, sorting, and sparse fieldsets all defined, consistent with platform standards, and include examples."
+
+        - id: "rcc-05"
+          name: "Content Negotiation & Media Types"
+          is_gate: false
+          description: >
+            The design specifies supported media types, content negotiation
+            behavior, and any custom media types.
+          scoring_guidance:
+            1: "No mention of media types or content negotiation."
+            2: "Media types mentioned but Accept/Content-Type handling not fully specified."
+            3: "Supported media types listed, content negotiation behavior defined, 406/415 responses documented."
+            4: "Complete content negotiation strategy including versioned media types, compression, and charset handling."
+
+    # -------------------------------------------------------------------------
+    # 2. ERROR HANDLING CONTRACTS
+    # -------------------------------------------------------------------------
+    - id: "error-handling"
+      name: "Error Handling Contracts"
+      weight: 0.20
+      is_gate: true
+      description: >
+        Error responses must follow RFC 7807 (Problem Details for HTTP APIs)
+        and cover all foreseeable failure modes with actionable detail.
+      criteria:
+
+        - id: "err-01"
+          name: "RFC 7807 Compliance"
+          is_gate: true
+          description: >
+            All error responses use application/problem+json with the required
+            members: type, title, status, and recommended members: detail,
+            instance.
+          scoring_guidance:
+            1: "No structured error format defined, or uses a proprietary format with no mapping to RFC 7807."
+            2: "Some RFC 7807 fields present but missing required members or inconsistently applied."
+            3: "All error responses defined with type, title, status, detail, and instance per RFC 7807."
+            4: "Full RFC 7807 compliance plus documented extension members, error type URI taxonomy, and machine-readable error codes."
+
+        - id: "err-02"
+          name: "HTTP Status Code Coverage"
+          is_gate: true
+          description: >
+            The design documents which HTTP status codes each endpoint can
+            return, with specific conditions for each.
+          scoring_guidance:
+            1: "Only 200 and 500 documented, or status codes are missing entirely."
+            2: "Common codes (200, 400, 404, 500) listed but conditions are vague or codes are misused."
+            3: "All relevant status codes documented per endpoint (including 201, 204, 400, 401, 403, 404, 409, 422, 429, 500, 503) with clear trigger conditions."
+            4: "Comprehensive status code mapping with trigger conditions, retry guidance, and documented distinction between client vs. server errors."
+
+        - id: "err-03"
+          name: "Validation Error Detail"
+          is_gate: true
+          description: >
+            Validation errors (400/422) include field-level detail so consumers
+            can programmatically identify and fix problems.
+          scoring_guidance:
+            1: "No field-level error detail defined."
+            2: "Validation errors mention fields but format is inconsistent or not machine-parseable."
+            3: "Validation errors return a structured array of field-level errors with field pointer, code, and human-readable message."
+            4: "Field-level errors use JSON Pointer (RFC 6901) for field identification, include error codes from a published taxonomy, and provide localization support."
+
+        - id: "err-04"
+          name: "Rate Limiting & Throttling Response"
+          is_gate: false
+          description: >
+            429 Too Many Requests responses include Retry-After headers and
+            rate limit context headers.
+          scoring_guidance:
+            1: "Rate limiting not addressed."
+            2: "429 status mentioned but no headers or retry guidance."
+            3: "429 response defined with Retry-After header and rate limit headers (X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset)."
+            4: "Complete rate limiting contract including per-consumer quotas, burst limits, quota headers on all responses, and 429 response with Retry-After and problem+json body."
+
+        - id: "err-05"
+          name: "Downstream Failure Handling"
+          is_gate: false
+          description: >
+            The design specifies how failures in downstream dependencies are
+            surfaced to API consumers (circuit breaker behavior, degraded
+            responses, 502/503 semantics).
+          scoring_guidance:
+            1: "No consideration of downstream failures."
+            2: "Downstream failures acknowledged but handling strategy is vague."
+            3: "Clear policy for downstream failures: timeout thresholds, fallback behavior, appropriate 502/503 responses with Retry-After."
+            4: "Comprehensive resilience contract including circuit breaker states, partial degradation strategy, health check endpoints, and consumer retry guidance."
+
+    # -------------------------------------------------------------------------
+    # 3. VERSIONING STRATEGY
+    # -------------------------------------------------------------------------
+    - id: "versioning"
+      name: "Versioning Strategy"
+      weight: 0.15
+      is_gate: true
+      description: >
+        The API must have a clear versioning strategy that protects existing
+        consumers while allowing the API to evolve.
+      criteria:
+
+        - id: "ver-01"
+          name: "Version Scheme & Location"
+          is_gate: true
+          description: >
+            The design specifies how the API is versioned (URI path, header,
+            query parameter, or media type) consistent with the platform standard.
+          scoring_guidance:
+            1: "No versioning strategy defined."
+            2: "Versioning mentioned but mechanism is unclear or conflicts with platform standard."
+            3: "Versioning mechanism clearly defined and consistent with platform convention (e.g., URI path /v1/)."
+            4: "Versioning mechanism defined with rationale, examples of version negotiation, and documentation of what constitutes a version boundary."
+
+        - id: "ver-02"
+          name: "Breaking vs. Non-Breaking Change Policy"
+          is_gate: true
+          description: >
+            The document defines what constitutes a breaking change and how
+            backward compatibility is maintained within a version.
+          scoring_guidance:
+            1: "No change policy defined."
+            2: "Some mention of compatibility but no clear rules for what is breaking vs. non-breaking."
+            3: "Clear enumeration of breaking changes (field removal, type change, required field addition) and non-breaking changes (optional field addition, new endpoints)."
+            4: "Comprehensive compatibility policy with evolution examples, consumer contract testing strategy, and documented Postel's Law (liberal in acceptance, conservative in output) application."
+
+        - id: "ver-03"
+          name: "Deprecation & Sunset Policy"
+          is_gate: false
+          description: >
+            The design includes a deprecation timeline and sunset strategy for
+            older API versions.
+          scoring_guidance:
+            1: "No deprecation or sunset policy."
+            2: "Deprecation mentioned but no timeline or mechanism defined."
+            3: "Deprecation policy defined with Sunset header (RFC 8594), minimum support window, and consumer notification plan."
+            4: "Full lifecycle policy with deprecation headers, sunset dates, migration guides, usage monitoring triggers, and consumer communication SLA."
+
+    # -------------------------------------------------------------------------
+    # 4. PLATFORM PATTERN COMPLIANCE
+    # -------------------------------------------------------------------------
+    - id: "platform-compliance"
+      name: "Platform Pattern Compliance"
+      weight: 0.20
+      is_gate: true
+      description: >
+        The API must conform to the organization's platform standards for
+        authentication, observability, naming, and cross-cutting concerns.
+      criteria:
+
+        - id: "plat-01"
+          name: "Authentication & Authorization Model"
+          is_gate: true
+          description: >
+            The design specifies the auth mechanism (OAuth 2.0 flows, API keys,
+            mTLS) and authorization model (scopes, roles, permissions) for
+            every endpoint.
+          scoring_guidance:
+            1: "Auth not addressed or assumes a single mechanism without detail."
+            2: "Auth mechanism named but scopes/permissions are not mapped to endpoints."
+            3: "Auth mechanism specified with OAuth 2.0 scopes or equivalent permission model mapped to each endpoint."
+            4: "Complete auth design with OAuth 2.0 flow diagrams, scope hierarchy, fine-grained permissions, token lifetime policy, and consent requirements for PII access."
+
+        - id: "plat-02"
+          name: "Naming Conventions & Consistency"
+          is_gate: false
+          description: >
+            Field names, enum values, and URI segments follow platform naming
+            conventions (e.g., camelCase vs. snake_case, date formats, ID formats).
+          scoring_guidance:
+            1: "No consistent naming convention applied."
+            2: "Partially consistent naming with some violations of platform style guide."
+            3: "Consistent naming throughout, aligned with platform conventions (casing, date/time in ISO 8601, ID formats)."
+            4: "Naming fully consistent, with a glossary of domain terms, and explicit mapping to internal domain model names where they differ."
+
+        - id: "plat-03"
+          name: "Observability & Correlation"
+          is_gate: false
+          description: >
+            The design includes correlation ID propagation, standard logging
+            events, and any required health/readiness endpoints.
+          scoring_guidance:
+            1: "No mention of observability or correlation."
+            2: "Correlation ID header mentioned but not consistently applied, no health endpoints."
+            3: "Correlation ID header defined (e.g., X-Request-ID), health/readiness endpoints specified, standard log events identified."
+            4: "Full observability contract: correlation ID, distributed tracing headers (W3C Trace Context), SLI/SLO targets, health endpoints with dependency checks, and audit logging for sensitive operations."
+
+        - id: "plat-04"
+          name: "Security Controls"
+          is_gate: true
+          description: >
+            The design addresses input validation, output encoding, sensitive
+            data handling (PII/PCI), transport security, and OWASP API
+            Security Top 10 considerations.
+          scoring_guidance:
+            1: "Security not addressed."
+            2: "Some security considerations noted but major gaps (e.g., PII exposure, missing input validation)."
+            3: "Input validation strategy, PII/PCI data classification, TLS requirements, and CORS policy defined."
+            4: "Comprehensive security design: input validation, output encoding, data classification with masking/encryption rules, CORS, CSP, OWASP API Top 10 threat model, and security testing requirements."
+
+        - id: "plat-05"
+          name: "Async Patterns & Event Contracts"
+          is_gate: false
+          description: >
+            If the API involves asynchronous operations, the design specifies
+            polling, webhooks, or event-driven patterns with clear contracts.
+          scoring_guidance:
+            1: "Async operations present but no async pattern defined."
+            2: "Async pattern mentioned but incomplete (e.g., 202 Accepted returned but no status polling or callback mechanism)."
+            3: "Async pattern fully defined: 202 Accepted with Location header for status polling, or webhook callback contract with retry policy."
+            4: "Complete async design with status polling, webhook registration API, event schema (CloudEvents or equivalent), idempotency keys, and dead-letter handling."
+
+    # -------------------------------------------------------------------------
+    # 5. CONSUMER EXPERIENCE
+    # -------------------------------------------------------------------------
+    - id: "consumer-experience"
+      name: "Consumer Experience"
+      weight: 0.15
+      is_gate: false
+      description: >
+        The API should be intuitive, well-documented, and easy for consumers
+        to integrate with on first attempt.
+      criteria:
+
+        - id: "cx-01"
+          name: "Developer Documentation Quality"
+          is_gate: false
+          description: >
+            The design includes or references clear documentation with getting
+            started guides, authentication quickstart, and common use-case
+            walkthroughs.
+          scoring_guidance:
+            1: "No consumer-facing documentation planned."
+            2: "Auto-generated OpenAPI docs only, no narrative documentation."
+            3: "OpenAPI spec plus getting-started guide, authentication walkthrough, and at least two use-case examples."
+            4: "Comprehensive documentation plan: OpenAPI spec, interactive sandbox, getting-started guide, use-case tutorials, SDK considerations, and changelog."
+
+        - id: "cx-02"
+          name: "Consistency of Consumer Contracts"
+          is_gate: false
+          description: >
+            Response shapes are consistent across endpoints (envelope structure,
+            timestamp formats, null handling, empty collection representation).
+          scoring_guidance:
+            1: "Response shapes vary arbitrarily across endpoints."
+            2: "Some consistency but notable deviations in envelope structure or field representation."
+            3: "Consistent response envelope, timestamp format (ISO 8601), null vs. absent field policy, and empty collection as empty array."
+            4: "Fully consistent contracts with documented response envelope schema, HATEOAS links, consistent null/empty handling, and consumer SDK generation tested."
+
+        - id: "cx-03"
+          name: "Discoverability & Hypermedia"
+          is_gate: false
+          description: >
+            The API provides navigation aids such as link relations, pagination
+            links, or a root resource discovery endpoint.
+          scoring_guidance:
+            1: "No discoverability features."
+            2: "Pagination links present but no other navigational aids."
+            3: "Pagination links, self links, and related resource links provided consistently."
+            4: "Full HATEOAS implementation with link relations, affordances, and a root discovery document."
+
+        - id: "cx-04"
+          name: "Use-Case Completeness"
+          is_gate: false
+          description: >
+            The API design covers all identified consumer use cases end-to-end
+            without requiring workarounds or multiple undocumented call sequences.
+          scoring_guidance:
+            1: "Major use cases cannot be accomplished with the proposed API."
+            2: "Primary use cases covered but secondary flows require workarounds."
+            3: "All identified use cases achievable with documented call sequences."
+            4: "All use cases covered, with sequence diagrams for complex flows, and the design has been validated with at least one consumer team."
+
+    # -------------------------------------------------------------------------
+    # 6. DESIGN DOCUMENT QUALITY
+    # -------------------------------------------------------------------------
+    - id: "document-quality"
+      name: "Design Document Quality"
+      weight: 0.10
+      is_gate: false
+      description: >
+        The design document itself should be clear, complete, and structured
+        so the governance board can review it efficiently.
+      criteria:
+
+        - id: "dq-01"
+          name: "Problem Statement & Context"
+          is_gate: false
+          description: >
+            The document opens with a clear problem statement, business context,
+            and identifies the target consumers of the API.
+          scoring_guidance:
+            1: "No problem statement or context provided."
+            2: "Brief context but consumer personas and business drivers unclear."
+            3: "Clear problem statement, business justification, and identified consumer personas."
+            4: "Compelling problem statement with quantified business impact, consumer journey mapping, and alternatives considered."
+
+        - id: "dq-02"
+          name: "Architecture & Dependency Map"
+          is_gate: false
+          description: >
+            The document includes an architecture diagram showing the API's
+            position in the platform, upstream/downstream dependencies, and
+            data flow.
+          scoring_guidance:
+            1: "No architecture context provided."
+            2: "Text description of dependencies but no diagram."
+            3: "Architecture diagram showing API position, dependencies, and data flow directions."
+            4: "Detailed architecture diagram with sequence diagrams for key flows, dependency SLAs, and data classification per flow."
+
+        - id: "dq-03"
+          name: "Non-Functional Requirements"
+          is_gate: false
+          description: >
+            The design documents expected throughput, latency targets, availability
+            requirements, and data volume estimates.
+          scoring_guidance:
+            1: "No non-functional requirements stated."
+            2: "Some NFRs mentioned but incomplete or without measurable targets."
+            3: "Throughput, P99 latency, availability (e.g., 99.95%), and data volume estimates documented with measurable targets."
+            4: "Comprehensive NFRs with load test plan, capacity model, SLO definitions, error budget policy, and scaling strategy."
+
+  # ===========================================================================
+  # REVIEW PROCESS
+  # ===========================================================================
+  review_process:
+    instructions: >
+      Each member of the API Governance Board independently scores every
+      criterion. Scores are then discussed to reach consensus. Any gate
+      criterion scoring below 3 blocks approval. The overall weighted average
+      must also meet the minimum threshold.
+    workflow:
+      - step: 1
+        action: "Author submits API design document and OpenAPI specification to governance board."
+      - step: 2
+        action: "Each reviewer scores all criteria independently using this rubric."
+      - step: 3
+        action: "Board convenes to discuss scores, focusing on gate criteria and any score below 3."
+      - step: 4
+        action: "Board issues verdict: Approved, Conditionally Approved (with required changes), or Rejected."
+      - step: 5
+        action: "If conditionally approved, author addresses feedback and resubmits for targeted re-review."
+    verdicts:
+      approved:
+        condition: "All gate criteria >= 3 AND overall weighted average >= 3.0"
+        action: "Implementation may proceed."
+      conditionally_approved:
+        condition: "All gate criteria >= 3 AND overall weighted average >= 2.5 but < 3.0"
+        action: "Author must address specific feedback items and resubmit affected sections."
+      rejected:
+        condition: "Any gate criterion < 3 OR overall weighted average < 2.5"
+        action: "Significant redesign required. Full re-review needed."
+
+  # ===========================================================================
+  # SCORING SHEET TEMPLATE
+  # ===========================================================================
+  scoring_template:
+    note: >
+      Use this structure to record scores for a specific API design review.
+    fields:
+      api_name: ""
+      api_version: ""
+      review_date: ""
+      reviewers: []
+      scores: {}
+      gate_criteria_passed: null
+      weighted_average: null
+      verdict: ""
+      action_items: []

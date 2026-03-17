@@ -1,0 +1,135 @@
+rubric_id: EAROS-CAP-001
+version: 1.0.0
+kind: profile
+title: Capability Map Profile
+status: approved
+artifact_type: capability_map
+inherits:
+- EAROS-CORE-001@1.0.0
+purpose:
+- strategy_alignment_review
+- operating_model_review
+- investment_planning_review
+stakeholders:
+- enterprise_architect
+- business_architect
+- strategy
+- portfolio
+- finance
+viewpoints:
+- capability
+- ownership
+- heatmap
+- target-state
+dimensions:
+- id: CP1
+  name: Decomposition quality
+  criteria:
+  - id: CAP-01
+    question: Is the capability decomposition stable, non-overlapping, and expressed
+      at a coherent level of abstraction?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: major
+      failure_effect: Cannot pass above conditional_pass
+    required_evidence:
+    - level definitions
+    - decomposition structure
+    - naming conventions
+    scoring_guide:
+      '0': Chaotic or overlapping decomposition
+      '1': Frequent overlap or mixed levels
+      '2': Partly coherent decomposition
+      '3': Mostly stable and coherent decomposition
+      '4': Stable, non-overlapping, and structurally consistent decomposition
+    anti_patterns:
+    - Capabilities mixed with processes or systems
+    - Different abstraction levels side by side
+    remediation_hints:
+    - Normalize level definitions
+    - Separate capability from implementation
+- id: CP2
+  name: Business relevance
+  criteria:
+  - id: CAP-02
+    question: Does the map connect capabilities to business outcomes, ownership, and
+      investment or maturity decisions?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - business outcomes
+    - owners
+    - heatmaps or assessments
+    - investment cues
+    scoring_guide:
+      '0': No business relevance
+      '1': Weak narrative connection
+      '2': Partial relevance
+      '3': Clear link to business concerns
+      '4': Strong basis for strategy and portfolio decisions
+    anti_patterns:
+    - Only a taxonomy poster
+    - No ownership
+    remediation_hints:
+    - Add ownership
+    - Add maturity or investment overlays
+- id: CP3
+  name: Comparability and stewardship
+  criteria:
+  - id: CAP-03
+    question: Can the capability map be reused over time for comparative analysis
+      without frequent structural rework?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - change policy
+    - versioning
+    - definition stability
+    scoring_guide:
+      '0': Not reusable
+      '1': Highly unstable
+      '2': Some comparative reuse possible
+      '3': Generally comparable over time
+      '4': Strong stewardship and longitudinal usability
+    anti_patterns:
+    - Structure changes every quarter
+    - No definition owner
+    remediation_hints:
+    - Freeze decomposition policy
+    - Define change control
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: Escalate when CAP-01 < 3 for enterprise-wide portfolio
+      use
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report

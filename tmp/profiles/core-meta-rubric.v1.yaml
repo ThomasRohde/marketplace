@@ -1,0 +1,388 @@
+rubric_id: EAROS-CORE-001
+version: 1.0.0
+kind: core_rubric
+title: EAROS Core Meta-Rubric
+status: approved
+artifact_type: architecture_artifact
+purpose:
+- design_review
+- governance_review
+- assurance_review
+stakeholders:
+- architecture_board
+- domain_architect
+- delivery_lead
+- risk
+- security
+- operations
+viewpoints:
+- context
+- functional
+- information
+- integration
+- deployment
+- roadmap
+- decision
+dimensions:
+- id: D1
+  name: Stakeholder and purpose fit
+  description: Does the artifact identify stakeholders, decision intent, and the concerns
+    it must address?
+  weight: 1.0
+  criteria:
+  - id: STK-01
+    question: Does the artifact explicitly identify intended stakeholders, decision
+      purpose, and review context?
+    description: The artifact should make clear who it is for, why it exists, and
+      what decision it is intended to support.
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: major
+      failure_effect: Cannot pass above conditional_pass
+    required_evidence:
+    - purpose statement
+    - stakeholder list
+    - decision or usage context
+    scoring_guide:
+      '0': Absent or contradicted
+      '1': Implied only
+      '2': Explicit but incomplete
+      '3': Explicit and mostly complete
+      '4': Explicit, complete, and used consistently
+    anti_patterns:
+    - Generic audience only
+    - No stated decision intent
+    remediation_hints:
+    - Add a purpose section
+    - Add a stakeholder-concern table
+  - id: STK-02
+    question: Are concerns mapped to the views or sections used in the artifact?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - concern-to-view mapping
+    - section structure
+    - legend or reading guide
+    scoring_guide:
+      '0': No mapping
+      '1': Weak implied mapping
+      '2': Partial mapping
+      '3': Mostly complete mapping
+      '4': Clear and consistent mapping across the artifact
+    anti_patterns:
+    - Many diagrams with no explanation
+    - Views do not align to concerns
+    remediation_hints:
+    - Add a view inventory
+    - Explain why each view exists
+- id: D2
+  name: Scope and boundary clarity
+  description: Does the artifact define what is in scope, out of scope, and the boundaries
+    of the architecture?
+  weight: 1.0
+  criteria:
+  - id: SCP-01
+    question: Does the artifact define scope, boundaries, assumptions, and exclusions?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: critical
+      failure_effect: not_reviewable when score < 2
+    required_evidence:
+    - scope statement
+    - in/out list
+    - boundary definition
+    - assumptions
+    scoring_guide:
+      '0': No scope or boundary
+      '1': Scope is ambiguous
+      '2': Basic scope exists but is incomplete
+      '3': Scope and boundaries are clear
+      '4': Scope and boundaries are clear, tested, and internally consistent
+    anti_patterns:
+    - Everything is in scope
+    - System boundary changes by diagram
+    remediation_hints:
+    - Add context boundary
+    - List exclusions explicitly
+- id: D3
+  name: Concern coverage and viewpoint appropriateness
+  weight: 1.0
+  criteria:
+  - id: CVP-01
+    question: Do the selected views and representations fit the stakeholder concerns
+      and review purpose?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - view inventory
+    - stakeholder concerns
+    - rationale for representations
+    scoring_guide:
+      '0': Views are unfit or missing
+      '1': Views weakly fit the concerns
+      '2': Views cover some concerns
+      '3': Views cover most concerns appropriately
+      '4': Views are well chosen and materially support the decision
+    anti_patterns:
+    - Wrong level of abstraction
+    - Diagram-first with no decision intent
+    remediation_hints:
+    - Remove decorative views
+    - Add missing stakeholder-focused view
+- id: D4
+  name: Traceability to drivers, requirements, and principles
+  weight: 1.0
+  criteria:
+  - id: TRC-01
+    question: Are business drivers, objectives, principles, or requirements traceably
+      connected to the architecture content?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: major
+      failure_effect: Cannot pass if score < 2
+    required_evidence:
+    - driver list
+    - requirements traceability
+    - principle references
+    scoring_guide:
+      '0': No traceability
+      '1': Loose narrative only
+      '2': Partial traceability
+      '3': Clear traceability for most important items
+      '4': Consistent traceability for decision-relevant items
+    anti_patterns:
+    - Drivers listed but not used
+    - Principles cited without effect
+    remediation_hints:
+    - Add traceability matrix
+    - Link decisions to requirements
+- id: D5
+  name: Internal consistency and integrity
+  weight: 1.0
+  criteria:
+  - id: CON-01
+    question: Are terms, structures, interfaces, and facts consistent across sections
+      and views?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - consistent terminology
+    - cross-view agreement
+    - legend or glossary
+    scoring_guide:
+      '0': Contradictory
+      '1': Frequent inconsistencies
+      '2': Some inconsistencies remain
+      '3': Mostly consistent
+      '4': Consistent and actively normalized
+    anti_patterns:
+    - Different names for same thing
+    - Interfaces differ by diagram
+    remediation_hints:
+    - Create glossary
+    - Reconcile entities and interfaces
+- id: D6
+  name: Risks, assumptions, constraints, and tradeoffs
+  weight: 1.0
+  criteria:
+  - id: RAT-01
+    question: Does the artifact identify key risks, assumptions, constraints, and
+      tradeoffs relevant to the decision?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - risk list
+    - assumptions
+    - constraints
+    - tradeoff discussion
+    scoring_guide:
+      '0': Not addressed
+      '1': Mentioned superficially
+      '2': Partial treatment
+      '3': Material issues treated
+      '4': Tradeoffs and consequences are explicit and decision-useful
+    anti_patterns:
+    - Only upsides presented
+    - No downside analysis
+    remediation_hints:
+    - Add tradeoff table
+    - Record assumptions and owners
+- id: D7
+  name: Standards and policy compliance
+  weight: 1.0
+  criteria:
+  - id: CMP-01
+    question: Does the artifact show alignment to applicable architecture standards,
+      policies, and mandatory controls?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: critical
+      failure_effect: reject when mandatory control compliance cannot be determined
+    required_evidence:
+    - standards references
+    - exceptions list
+    - control mapping
+    scoring_guide:
+      '0': No compliance treatment
+      '1': Assertions without evidence
+      '2': Partial compliance view
+      '3': Compliance treated for most material controls
+      '4': Compliance and exceptions are explicit, evidence-backed, and owned
+    anti_patterns:
+    - Compliant by assumption
+    - No recorded exceptions
+    remediation_hints:
+    - Map controls to design elements
+    - Add exception log
+- id: D8
+  name: Actionability and implementation relevance
+  weight: 1.0
+  criteria:
+  - id: ACT-01
+    question: Can delivery and governance teams act on the artifact without major
+      reinterpretation?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - decision statement
+    - next actions
+    - owner or roadmap references
+    scoring_guide:
+      '0': Not actionable
+      '1': Heavily ambiguous
+      '2': Partly actionable
+      '3': Mostly actionable
+      '4': Actionable with clear ownership and next steps
+    anti_patterns:
+    - Interesting but unusable
+    - No owner, no next step
+    remediation_hints:
+    - Add decisions and actions
+    - Assign owners
+- id: D9
+  name: Artifact maintainability and stewardship
+  weight: 1.0
+  criteria:
+  - id: MNT-01
+    question: Does the artifact identify ownership, update expectations, and change
+      history or provenance?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - owner
+    - last updated
+    - change log or provenance
+    scoring_guide:
+      '0': No stewardship information
+      '1': Ownership unclear
+      '2': Basic stewardship exists
+      '3': Stewardship and update expectations are clear
+      '4': Stewardship, provenance, and lifecycle handling are strong
+    anti_patterns:
+    - Orphaned artifact
+    - Unknown last update
+    remediation_hints:
+    - Assign owner
+    - Add review cadence
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: gates_first_then_weighted_average
+  thresholds:
+    pass: No critical gate failure, overall >= 3.2, and no dimension < 2.0
+    conditional_pass: No critical gate failure and overall 2.4-3.19 or one weak dimension
+    rework_required: Overall < 2.4 or repeated weak dimensions
+    reject: Critical gate failure or mandatory control breach
+    not_reviewable: Evidence insufficient for core gate criteria
+  na_policy: Exclude N/A criteria from denominator; evaluator must justify N/A in
+    narrative
+  confidence_policy: Confidence is reported separately and must not mathematically
+    modify the score
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report
+calibration:
+  required_before_production: true
+  minimum_examples: 3
+  recommended_reviewers:
+  - 2 human reviewers
+  - 1 evaluator agent
+  - 1 challenger agent

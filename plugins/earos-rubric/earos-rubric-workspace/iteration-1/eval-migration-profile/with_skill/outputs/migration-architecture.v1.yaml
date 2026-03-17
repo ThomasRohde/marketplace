@@ -1,0 +1,503 @@
+rubric_id: EAROS-MIG-001
+version: 0.1.0
+kind: profile
+title: Migration Architecture Profile
+status: draft
+artifact_type: migration_architecture
+inherits:
+  - EAROS-CORE-001@1.0.0
+purpose:
+  - migration_governance_gate
+  - workload_migration_approval
+  - operational_readiness_review
+stakeholders:
+  - cloud_architect
+  - infrastructure_engineer
+  - security_architect
+  - service_management
+  - finance_cost_governance
+  - domain_architect
+viewpoints:
+  - current_state
+  - transition_state
+  - target_state
+  - dependency
+  - data_flow
+  - operational
+  - cost
+
+applicability:
+  description: >
+    Applies to architecture documents produced for workload migrations from
+    on-premises to cloud (or between cloud providers). Intended for use at the
+    governance gate before migration execution is approved. Assumes the core
+    meta-rubric (EAROS-CORE-001) covers stakeholder fit, scope clarity, concern
+    coverage, traceability, internal consistency, risks and tradeoffs, standards
+    compliance, actionability, and maintainability.
+  when:
+    - artifact describes a workload migration from on-prem to cloud
+    - artifact is presented at a migration governance gate
+    - review decision is whether to approve migration execution
+
+design_method: C - Lifecycle-centered
+design_method_rationale: >
+  Migration architecture documents sit at a lifecycle stage boundary: they
+  bridge the current on-premises state and the target cloud state, and are
+  reviewed at a governance gate before execution begins. The primary quality
+  concerns are transition-state clarity, sequencing, dependency readiness,
+  rollback capability, and hybrid-period operational and cost readiness.
+  Method C (Lifecycle-centered) is the correct fit because the artifact's
+  value is defined by what downstream consumers (migration teams, operations,
+  finance) need to execute safely, not by a single decision or a static
+  viewpoint.
+
+dimensions:
+  - id: MT1
+    name: Transition-state and sequencing clarity
+    description: >
+      Evaluates whether the migration architecture defines clear transition
+      states between current and target, including the hybrid operational
+      period where on-prem and cloud coexist. The core meta-rubric covers
+      scope and actionability generically; this dimension targets the
+      migration-specific need for sequenced, phased transition planning.
+    weight: 1.0
+    criteria:
+      - id: MIG-01
+        question: >
+          Does the migration architecture define discrete transition states
+          between current-state and target-state, with explicit entry/exit
+          criteria and sequencing for each phase?
+        description: >
+          Checks whether the document moves beyond a simple before/after
+          comparison to define the intermediate states the workload will pass
+          through, including the hybrid period where both environments operate
+          simultaneously.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass. A migration architecture
+            without defined transition states is not executable.
+        required_evidence:
+          - transition-state diagram or table showing phases
+          - entry and exit criteria for each phase
+          - sequencing rationale explaining phase ordering
+          - hybrid-state operational description
+        scoring_guide:
+          '0': >
+            No transition states defined. Document shows only current-state
+            and target-state with no migration path.
+          '1': >
+            Migration path mentioned in prose but no discrete phases or
+            sequencing. Reads as "we will migrate" without structure.
+          '2': >
+            Phases are identified but entry/exit criteria are missing or
+            vague. Hybrid operational period is not addressed.
+          '3': >
+            Discrete phases with entry/exit criteria are defined. Hybrid
+            period is acknowledged with basic operational description.
+            Minor gaps in sequencing rationale.
+          '4': >
+            Fully sequenced transition with clear phases, entry/exit
+            criteria, hybrid-state operations, and rationale for ordering.
+            A migration team could build an execution plan from this.
+        anti_patterns:
+          - Only current-state and target-state diagrams with no transition path
+          - Single "migration phase" with no decomposition
+          - Sequencing based on convenience rather than dependency or risk
+          - Hybrid operational period not mentioned or dismissed as trivial
+        remediation_hints:
+          - Add a transition-state diagram showing each intermediate phase
+          - Define explicit entry and exit criteria for every phase
+          - Describe the hybrid operational model during coexistence
+          - Explain why phases are ordered the way they are
+
+  - id: MT2
+    name: Dependency mapping and impact analysis
+    description: >
+      Evaluates whether dependencies between the migrating workload and its
+      on-prem ecosystem, cloud services, and cross-system integration points
+      are explicitly mapped with migration-state impact analysis. The core
+      meta-rubric covers traceability generally; this dimension targets the
+      migration-specific risk of unmapped dependencies causing outages or
+      blocking migration.
+    weight: 1.2
+    criteria:
+      - id: MIG-02
+        question: >
+          Are all material dependencies (upstream, downstream, infrastructure,
+          data, and integration) explicitly mapped, with impact analysis
+          showing how each dependency is affected during each transition state?
+        description: >
+          Checks whether the document identifies what the workload depends on
+          and what depends on it, and how those relationships change or break
+          during migration phases.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: critical
+          failure_effect: >
+            Reject when material dependencies are unmapped. Unmapped
+            dependencies are the primary cause of migration-related outages.
+        required_evidence:
+          - dependency inventory or map
+          - per-dependency migration impact assessment
+          - integration point catalogue with migration-state behavior
+          - upstream/downstream notification or coordination plan
+        scoring_guide:
+          '0': >
+            No dependency mapping. The document does not identify what
+            the workload connects to or depends on.
+          '1': >
+            Dependencies mentioned in passing but not systematically
+            catalogued. No impact analysis per dependency.
+          '2': >
+            Dependency list exists but is incomplete or lacks migration-state
+            impact analysis. Some integration points not covered.
+          '3': >
+            Material dependencies are mapped with impact analysis for each
+            transition state. Minor dependencies may be incomplete but
+            critical paths are covered.
+          '4': >
+            Comprehensive dependency map with per-dependency impact analysis
+            across all transition states. Integration behavior during
+            coexistence is explicitly described. Coordination plan with
+            upstream/downstream teams is documented.
+        anti_patterns:
+          - Dependency diagram that only shows target-state connections
+          - Dependencies will be managed during execution without specifics
+          - Network dependencies listed but application-level dependencies omitted
+          - No distinction between hard dependencies and soft dependencies
+        remediation_hints:
+          - Create a dependency inventory with columns for type, owner, migration impact, and mitigation
+          - Map each dependency's behavior during every transition phase
+          - Identify which dependencies block migration and which can be bridged
+          - Document coordination requirements with dependent teams
+
+      - id: MIG-03
+        question: >
+          Are cross-environment integration patterns (e.g., VPN, API gateway,
+          message bridging) defined for the hybrid period when on-prem and
+          cloud must communicate?
+        description: >
+          Checks whether the architecture addresses how systems will
+          communicate across environments during the coexistence period,
+          not just in the target state.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - hybrid integration architecture diagram
+          - cross-environment communication patterns
+          - latency and bandwidth considerations
+        scoring_guide:
+          '0': >
+            No cross-environment integration design. Assumes clean cutover
+            with no coexistence communication.
+          '1': >
+            "VPN" or "API gateway" mentioned without design detail.
+          '2': >
+            Some integration patterns described but incomplete coverage
+            of cross-environment communication needs.
+          '3': >
+            Cross-environment patterns defined for critical integrations
+            with latency and reliability considerations.
+          '4': >
+            Full hybrid integration architecture with patterns, failover,
+            and performance characteristics for all material integration
+            points during coexistence.
+        anti_patterns:
+          - Assuming zero cross-environment communication is needed
+          - Designing only for target-state connectivity
+          - Ignoring latency impact of cross-environment calls
+        remediation_hints:
+          - Add a hybrid integration diagram showing on-prem to cloud communication paths
+          - Document latency and bandwidth requirements for cross-environment links
+          - Define failover behavior if cross-environment links fail
+
+  - id: MT3
+    name: Rollback and contingency planning
+    description: >
+      Evaluates whether the migration architecture includes concrete,
+      executable rollback plans with defined triggers, procedures, and
+      success criteria. The core meta-rubric covers risks generically;
+      this dimension targets the migration-specific need for reversibility
+      when a migration phase fails.
+    weight: 1.2
+    criteria:
+      - id: MIG-04
+        question: >
+          Does the migration architecture define a rollback plan for each
+          migration phase, including triggers, procedures, data reversion
+          strategy, maximum rollback window, and success criteria for
+          confirming rollback completion?
+        description: >
+          Checks whether the document provides an actionable rollback
+          strategy, not just an assertion that rollback is possible.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: critical
+          failure_effect: >
+            Reject when no rollback plan exists. Migrations without
+            rollback capability represent unacceptable operational risk.
+        required_evidence:
+          - rollback trigger criteria (quantitative where possible)
+          - step-by-step rollback procedure per phase
+          - data reversion or reconciliation strategy
+          - maximum rollback window (time-bounded)
+          - rollback success criteria and verification steps
+        scoring_guide:
+          '0': >
+            No rollback plan. Document does not address what happens
+            if migration fails.
+          '1': >
+            Rollback mentioned as possible but no plan, triggers, or
+            procedures defined. "We can always go back" without substance.
+          '2': >
+            Rollback plan exists for some phases but lacks triggers,
+            time windows, or data reversion strategy. Not executable
+            as written.
+          '3': >
+            Rollback plan covers all major phases with triggers,
+            procedures, and time windows. Data reversion strategy
+            exists but may have minor gaps. Plan is largely executable.
+          '4': >
+            Comprehensive rollback plan per phase with quantitative
+            triggers, tested procedures, data reversion and
+            reconciliation, bounded time windows, and explicit
+            verification criteria. Plan has been or can be tested.
+        anti_patterns:
+          - Rollback is possible without any plan detail
+          - Rollback plan that ignores data changes made after cutover
+          - No time window for rollback feasibility
+          - Rollback plan that requires capabilities not yet built
+          - Single rollback plan for all phases rather than phase-specific plans
+        remediation_hints:
+          - Define explicit rollback triggers with measurable thresholds
+          - Write step-by-step rollback procedures for each migration phase
+          - Address data reversion including changes made during the migration window
+          - Define the maximum time window within which rollback remains feasible
+          - Specify how you verify rollback was successful
+
+  - id: MT4
+    name: Data migration strategy
+    description: >
+      Evaluates whether the migration architecture defines how data will be
+      migrated, including volume, approach (big-bang vs. trickle), integrity
+      validation, cutover mechanics, and data rollback. This is entirely
+      migration-specific and not covered by the core meta-rubric.
+    weight: 1.0
+    criteria:
+      - id: MIG-05
+        question: >
+          Does the migration architecture define a data migration strategy
+          including approach selection (big-bang, trickle, dual-write),
+          data volume and transfer mechanics, integrity validation, cutover
+          procedure, and data-specific rollback?
+        description: >
+          Checks whether data migration is treated as a first-class
+          architectural concern rather than an implementation detail
+          deferred to execution.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass when data migration
+            strategy is absent for data-bearing workloads.
+        required_evidence:
+          - data migration approach and rationale
+          - data volume estimates and transfer time
+          - integrity validation method
+          - cutover procedure and timing
+          - data-specific rollback or reconciliation plan
+        scoring_guide:
+          '0': >
+            No data migration strategy. Data movement is not addressed.
+          '1': >
+            Data migration mentioned but approach not defined. "Data
+            will be migrated" without substance.
+          '2': >
+            Approach selected (e.g., trickle) but missing volume
+            analysis, integrity validation, or cutover procedure.
+          '3': >
+            Data migration approach is defined with volume estimates,
+            validation method, and cutover procedure. Minor gaps in
+            rollback or edge cases.
+          '4': >
+            Comprehensive data migration strategy with justified
+            approach, volume and timing analysis, integrity validation
+            procedure, cutover mechanics, and data rollback plan.
+            Edge cases (schema differences, referential integrity) are
+            addressed.
+        anti_patterns:
+          - ETL will handle it without architectural direction
+          - No data integrity validation step
+          - Data volume not estimated
+          - Cutover timing not bounded
+          - Assumes zero-downtime migration without justifying how
+        remediation_hints:
+          - Select and justify a data migration approach
+          - Estimate data volumes and transfer times
+          - Define integrity validation procedure (checksums, record counts, sampling)
+          - Document cutover procedure with timing constraints
+          - Address what happens to data written during the migration window
+
+  - id: MT5
+    name: Cost and operational readiness for transition period
+    description: >
+      Evaluates whether the migration architecture addresses the cost model
+      and operational readiness for the transition period, not just the
+      target state. The core meta-rubric covers actionability generically;
+      this dimension targets the common migration failure of ignoring the
+      expense and operational complexity of running dual environments.
+    weight: 1.0
+    criteria:
+      - id: MIG-06
+        question: >
+          Does the migration architecture include a cost model that covers
+          the transition period (dual-environment costs, migration tooling,
+          additional staffing) separately from the target-state cost model?
+        description: >
+          Checks whether the financial impact of the migration itself is
+          modeled, not just the target-state run cost.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - transition-period cost model or estimate
+          - dual-environment run cost during coexistence
+          - migration tooling and staffing costs
+          - comparison with target-state cost model
+        scoring_guide:
+          '0': >
+            No cost model, or only target-state costs shown.
+          '1': >
+            Transition costs acknowledged but not quantified.
+          '2': >
+            Some transition costs estimated but incomplete. Dual-run
+            costs or migration tooling costs missing.
+          '3': >
+            Transition-period cost model exists covering dual-run,
+            tooling, and staffing. Minor line items may be missing.
+          '4': >
+            Comprehensive transition cost model with dual-run costs,
+            migration tooling, staffing, contingency budget, and
+            comparison showing total migration cost vs. target-state
+            savings timeline.
+        anti_patterns:
+          - Only showing target-state cost savings without transition costs
+          - Comparing current on-prem cost to target cloud cost without migration period
+          - Ignoring dual-environment licensing and support costs
+          - No contingency budget for migration delays
+        remediation_hints:
+          - Add transition-period cost model as separate section
+          - Include dual-environment run costs for the coexistence period
+          - Model migration tooling and additional staffing costs
+          - Show break-even timeline including transition costs
+
+      - id: MIG-07
+        question: >
+          Does the migration architecture define operational readiness
+          criteria for the hybrid period, including monitoring, incident
+          management, support model, and team skill readiness?
+        description: >
+          Checks whether the document addresses how operations will work
+          during the transition when both environments are live.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass when operational readiness
+            for the hybrid period is not addressed.
+        required_evidence:
+          - hybrid-state monitoring strategy
+          - incident management during migration
+          - support model for dual-environment operation
+          - team skill readiness assessment or training plan
+        scoring_guide:
+          '0': >
+            No operational readiness treatment for the hybrid period.
+          '1': >
+            "Operations will be notified" or similar without substance.
+          '2': >
+            Some operational readiness addressed but significant gaps
+            in monitoring, incident management, or skill readiness.
+          '3': >
+            Operational readiness criteria defined for monitoring,
+            incident management, and support model. Team readiness
+            acknowledged with plan. Minor gaps.
+          '4': >
+            Comprehensive operational readiness plan covering monitoring
+            across both environments, incident escalation during
+            migration, dual-environment support model, and team
+            skill assessment with training plan. Operations team
+            has reviewed and agreed.
+        anti_patterns:
+          - Assuming cloud operations team is already skilled and ready
+          - No monitoring strategy for the hybrid period
+          - Incident management plan that only covers target state
+          - No consideration of on-call or support coverage during migration windows
+        remediation_hints:
+          - Define monitoring requirements for both environments during transition
+          - Document incident management procedures specific to migration period
+          - Assess team skills and define training needs
+          - Get operations team sign-off on readiness criteria
+
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: >
+      Escalate to human review when MIG-02 (dependency mapping) scores
+      below 3 for workloads with more than 5 integration points.
+      Escalate to human review when MIG-04 (rollback plan) scores
+      below 3 for Tier-1 or customer-facing workloads.
+      Escalate to human review when MIG-05 (data migration) scores
+      below 3 for workloads with data volumes exceeding 1TB.
+      Escalate to human review when any two criteria score 1 or below.
+  na_policy: >
+    Exclude N/A criteria from denominator. Evaluator must justify N/A
+    in narrative. MIG-05 may be N/A for stateless workloads with no
+    persistent data. All other criteria are expected to be applicable
+    for migration architectures.
+  confidence_policy: >
+    Confidence is reported separately per criterion and must not
+    mathematically modify the score. Low confidence on any gated
+    criterion triggers human review.
+
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+    - yaml
+    - json
+    - markdown-report
+
+calibration:
+  required_before_production: true
+  minimum_examples: 3
+  recommended_reviewers:
+    - 2 cloud architects with migration experience
+    - 1 evaluator agent
+    - 1 challenger agent
+  calibration_notes: >
+    Calibrate with at least one example from each migration pattern:
+    lift-and-shift, re-platform, and re-architect. Ensure scoring
+    guide distinctions are testable across all three patterns.
+
+change_log:
+  - version: 0.1.0
+    date: '2026-03-17'
+    author: EAROS rubric creator (agent-assisted)
+    change_class: major
+    summary: Initial draft created using Method C (Lifecycle-centered)

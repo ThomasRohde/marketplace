@@ -1,0 +1,597 @@
+rubric_id: EAROS-API-001
+version: 0.1.0
+kind: profile
+title: API Design Document Profile
+status: draft
+artifact_type: api_design_document
+inherits:
+  - EAROS-CORE-001@1.0.0
+purpose:
+  - api_governance_gate
+  - design_review
+  - platform_consistency_review
+stakeholders:
+  - platform_architect
+  - security_architect
+  - api_product_owner
+  - api_consumer_representative
+  - engineering_lead
+viewpoints:
+  - api_contract
+  - integration
+  - error_handling
+  - consumer_experience
+  - platform_consistency
+
+applicability:
+  artifact_types:
+    - api_design_document
+    - api_specification
+    - api_contract_proposal
+  conditions: >
+    Apply when the artifact is a REST API design document submitted for
+    governance board review before implementation begins. Applicable to
+    new APIs and major revisions of existing APIs. Not applicable to
+    patch-level changes or documentation-only updates.
+
+dimensions:
+  - id: AP1
+    name: API contract completeness
+    description: >
+      Evaluates whether the API design document defines a complete,
+      unambiguous contract that an implementer and consumer can rely on.
+      The core meta-rubric covers general scope and concern coverage but
+      does not assess API-specific contract elements such as resource
+      models, operations, request/response schemas, and status codes.
+    weight: 1.0
+    criteria:
+      - id: API-01
+        question: >
+          Does the API design document define all resources, operations,
+          request/response schemas, and HTTP status codes at a level
+          sufficient for an implementer to build and a consumer to
+          integrate without ambiguity?
+        description: >
+          Checks whether the API contract is complete enough that a
+          developer could generate a client SDK or server stub from it.
+          Covers resource URIs, HTTP methods, path and query parameters,
+          request bodies, response bodies, and status code semantics.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass. Incomplete contracts
+            lead to implementation ambiguity and consumer integration
+            rework.
+        required_evidence:
+          - resource model or entity diagram
+          - operation listing with HTTP methods and URIs
+          - request and response schema definitions (OpenAPI, JSON Schema, or equivalent)
+          - HTTP status code catalog per operation
+          - path, query, and header parameter definitions
+        scoring_guide:
+          '0': >
+            No contract definition. Only prose description of API
+            intent with no resource or operation detail.
+          '1': >
+            Resource names and some operations listed but schemas are
+            missing or only described informally in prose.
+          '2': >
+            Partial contract. Most operations defined but request/response
+            schemas are incomplete or status codes are generic
+            (only 200 and 500 listed).
+          '3': >
+            Good contract. All primary operations have defined schemas,
+            status codes are specific per operation, and parameters are
+            documented. Minor gaps in edge-case operations or optional
+            query parameters.
+          '4': >
+            Strong contract. All operations, schemas, status codes,
+            parameters, and headers are fully defined. Contract is
+            precise enough to generate client SDKs. Examples are
+            provided for each operation.
+        anti_patterns:
+          - Operations described only in prose without schema definitions
+          - Generic status codes (200/500) applied uniformly across all operations
+          - Request/response bodies defined as "object" without field-level detail
+          - Missing PATCH or DELETE semantics for resources that support mutation
+        remediation_hints:
+          - Define an OpenAPI 3.x specification as the source of truth for the contract
+          - Add request and response examples for each operation
+          - Map each operation to its specific success and error status codes
+
+      - id: API-02
+        question: >
+          Does the API design specify error handling behavior
+          comprehensively, including error response format (RFC 7807),
+          error codes for domain-specific failure modes, and retry
+          guidance?
+        description: >
+          This is the most common failure mode identified by the
+          governance board. API designs frequently acknowledge error
+          handling but omit concrete error response schemas, domain
+          error codes, and guidance for consumers on retry and
+          recovery behavior.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: critical
+          failure_effect: >
+            Reject when error handling contracts are absent or do not
+            conform to RFC 7807. Incomplete error contracts are the
+            primary source of post-implementation rework in this
+            organization.
+        required_evidence:
+          - error response schema conforming to RFC 7807 Problem Details
+          - domain-specific error code catalog with descriptions
+          - error response examples per operation
+          - retry and idempotency guidance for consumers
+          - rate limiting and throttling error behavior
+        scoring_guide:
+          '0': >
+            No error handling specification. Error responses are not
+            mentioned or are deferred to implementation.
+          '1': >
+            Error handling acknowledged. A general statement about
+            returning errors exists but no schema, no error codes,
+            and no RFC 7807 reference.
+          '2': >
+            Partial error contract. RFC 7807 is referenced or an error
+            schema is provided but domain-specific error codes are
+            incomplete. Retry guidance is missing. Not all operations
+            have error responses documented.
+          '3': >
+            Good error contract. RFC 7807 Problem Details schema is
+            defined. Domain error codes are cataloged for primary
+            operations. Retry and idempotency guidance is present.
+            Minor gaps in edge-case error scenarios.
+          '4': >
+            Strong error contract. Complete RFC 7807 implementation
+            with domain error type URIs, error code catalog covering
+            all operations including edge cases, retry/backoff
+            guidance, idempotency semantics, rate limit headers,
+            and error response examples.
+        anti_patterns:
+          - Error handling deferred to implementation teams
+          - Generic error schema without domain-specific error codes
+          - No distinction between client errors (4xx) and server errors (5xx)
+          - Missing retry and idempotency guidance for non-idempotent operations
+          - Rate limiting behavior undocumented
+        remediation_hints:
+          - Adopt RFC 7807 Problem Details as the standard error response format
+          - Create a domain error code catalog with type URIs and descriptions
+          - Document retry behavior and idempotency keys for POST and PATCH operations
+          - Add rate limit response headers and 429 behavior to the contract
+
+  - id: AP2
+    name: Platform pattern compliance
+    description: >
+      Evaluates whether the API design is consistent with the
+      organization's established platform API patterns. The core
+      meta-rubric D5 (internal consistency) checks coherence within
+      the artifact; this dimension checks consistency with the
+      broader platform API landscape including naming conventions,
+      pagination, authentication, filtering, and sorting patterns.
+    weight: 1.0
+    criteria:
+      - id: API-03
+        question: >
+          Does the API design follow the organization's REST API naming
+          conventions, resource modeling patterns, and HTTP method
+          semantics as defined in the platform API standards?
+        description: >
+          Checks alignment with platform standards for URI structure,
+          resource naming (plural nouns, kebab-case), HTTP method
+          semantics (GET is safe, PUT is idempotent, etc.), query
+          parameter naming, and header conventions.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass. Platform inconsistencies
+            degrade developer experience and increase integration cost
+            for consumers using multiple platform APIs.
+        required_evidence:
+          - URI structure following platform naming conventions
+          - HTTP method usage aligned with REST semantics and platform standards
+          - Resource naming following plural-noun, kebab-case convention
+          - Pagination pattern matching platform standard (cursor or offset)
+          - Filtering and sorting parameter conventions
+          - Authentication and authorization pattern reference
+        scoring_guide:
+          '0': >
+            No evidence of platform pattern awareness. API design uses
+            ad-hoc naming and conventions that conflict with platform
+            standards.
+          '1': >
+            Platform standards referenced but multiple significant
+            deviations. Naming is inconsistent, pagination does not
+            match platform pattern, or HTTP methods are misused.
+          '2': >
+            Partial compliance. Core naming and method conventions
+            are followed but secondary patterns (pagination, filtering,
+            sorting, headers) deviate from platform standards without
+            justification.
+          '3': >
+            Good compliance. Naming, methods, pagination, and
+            authentication follow platform patterns. Minor deviations
+            are documented and justified.
+          '4': >
+            Strong compliance. Full alignment with platform API
+            standards. Any deviations are explicitly documented with
+            rationale and approved by platform architecture. Consistent
+            with existing platform API catalog.
+        anti_patterns:
+          - Inventing new pagination patterns when platform standard exists
+          - Using verbs in resource URIs instead of nouns
+          - Inconsistent casing across resource names and parameters
+          - Ignoring platform authentication patterns in favor of custom schemes
+          - Using non-standard HTTP methods or overloading POST for everything
+        remediation_hints:
+          - Review the platform API standards guide and map each endpoint to conventions
+          - Run the API contract through the platform linting tool
+          - Document and seek approval for any necessary deviations
+
+      - id: API-04
+        question: >
+          Does the API design document explicitly address versioning
+          strategy, backward compatibility commitments, and breaking
+          change analysis?
+        description: >
+          Checks whether the API design specifies how the API will
+          be versioned (URL-based major versions per platform policy),
+          what backward compatibility guarantees are made, and whether
+          potential breaking changes relative to existing API versions
+          have been analyzed.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass. Missing versioning
+            strategy leads to unplanned breaking changes that disrupt
+            API consumers.
+        required_evidence:
+          - versioning scheme declaration (URL-based major, header-based minor)
+          - backward compatibility policy statement
+          - breaking change analysis for existing API consumers (if applicable)
+          - deprecation strategy and timeline for superseded versions
+          - migration guidance for consumers moving between versions
+        scoring_guide:
+          '0': >
+            No versioning treatment. The API design does not mention
+            versioning, compatibility, or evolution.
+          '1': >
+            Versioning mentioned but strategy is vague or does not
+            match platform versioning policy. No breaking change
+            analysis.
+          '2': >
+            Versioning strategy stated and aligns with platform
+            policy, but backward compatibility commitments are vague
+            and breaking change analysis is incomplete or missing.
+          '3': >
+            Good versioning treatment. Strategy aligns with platform
+            policy, backward compatibility is explicitly committed,
+            and breaking changes are analyzed for existing consumers.
+            Deprecation timeline is outlined.
+          '4': >
+            Strong versioning treatment. Full alignment with platform
+            versioning policy, explicit compatibility matrix,
+            comprehensive breaking change analysis, deprecation
+            strategy with migration guidance, and sunset timeline
+            with consumer notification plan.
+        anti_patterns:
+          - Versioning strategy stated but breaking changes not analyzed
+          - No deprecation policy for old versions
+          - Version number in URI but no compatibility commitment
+          - Assuming all consumers will migrate simultaneously
+        remediation_hints:
+          - Document the versioning scheme aligned with platform policy
+          - Perform breaking change analysis against current API version
+          - Define deprecation timeline and consumer migration support plan
+          - Add compatibility matrix showing which consumer versions are supported
+
+  - id: AP3
+    name: Consumer experience and integration design
+    description: >
+      Evaluates whether the API design considers the consumer's
+      integration experience, including discoverability, developer
+      ergonomics, and practical integration concerns. The core D8
+      (actionability) focuses on downstream teams acting on the
+      artifact; this dimension targets the end consumer's experience
+      when integrating with the API.
+    weight: 1.0
+    criteria:
+      - id: API-05
+        question: >
+          Does the API design demonstrate consideration of the consumer
+          journey, including discovery, onboarding, common integration
+          scenarios, and developer experience?
+        description: >
+          Checks whether the API design addresses how consumers will
+          discover, understand, and integrate with the API. Includes
+          API description quality, example payloads, common workflow
+          sequences, and SDK or client library considerations.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - consumer persona or integration scenario descriptions
+          - example request/response payloads for key workflows
+          - API workflow or sequence diagrams for multi-step operations
+          - SDK or client library considerations (if applicable)
+          - rate limiting and quota information for consumers
+        scoring_guide:
+          '0': >
+            No consumer perspective. API design is purely
+            provider-centric with no consideration of how consumers
+            will integrate.
+          '1': >
+            Consumer acknowledged but not designed for. The API
+            functions correctly but integration scenarios, examples,
+            and workflows are absent.
+          '2': >
+            Partial consumer consideration. Some examples provided
+            and primary integration scenarios are described, but
+            multi-step workflows and edge cases are not covered.
+          '3': >
+            Good consumer experience design. Key integration
+            scenarios are documented with examples, workflow sequences
+            are clear, and common consumer needs (pagination, filtering,
+            error recovery) are addressed.
+          '4': >
+            Strong consumer experience. Comprehensive integration
+            guide with consumer personas, end-to-end workflow examples,
+            SDK design considerations, sandbox/testing guidance, and
+            consumer feedback mechanism.
+        anti_patterns:
+          - API designed purely from data model without consumer workflow analysis
+          - No request/response examples
+          - Complex multi-step operations without sequence diagrams
+          - Pagination and filtering designed without consumer input
+        remediation_hints:
+          - Identify top 3-5 consumer integration scenarios and document them
+          - Add request/response examples for each primary workflow
+          - Create sequence diagrams for multi-step operations
+          - Consider consumer usability testing before finalizing the design
+
+      - id: API-06
+        question: >
+          Does the API design address operational concerns that affect
+          consumers, including availability commitments, rate limiting,
+          caching strategy, and monitoring observability?
+        description: >
+          Checks whether the API design specifies operational
+          characteristics that consumers need to design their
+          integrations reliably, including SLA/SLO commitments,
+          rate limiting behavior, caching headers, and health
+          check endpoints.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - SLA or SLO commitments for the API
+          - rate limiting policy and headers
+          - caching strategy and cache-control headers
+          - health check or status endpoint specification
+          - correlation ID and tracing header conventions
+        scoring_guide:
+          '0': >
+            No operational specification. The API design contains no
+            information about availability, rate limits, caching, or
+            observability.
+          '1': >
+            Operational concerns mentioned in passing but no concrete
+            commitments or specifications.
+          '2': >
+            Partial operational specification. Some SLO targets or
+            rate limits stated but caching strategy, health checks,
+            or observability hooks are missing.
+          '3': >
+            Good operational specification. SLO targets, rate limits,
+            caching strategy, and health check endpoint are defined.
+            Correlation ID convention is specified.
+          '4': >
+            Strong operational specification. Comprehensive operational
+            design including SLO with measurement method, rate limiting
+            with graduated response, caching with invalidation strategy,
+            health and readiness endpoints, correlation ID propagation,
+            and consumer-facing status page or degradation notification
+            mechanism.
+        anti_patterns:
+          - Availability commitments without measurement methodology
+          - Rate limiting designed but not communicated to consumers
+          - No correlation ID or tracing convention for debugging
+          - Caching strategy that conflicts with data consistency requirements
+        remediation_hints:
+          - Define SLO targets with measurement criteria
+          - Document rate limiting policy including headers and consumer-facing behavior
+          - Specify cache-control headers and invalidation approach
+          - Add health check endpoint and correlation ID header convention
+
+  - id: AP4
+    name: Security and data contract
+    description: >
+      Evaluates API-specific security and data handling design that
+      goes beyond the general security overlay. Focuses on authentication
+      and authorization model, data classification in payloads,
+      and sensitive data handling specific to the API contract.
+      Note: This dimension covers API-contract-level security design
+      only. Organization-wide security controls should be evaluated
+      via the security overlay (EAROS-OVR-SEC-001).
+    weight: 1.0
+    criteria:
+      - id: API-07
+        question: >
+          Does the API design specify the authentication and
+          authorization model, including token types, scopes,
+          permission boundaries, and how authorization decisions
+          map to API operations?
+        description: >
+          Checks whether the API design defines how consumers
+          authenticate and what authorization model governs access
+          to resources and operations. This is API-contract-specific
+          and complements but does not replace the security overlay.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate:
+          enabled: true
+          severity: major
+          failure_effect: >
+            Cannot pass above conditional_pass. APIs without a
+            defined authentication and authorization model cannot
+            be safely implemented in a fintech environment.
+        required_evidence:
+          - authentication mechanism specification (OAuth 2.0, API key, mTLS)
+          - authorization model (scopes, roles, permissions per operation)
+          - token type and lifetime specification
+          - scope-to-operation mapping
+          - sensitive operation access controls (e.g., financial transactions)
+        scoring_guide:
+          '0': >
+            No authentication or authorization specification.
+            Security is not addressed in the API design.
+          '1': >
+            Authentication mechanism named (e.g., "uses OAuth 2.0")
+            but no scopes, permissions, or operation-level access
+            controls defined.
+          '2': >
+            Authentication and basic authorization defined but
+            scope-to-operation mapping is incomplete or sensitive
+            operation controls are missing.
+          '3': >
+            Good security contract. Authentication mechanism,
+            authorization scopes, and operation-level access
+            controls are defined. Sensitive operations have
+            additional access requirements.
+          '4': >
+            Strong security contract. Complete authentication
+            and authorization model with scope-to-operation
+            mapping, sensitive operation escalation, token
+            lifecycle management, and security testing
+            requirements referenced.
+        anti_patterns:
+          - Authentication mentioned but authorization model absent
+          - All operations use the same scope with no granularity
+          - Sensitive financial operations lack additional access controls
+          - No token lifetime or refresh specification
+        remediation_hints:
+          - Define OAuth 2.0 scopes mapped to API operations
+          - Identify sensitive operations and add elevated access controls
+          - Specify token types, lifetimes, and refresh behavior
+          - Reference platform identity and access management standards
+
+      - id: API-08
+        question: >
+          Does the API design classify data sensitivity in request
+          and response payloads and specify handling requirements
+          for PII, financial data, and other regulated data types?
+        description: >
+          Checks whether the API design identifies sensitive data
+          fields in payloads and specifies appropriate handling
+          including masking, encryption, audit logging, and
+          retention constraints. Critical in fintech where
+          financial and personal data flows through APIs.
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: false
+        required_evidence:
+          - data classification labels on schema fields (PII, financial, public)
+          - sensitive data handling requirements per classification
+          - field-level masking or encryption requirements
+          - audit logging requirements for sensitive data access
+          - data retention and purging constraints
+        scoring_guide:
+          '0': >
+            No data classification. Payload fields are defined
+            without any sensitivity or handling metadata.
+          '1': >
+            Data sensitivity acknowledged in general terms but
+            not mapped to specific fields or handling requirements.
+          '2': >
+            Partial classification. Some sensitive fields identified
+            but handling requirements are incomplete or inconsistent.
+            Audit logging requirements not specified.
+          '3': >
+            Good data contract. Sensitive fields are classified,
+            handling requirements are specified per classification,
+            and audit logging for sensitive data access is defined.
+          '4': >
+            Strong data contract. Complete field-level classification,
+            handling requirements with encryption and masking
+            specifications, comprehensive audit logging, retention
+            policies, and alignment with data governance standards.
+        anti_patterns:
+          - Returning full PII in list endpoints without masking
+          - No data classification metadata in API schema
+          - Financial data fields without encryption or audit requirements
+          - Missing retention or purging specifications for regulated data
+        remediation_hints:
+          - Add data classification annotations to schema fields
+          - Define masking rules for PII in list and search responses
+          - Specify audit logging requirements for sensitive data operations
+          - Reference data governance and retention policies
+
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: >
+      Escalate to human review when API-02 (error handling contract)
+      scores below 3 for payment or financial transaction APIs.
+      Escalate to human review when API-03 (platform pattern compliance)
+      scores below 3 for any public-facing or partner-facing API.
+      Escalate to human review when API-07 (auth model) scores below 3
+      for any API handling financial data or PII.
+  na_policy: >
+    Exclude N/A criteria from denominator. Evaluator must justify
+    N/A with a rationale. API-02 (error handling) and API-07
+    (auth model) may not be marked N/A for production APIs.
+  confidence_policy: >
+    Confidence is reported separately per criterion and must not
+    mathematically modify the score. Low confidence on any gate
+    criterion triggers mandatory human review.
+
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+    - yaml
+    - json
+    - markdown-report
+
+calibration:
+  required_before_production: true
+  minimum_examples: 3
+  recommended_reviewers:
+    - 2 platform architects from the API governance board
+    - 1 API product owner
+    - 1 evaluator agent
+    - 1 challenger agent
+
+metadata:
+  design_method: A - Decision-centered
+  design_method_rationale: >
+    The API design document exists to support a specific governance
+    decision (approve for implementation). The decision-centered
+    method focuses on identifying the minimum questions the
+    governance board must answer to make that decision confidently.
+  created_by: EAROS rubric creator skill
+  created_date: '2026-03-17'
+  organization_context: >
+    Mid-size fintech company. API governance board reviews API
+    designs before implementation. Primary pain points are
+    inconsistent platform patterns and incomplete error handling
+    contracts leading to post-approval rework.
+  change_log:
+    - version: 0.1.0
+      date: '2026-03-17'
+      description: Initial draft created via EAROS rubric creator skill
+      change_class: major

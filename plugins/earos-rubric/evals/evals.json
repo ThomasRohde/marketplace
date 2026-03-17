@@ -1,0 +1,20 @@
+{
+  "skill_name": "earos-rubric",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to create a rubric for evaluating our API design documents. We have a recurring problem where API designs get approved but then turn out to be inconsistent with our platform standards and missing error handling contracts. The API governance board reviews these before implementation starts.",
+      "expected_output": "A YAML profile rubric for API design documents with dimensions covering contract completeness, platform standards alignment, and error handling. Should include gates for standards compliance and error contract coverage."
+    },
+    {
+      "id": 2,
+      "prompt": "We need a regulatory compliance overlay that can be attached to any architecture artifact. Our financial services org requires DORA compliance evidence, and we keep finding that architects mention compliance but don't actually map controls to their designs.",
+      "expected_output": "A YAML overlay rubric with kind: overlay and artifact_type: any, focused on regulatory/DORA control mapping, evidence of compliance treatment, and residual risk ownership. Should have a critical gate for mandatory control coverage."
+    },
+    {
+      "id": 3,
+      "prompt": "Create a rubric for our migration architecture documents. Teams write these when moving workloads from on-prem to cloud, but the quality is wildly inconsistent — some have detailed rollback plans and dependency analysis, others are just a target-state diagram with no transition path.",
+      "expected_output": "A YAML profile rubric for migration/transition architecture using lifecycle-centered design method (Method C). Should cover transition-state clarity, dependency analysis, rollback and contingency planning, and sequencing quality."
+    }
+  ]
+}

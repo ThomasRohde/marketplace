@@ -1,0 +1,62 @@
+rubric_id: EAROS-XXX-001
+version: 0.1.0
+kind: profile
+title: New Artifact Profile
+status: draft
+artifact_type: replace_me
+inherits:
+- EAROS-CORE-001@1.0.0
+purpose:
+- replace_me
+stakeholders:
+- replace_me
+viewpoints:
+- replace_me
+dimensions:
+- id: PX1
+  name: Replace with dimension name
+  description: Why this dimension exists
+  weight: 1.0
+  criteria:
+  - id: NEW-01
+    question: Replace with evaluation question
+    description: Explain the intent of the criterion
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate: false
+    required_evidence:
+    - replace_me
+    scoring_guide:
+      '0': Absent or contradicted
+      '1': Weak or implied
+      '2': Partial
+      '3': Mostly complete
+      '4': Strong and decision-useful
+    anti_patterns:
+    - replace_me
+    remediation_hints:
+    - replace_me
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: merge_with_inherited_and_apply_core_thresholds
+  thresholds:
+    profile_specific_escalation: replace_me
+  na_policy: Exclude N/A from denominator; justify in narrative
+  confidence_policy: Report separately; do not alter score mathematically
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report
+calibration:
+  required_before_production: true
+  minimum_examples: 3

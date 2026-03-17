@@ -1,0 +1,61 @@
+rubric_id: EAROS-OVR-SEC-001
+version: 1.0.0
+kind: overlay
+title: Security Overlay
+status: approved
+artifact_type: any
+purpose:
+- security_assurance
+- control_alignment_review
+stakeholders:
+- security
+- risk
+- architecture_board
+dimensions:
+- id: SEC1
+  name: Threat, control, and ownership treatment
+  criteria:
+  - id: SEC-01
+    question: Does the artifact show material threats, required controls, and control
+      ownership at a level suitable for the review?
+    metric_type: ordinal
+    scale:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - N/A
+    gate:
+      enabled: true
+      severity: critical
+      failure_effect: Reject or escalate when mandatory controls are unaddressed
+    required_evidence:
+    - threat view or risk list
+    - control mapping
+    - ownership
+    scoring_guide:
+      '0': No material security treatment
+      '1': Security assertions only
+      '2': Partial threat/control view
+      '3': Material controls and owners addressed
+      '4': Threats, controls, exceptions, and ownership are explicit
+    anti_patterns:
+    - Security delegated to delivery without design response
+    - No exception handling
+    remediation_hints:
+    - Map controls to architecture decisions
+    - Record residual risk and owner
+scoring:
+  scale: 0-4 ordinal plus N/A
+  method: append_to_base_rubric
+  thresholds:
+    critical_security_failure: Escalate or reject according to control policy
+outputs:
+  require_evidence_refs: true
+  require_confidence: true
+  require_actions: true
+  formats:
+  - yaml
+  - json
+  - markdown-report
