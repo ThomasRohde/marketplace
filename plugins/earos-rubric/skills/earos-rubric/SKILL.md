@@ -133,6 +133,30 @@ Based on the answers, select the EAROS profile design method. Read `references/e
 
 Tell the user which method you recommend, explain why their context fits that method, and describe how the method will shape the criteria you design together. Stop and ask the user if they agree before proceeding.
 
+### Phase 2.5: Check for reference material
+
+Stop and ask the user:
+
+> **Do you have any reference material that describes the expected structure or content of this artifact type?**
+>
+> Reference material makes rubric design much more precise because we can derive candidate criteria from what the artifact is actually expected to contain, rather than inventing criteria from scratch. Reference material can be anything: a document template with sections and guidance, an existing artifact that represents "good," a standards document, a policy, a checklist your review board already uses, or even a table of contents from a guidebook. Multiple files are fine too.
+>
+> If you have something like this, please provide the file path(s). If not, we'll design the dimensions and criteria from the context you've already given me.
+
+If the user provides reference material, read it and assess its scope — how many distinct sections, topics, or concern areas does it cover? Then proceed to either the **standard path** (Phase 3) or the **distributed path** (Phase 3D), based on the following decision:
+
+**Choosing the path:**
+
+- **Standard path** (Phases 3-6): Use when the scope is manageable — no reference material, or reference material with fewer than ~8 distinct sections/topics. In this mode, you design dimensions and criteria interactively with the user, one at a time. This works well for rubrics with 2-5 dimensions and up to ~12 criteria.
+
+- **Distributed path** (Phases 3D-6D): Use when the reference material is large and comprehensive — roughly 8+ sections, multiple source documents, or enough material that designing all criteria in a single agent context would produce shallow or inconsistent results. In this mode, you spawn a fleet of sub-agents to analyze portions of the reference material in parallel, then consolidate their proposals into a coherent rubric. The user still reviews and approves the final result.
+
+Tell the user which path you're choosing and why.
+
+---
+
+## Standard path (small to medium artifacts)
+
 ### Phase 3: Design the dimensions
 
 Now design the artifact-specific dimensions. The core meta-rubric already covers 9 universal dimensions (stakeholder fit, scope clarity, concern coverage, traceability, consistency, risks/tradeoffs, compliance, actionability, maintainability). The profile should only add what the core does not cover.
@@ -212,6 +236,191 @@ For scoring guidance, use the standard 0-4 ordinal scale. For each criterion, as
 
 ### Phase 6: Assemble and validate
 
+Proceed to the **Assembly** section below.
+
+---
+
+## Distributed path (large or comprehensive reference material)
+
+Use this path when the reference material is substantial — 8+ sections, multiple documents, or enough content that a single agent pass would produce shallow analysis. The goal is to analyze the material thoroughly without overwhelming a single agent context, while keeping the user in control of the final rubric.
+
+### Phase 3D: Partition and brief
+
+Read all reference material and identify its major structural divisions — sections, chapters, documents, topic areas, or any natural boundaries. Group them into **3-5 clusters** of roughly equal scope, keeping closely related material together. Each cluster should be a coherent unit — for example, grouping business context with stakeholder analysis makes more sense than grouping it with deployment architecture. If the reference material spans multiple files, a single file may form its own cluster or be combined with related content from other files.
+
+Prepare a **context brief** that captures everything learned in Phases 1-2. This brief will be given to every sub-agent so they all work from the same understanding:
+
+```
+CONTEXT BRIEF
+=============
+Artifact type: [from Phase 1]
+Rubric kind: [profile or overlay]
+Design method: [A-E, from Phase 2]
+Reviewers: [from Round 2]
+Decision supported: [from Round 2]
+Known failure modes: [from Round 2]
+Lifecycle position: [from Round 3]
+Mandatory standards: [from Round 3]
+Common anti-patterns: [from Round 3]
+```
+
+Tell the user:
+
+> Your reference material covers [N] distinct topic areas. Rather than trying to analyze all of them in a single pass — which would produce shallow results for material this comprehensive — I'm going to distribute the work across [M] specialist agents. Each agent will analyze a cluster of related topics and propose candidate dimensions and criteria. I'll then consolidate their proposals, remove duplicates, enforce EAROS constraints, and present the assembled rubric to you for approval.
+>
+> Here's how I've grouped the material: [show clusters]. Does this grouping make sense, or would you reorganize any of these?
+
+Stop and wait for the user to confirm or adjust the grouping.
+
+### Phase 4D: Spawn analyst agents
+
+For each section cluster, spawn a sub-agent using the Agent tool. Each agent receives:
+
+1. The **context brief** from Phase 3D
+2. The **reference material** in its assigned cluster (the actual content)
+3. The **EAROS rules** (read from `references/earos-standard-summary.md`)
+4. The **rubric schema** (read from `references/rubric-schema.md`)
+5. Specific instructions for its analysis task
+
+Use this prompt for each analyst agent:
+
+```
+You are an EAROS Cluster Analyst. You are part of a team creating an
+evaluation rubric for a [artifact_type]. Your job is to analyze a
+specific cluster of reference material and propose candidate rubric
+dimensions and criteria.
+
+## Context brief
+[INSERT CONTEXT BRIEF]
+
+## Your assigned material
+[INSERT CLUSTER CONTENT]
+
+## What to produce
+
+Analyze your assigned material and propose:
+
+1. **Candidate dimensions** (1-3 max) — evaluation concerns specific
+   to these sections that the EAROS core meta-rubric does NOT already
+   cover. The core already handles: stakeholder fit, scope clarity,
+   concern coverage, traceability, consistency, risks/tradeoffs,
+   compliance, actionability, and artifact maintainability. Only propose
+   dimensions that address something genuinely different.
+
+2. **Candidate criteria** (1-3 per dimension) — each with:
+   - A clear evaluation question answerable by examining the artifact
+   - Required evidence (what a reviewer should look for)
+   - Scoring guide (what 0, 1, 2, 3, 4 look like for this criterion)
+   - Gate recommendation (none, advisory, major, or critical) with
+     justification based on the known failure modes
+   - Anti-patterns common in these sections
+   - Remediation hints
+
+3. **Cross-cutting observations** — anything you noticed that:
+   - Overlaps with another cluster (potential duplication)
+   - Should be an overlay rather than a profile criterion
+   - Is already covered by the core meta-rubric
+   - Seems important but hard to evaluate objectively
+
+## Rules
+
+- Propose ONLY criteria specific to this material. Do not re-invent
+  the core meta-rubric.
+- The scoring guide must clearly distinguish level 2 from level 3.
+  Level 2 = "tried but not enough for a decision." Level 3 = "good
+  enough, minor gaps only."
+- Be honest about what can be evaluated by examining an artifact
+  versus what requires external knowledge.
+- Use the 0-4 ordinal scale.
+- Prefer fewer, sharper criteria over many vague ones.
+- Flag anything that belongs in an overlay rather than this profile.
+
+## Output format
+
+Return your results as YAML with this structure:
+
+```yaml
+cluster_id: [cluster number]
+material_analyzed:
+  - [topic or section names]
+candidate_dimensions:
+  - id: [short ID]
+    name: [dimension name]
+    rationale: [why this is not covered by the core]
+    criteria:
+      - id: [criterion ID]
+        question: [evaluation question]
+        metric_type: ordinal
+        scale: [0, 1, 2, 3, 4, N/A]
+        gate: [false or {enabled: true, severity: major/critical, failure_effect: ...}]
+        required_evidence: [list]
+        scoring_guide:
+          '0': [description]
+          '1': [description]
+          '2': [description]
+          '3': [description]
+          '4': [description]
+        anti_patterns: [list]
+        remediation_hints: [list]
+cross_cutting_observations:
+  - [observations]
+```
+```
+
+Spawn all analyst agents in parallel if the clusters are independent (they usually are — each analyzes different material). If you want to be more conservative, spawn them sequentially so each can see what the previous one proposed and avoid duplication. The parallel approach is faster; the sequential approach produces less redundancy.
+
+### Phase 5D: Consolidate proposals
+
+After all analyst agents complete, collect their outputs and consolidate:
+
+1. **Merge all candidate dimensions** into a single list.
+
+2. **Deduplicate.** Look for dimensions that address the same concern using different names. Merge them, keeping the clearest framing. Common duplicates: "quality attributes" and "non-functional requirements" are usually the same dimension; "dependencies" and "integration points" often overlap.
+
+3. **Filter against the core.** Remove any proposed dimensions that actually duplicate core meta-rubric dimensions. If an analyst proposed "Is the scope clear?" — that's D2 in the core and should be removed.
+
+4. **Separate overlays.** Move any proposed criteria that are cross-cutting (security, regulatory, data governance) into a separate "suggested overlays" list. These should not be in the profile.
+
+5. **Rank and cut.** EAROS recommends no more than 5 dimensions and 12 criteria. If the consolidated list exceeds this, rank by:
+   - Alignment with known failure modes (from Phase 2)
+   - Gate severity (critical and major gates rank higher)
+   - How artifact-type-specific the criterion is (more specific = higher rank)
+   - Cut the lowest-ranked criteria, or merge related criteria into broader ones
+
+6. **Harmonize IDs and naming.** Assign final criterion IDs using a consistent prefix derived from the artifact type (e.g., SOL-01 for solution architecture, MIG-01 for migration, RDM-01 for roadmap). Ensure dimension IDs follow the pattern (e.g., SD1, MT1).
+
+7. **Generate the scoring method and thresholds.** Use `merge_with_inherited_and_apply_core_thresholds` for profiles, `append_to_base_rubric` for overlays.
+
+### Phase 5.5D: Present consolidated proposals to the user
+
+Before assembling the final YAML, present the consolidated dimensions and criteria to the user for review. This is where the interactive quality returns after the distributed analysis.
+
+For each proposed dimension and its criteria, explain:
+- What part of the reference material drove this dimension
+- Why it's not covered by the core meta-rubric
+- Which criteria are gates and why
+- What the analyst agents flagged as cross-cutting observations
+
+Stop and ask the user:
+
+> Here are the [N] dimensions and [M] criteria I've distilled from your reference material. I've already filtered out concerns covered by the core meta-rubric and moved cross-cutting concerns to a separate overlay suggestion list.
+>
+> For each dimension, please tell me:
+> - Does this capture a real review concern for your organization?
+> - Are the gate classifications right? (Should any be upgraded or downgraded?)
+> - Is anything important missing that the analyst agents may have overlooked?
+> - Should any of these be merged or removed?
+
+Iterate with the user until they approve the dimension and criteria set.
+
+### Phase 6D: Assemble
+
+Proceed to the **Assembly** section below. The assembly process is identical regardless of which path was used.
+
+---
+
+## Assembly (shared by both paths)
+
 Generate the complete YAML rubric file. The structure must conform to the schema in `references/rubric-schema.md`.
 
 Key requirements:
@@ -225,7 +434,7 @@ Key requirements:
 
 Present the complete YAML to the user and walk through it section by section, explaining how each part connects to the decisions made during the interview.
 
-### Phase 7: Create a worked evaluation example
+### Create a worked evaluation example
 
 After the rubric is approved, offer to create a worked evaluation example. Explain why:
 
@@ -237,7 +446,7 @@ Stop and ask the user:
 
 Generate the evaluation record using the template structure from `references/examples.md`.
 
-### Phase 8: Save and summarize
+### Save and summarize
 
 Save the rubric YAML file to the location the user specifies (suggest the `tmp/profiles/` or `tmp/overlays/` directory based on rubric type).
 
@@ -245,6 +454,7 @@ Summarize:
 - Rubric ID, type, and version
 - Number of dimensions and criteria added (and how they complement the 9 core dimensions)
 - Gate criteria and their severity, with reasoning
+- Any suggested overlays that were separated out during consolidation
 - Any unresolved ambiguities or open questions
 - Recommended next steps:
   - **Calibrate** with 3+ real artifacts (at least one strong, one weak, one ambiguous)
@@ -278,6 +488,7 @@ Before presenting the final rubric, verify:
 - [ ] Profile adds no more than 5 dimensions / 12 criteria
 - [ ] At least one escalation rule is defined
 - [ ] User has reviewed and approved each dimension
+- [ ] Cross-cutting concerns are separated into overlay suggestions
 - [ ] Ambiguities are logged and presented
 - [ ] YAML uses safe quoting (no bare strings with special characters in list items)
 
