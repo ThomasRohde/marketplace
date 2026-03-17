@@ -46,11 +46,11 @@ A rubric is a governed asset. A bad rubric is worse than no rubric — it create
 
 ## How to interact with the user
 
-**Use AskUserQuestion aggressively throughout this process.** Every section requires specific information from the user. Do not guess artifact types, stakeholders, concerns, or evidence requirements. If the user's answer is vague, ask a follow-up. If a critical detail is missing, ask for it.
+This skill is interactive. Every question requires a real answer from the user before you proceed. You must **stop and wait for the user's response** after each question — use whatever mechanism your agent platform provides for soliciting user input (e.g., a question tool, a prompt, a form). Do not just print the question as text and continue generating; that skips the user's answer entirely.
 
-When asking questions, always explain *why* the question matters and how the answer will shape the rubric. The user may not be familiar with rubric design, and every question is a teaching moment. Frame questions so the user understands the design reasoning, not just the data request.
+Include the educational context (why this question matters, how it shapes the rubric) as part of each question. This way the user sees both the explanation and the prompt in a single interaction.
 
-Ask one or two questions at a time — not all at once. Give the user space to think. When they answer, acknowledge what you learned and explain what it means for the rubric design before moving on.
+Ask one or two questions at a time — not all at once. Give the user space to think. When they answer, acknowledge what you learned and explain what it means for the rubric design before posing the next question.
 
 ## How to run this skill
 
@@ -60,7 +60,7 @@ Before designing anything, determine what the user needs.
 
 **Round 1 — What are we evaluating?**
 
-Ask the user:
+Stop and ask the user:
 
 > **What type of architecture artifact do you want to evaluate?**
 >
@@ -68,7 +68,7 @@ Ask the user:
 >
 > Examples: roadmap, integration architecture, platform strategy, operating model, data flow design, API design document, target-state architecture, service definition, migration plan.
 
-Then ask:
+Then stop and ask the user:
 
 > **Is this a concern specific to one artifact type, or a cross-cutting concern that should apply to many artifact types?**
 >
@@ -85,7 +85,7 @@ This is where most rubric quality is won or lost. Weak rubrics skip this phase a
 
 **Round 2 — Who reviews, and what decision does the review support?**
 
-Ask:
+Stop and ask the user:
 
 > **Who are the primary reviewers of this artifact?**
 >
@@ -105,7 +105,7 @@ Ask:
 
 **Round 3 — Lifecycle position and mandatory standards**
 
-Ask:
+Stop and ask the user:
 
 > **At what point in the lifecycle is this artifact reviewed?**
 >
@@ -131,7 +131,7 @@ Based on the answers, select the EAROS profile design method. Read `references/e
 | D — Risk-centered | Security arch, regulatory impact, resilience | The artifact manages a class of risk |
 | E — Pattern-library | Recurring reference architectures, platform patterns | Many similar artifacts recur |
 
-Tell the user which method you recommend, explain why their context fits that method, and describe how the method will shape the criteria you design together. Ask if they agree before proceeding.
+Tell the user which method you recommend, explain why their context fits that method, and describe how the method will shape the criteria you design together. Stop and ask the user if they agree before proceeding.
 
 ### Phase 3: Design the dimensions
 
@@ -231,7 +231,7 @@ After the rubric is approved, offer to create a worked evaluation example. Expla
 
 > A rubric without at least one worked example is not ready for operational use. The example serves as a calibration anchor — it shows reviewers (human and agent) what a real evaluation looks like, how to cite evidence, how to assign scores, and how to handle gaps. Without calibration examples, two reviewers will interpret the same rubric differently, which defeats the purpose.
 
-Ask the user:
+Stop and ask the user:
 - Do you have a real or realistic artifact we can use as a test case?
 - If not, should I create a hypothetical evaluation showing how the rubric would be applied?
 
