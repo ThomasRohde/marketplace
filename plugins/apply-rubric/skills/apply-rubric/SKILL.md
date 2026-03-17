@@ -32,21 +32,36 @@ You are applying an EAROS rubric to an architecture artifact using the three-pas
 
 Read `references/agent-prompts.md` for the full prompt templates for each agent. Read `references/evaluation-schema.md` for the exact output format.
 
+## How to interact with the user
+
+This skill requires input from the user before evaluation can begin. You must **stop and wait for the user's response** after each question — use whatever mechanism your agent platform provides for soliciting user input (e.g., a question tool, a prompt, a form). Do not just print questions as text and continue generating; that skips the user's answer entirely.
+
 ## How to run this skill
 
 ### Step 0: Gather inputs
 
-You need two things from the user:
+You need two things from the user. Stop and ask for each one, waiting for a response before proceeding.
 
-1. **The rubric** — a YAML file (profile or overlay) conforming to the EAROS rubric schema. Ask the user for the file path or help them find it.
-2. **The artifact** — the architecture document to evaluate. This could be a markdown file, a PDF, a Word document, a wiki page, or a collection of files. Ask the user for the file path(s).
+**First, stop and ask the user for the rubric:**
+
+> Which EAROS rubric should I apply? Please provide the file path to the rubric YAML file (profile or overlay).
+>
+> If you're not sure, tell me the artifact type (e.g., solution architecture, ADR, capability map) and I'll check for a matching rubric in the repository.
 
 If the user mentions an artifact type but no rubric, check the `tmp/profiles/` and `tmp/overlays/` directories for a matching EAROS rubric. If none exists, suggest they create one first using the `earos-rubric` skill.
 
-Also ask for optional metadata:
-- **Artifact ID and title** — for the evaluation record
-- **Artifact owner** — who is responsible for the artifact
-- **Applicable overlays** — any cross-cutting overlays to apply in addition to the profile (security, data, regulatory)
+**Then, stop and ask the user for the artifact:**
+
+> Which architecture artifact should I evaluate? Please provide the file path(s). This could be a markdown file, a PDF, a Word document, or a collection of files.
+
+**Then, stop and ask for metadata:**
+
+> A few more details for the evaluation record:
+> - **Artifact ID and title** — a short identifier and human-readable name
+> - **Artifact owner** — who is responsible for this artifact
+> - **Additional overlays** — should I apply any cross-cutting overlays (security, data, regulatory) in addition to the profile?
+>
+> (If you're unsure about any of these, just say so and I'll use reasonable defaults.)
 
 ### Step 1: Load and compose the rubric
 
@@ -221,7 +236,9 @@ Generate a YAML evaluation record conforming to the schema in `references/evalua
 - `dimension_results`: dimension-level scores and summaries
 - `summary`: strengths, weaknesses, risks, next_actions, decision_narrative
 
-Save the evaluation YAML to the location the user specifies. If no location is specified, suggest saving next to the artifact or in `tmp/calibration/results/`.
+Stop and ask the user where to save the evaluation:
+
+> Where should I save the evaluation record? I'll produce both a YAML file (machine-readable) and a markdown report (human-readable). If you don't have a preference, I'll save them next to the artifact or in `tmp/calibration/results/`.
 
 ### Step 8: Generate the narrative report
 
@@ -263,10 +280,14 @@ Present this report to the user directly in the conversation, and also save it a
 
 ### Step 9: Offer next steps
 
-After presenting the results, offer:
-- **Re-evaluate** after the author addresses recommended actions
-- **Apply additional overlays** if the evaluation revealed cross-cutting concerns not yet covered
-- **Calibrate** by having a human reviewer score the same artifact independently and comparing results
+After presenting the results, stop and ask the user what they'd like to do next:
+
+> The evaluation is complete. Here are some options:
+> - **Re-evaluate** — if the author addresses the recommended actions, I can re-run the evaluation
+> - **Apply additional overlays** — if the evaluation revealed cross-cutting concerns not yet covered (security, data, regulatory)
+> - **Calibrate** — have a human reviewer score the same artifact independently so you can compare results and tighten scoring guidance
+>
+> Would you like to do any of these, or is the evaluation complete?
 
 ## Handling edge cases
 
