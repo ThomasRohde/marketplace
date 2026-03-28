@@ -67,6 +67,17 @@ ArchiMate enterprise architecture modeling assistance for element selection, rel
 
 **Keywords:** archimate, enterprise-architecture, modeling, archi, togaf
 
+### cpf
+
+Author and run deterministic, resumable agent workflows with [checkpointflow](https://github.com/ThomasRohde/checkpointflow). Two skills: `cpf-workflow-author` for creating workflow YAML, and `cpf-workflow-runner` for running workflows interactively with pause/resume.
+
+**Install:**
+```shell
+/plugin install cpf@thomas-rohde-plugins
+```
+
+**Keywords:** checkpointflow, cpf, workflow, runbook, pause-resume, await-event, deterministic, agent-workflows
+
 ### create-plan
 
 Generate self-contained, agent-executable Execution Plans (ExecPlans) from PRD files that any coding agent or human novice can follow end-to-end.
@@ -231,6 +242,7 @@ marketplace/
 │   ├── blackbox-test/       # Blackbox CLI testing plugin
 │   ├── copilot-customization/ # GitHub Copilot customization plugin
 │   ├── copilot-manager/     # Copilot customization management
+│   ├── cpf/                 # checkpointflow workflow author & runner
 │   ├── create-plan/         # PRD-to-ExecPlan generation
 │   ├── drawio/              # DrawIO diagram plugin
 │   ├── improve-skill/       # Skill improvement plugin
