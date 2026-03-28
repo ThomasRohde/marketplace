@@ -81,8 +81,17 @@ Runs a shell command. Supports `${inputs.x}` and `${steps.<id>.outputs.x}` inter
 ```yaml
 - id: build
   kind: cli
+  cwd: ${inputs.project_dir}
   command: npm run build --project ${inputs.project_name}
   timeout_seconds: 120
+```
+
+Use `cwd` to set the working directory (supports interpolation). Use `shell` to pick a specific shell (`bash`, `sh`, `powershell`, `pwsh`), or set `defaults.shell` at the workflow level:
+
+```yaml
+workflow:
+  defaults:
+    shell: bash
 ```
 
 If the command produces structured JSON on stdout, declare `outputs` so the runtime validates it and makes it available to later steps:
