@@ -7,6 +7,57 @@ description: Run, resume, and manage checkpointflow workflows interactively. Use
 
 Run checkpointflow workflows interactively, handling pause/resume cycles with the user.
 
+## Core concept: You are the agent
+
+Checkpointflow orchestrates collaboration between humans and AI agents. The engine handles sequencing, checkpoints, and state — but **you are the agent**. When the workflow contains `cli` steps that describe agent work, the `echo` command is a structural placeholder that feeds the engine the output it needs to advance. The actual work is your responsibility.
+
+### Recognizing agent steps
+
+A step is agent-directed when:
+
+- Its name is prefixed with "Agent:" (e.g., `"Agent: Write Failing Tests"`)
+- Its description contains action verbs implying real work (e.g., "Scan the relevant source area and identify files, tests, and dependencies")
+- Its command is an `echo` outputting static or templated JSON — not a real tool invocation
+
+Steps prefixed "Human:" or "System:" are not agent-directed. Human steps are `await_event` checkpoints. System steps are `switch`/`parallel`/`end` — handled by the engine.
+
+### When to do the work
+
+The engine runs all steps between pause points automatically. By the time you see the envelope, the agent `cli` steps have already "completed" with their echo output. The `await_event` checkpoints are your natural intervention points.
+
+**At each pause, before presenting the checkpoint to the user:**
+
+1. Read the workflow YAML (if you haven't already) to identify which agent steps just executed since the last pause
+2. Do the actual work each step describes — use the step's `name`, `description`, and `outputs` schema as your assignment
+3. Present your real results to the user alongside the checkpoint prompt
+
+The `wait.prompt` will contain interpolated values from the echo outputs (e.g., fake file lists, hardcoded test counts). Replace these with your real findings when presenting to the user.
+
+### Example: what "doing the work" looks like
+
+Given this step in the workflow:
+```yaml
+- id: analyze_codebase
+  kind: cli
+  name: "Agent: Analyze Affected Area"
+  description: Scan the relevant source area and identify files, tests, and dependencies
+  command: echo '{"area":"gui", "source_dir":"src/checkpointflow/gui/", ...}'
+```
+
+Don't just let the echo run and move on. Actually:
+- Read files in the source directory
+- Find existing test files
+- Identify imports and dependencies
+- Assess schema impact
+
+Then present your real findings at the checkpoint that follows.
+
+For a step like `"Agent: Write Failing Tests"` — actually write test files. For `"Agent: Implement Feature"` — actually write production code. For quality gate steps — actually run `uv run pytest`, `uv run ruff check .`, `uv run mypy`.
+
+### Multiple agent steps between pauses
+
+Sometimes several agent steps run before the next checkpoint (e.g., write tests → implement → lint → typecheck → test → gate check → review). Do all of that work at the pause. The workflow structure tells you the order and what each step expects.
+
 ## Critical: Collect input through structured prompts, not chat
 
 Every time the workflow needs input from the user — whether collecting workflow inputs before `cpf run`, gathering event data at an `await_event` pause, or confirming a cancellation — present structured choices using whatever interactive prompt tool is available in your environment (e.g., a question/answer UI, a selection picker, a form). The user should experience the workflow as a guided flow where they pick options and provide values through structured prompts, not by typing free-form messages into chat.
@@ -66,15 +117,25 @@ Based on `exit_code`:
 | Exit code | What happened | What to do |
 |-----------|--------------|------------|
 | 0 | Completed | Show the `result` to the user. Done. |
-| 40 | Waiting for input | Enter the interactive loop (see below). |
+| 40 | Waiting for input | **Do agent work first** (see below), then enter the interactive loop. |
 | 10 | Validation error | Show `error.message`. Check inputs match the schema. |
 | 30 | Step failed | Show which step failed and why. Offer to inspect with `cpf inspect`. |
 | 80 | Unsupported step | Tell the user this step kind isn't implemented yet. |
 | Other | Error | Show the error and suggest next steps. |
 
+### Step 5a: Do agent work before presenting checkpoints
+
+When exit code is 40, before asking the user for input:
+
+1. Look at the workflow YAML — identify every agent-directed `cli` step that ran between the start (or last pause) and the current `await_event`
+2. Execute the real work each step describes (read code, write files, run commands, etc.)
+3. Present your actual findings/results to the user as context for their decision
+
+This is the step that makes the workflow real — without it, you're just passing fake echo output through human checkpoints.
+
 ## Interactive loop (await_event handling)
 
-This is the core of the skill. When a workflow pauses at an `await_event` step (exit code 40), the envelope contains a `wait` block:
+This is the core of the skill. When a workflow pauses at an `await_event` step (exit code 40), do any pending agent work first (see "Core concept" above), then handle the checkpoint. The envelope contains a `wait` block:
 
 ```json
 {
@@ -128,17 +189,34 @@ Handle it like this:
 
 Keep looping until the workflow completes, fails, or the user wants to stop.
 
-**Example interaction flow:**
+**Example interaction flow (with agent work):**
 
 ```
-User: run the agent-decision workflow
-→ cpf run -f examples/agent-decision.yaml --input '{"data_source": "sales_q1"}'
-→ Exit 40: waiting at "review" step
-→ Structured prompt: "Review the analysis and approve or request changes." [approve / revise]
+User: run the feature development workflow
+→ cpf run -f examples/cpf_feature_development.yaml --input '{"feature_name": "run-delete", ...}'
+→ Exit 40: waiting at "scope_decision" step
+→ Agent step "analyze_codebase" just ran — DO THE ACTUAL WORK:
+  - Read src/checkpointflow/gui/ to find relevant files
+  - Find existing tests in tests/test_gui*.py
+  - Identify dependencies and schema impact
+→ Present real findings + structured prompt for scope choice
+→ User picks "full"
+→ cpf resume --run-id abc123 --event scope_choice --input '{"scope": "full"}'
+→ Exit 40: waiting at "review_tdd_plan" step
+→ Agent step "tdd_plan" just ran — DO THE ACTUAL WORK:
+  - Design real test cases based on the codebase analysis
+  - Plan the implementation approach
+→ Present real TDD plan + structured prompt for approval
 → User picks "approve"
-→ cpf resume --run-id abc123 --event review_decision --input '{"action": "approve"}'
-→ Exit 0: completed with result {"outcome": "applied"}
-→ Show result to user
+→ cpf resume --run-id abc123 --event tdd_review --input '{"decision": "approve"}'
+→ Exit 40: waiting at "final_review" step
+→ Agent steps "write_tests", "implement_feature", quality gate all ran — DO THE ACTUAL WORK:
+  - Write real test files
+  - Implement the feature code
+  - Run uv run ruff check ., uv run mypy, uv run pytest
+→ Present real results + structured prompt for ship/revise
+→ User picks "ship_it"
+→ cpf resume → Exit 0: completed
 ```
 
 ## Status and inspection
@@ -175,9 +253,12 @@ The dashboard shows workflow graphs with all step types rendered, run history wi
 
 ## Tips
 
+- **Agent steps are work assignments, not status updates.** When a step says "Agent: Write Failing Tests", write tests. Don't just watch the echo command produce fake output.
+- **Read the workflow YAML early.** You need it to know which agent steps ran between pauses so you can do the work before presenting each checkpoint.
 - Always parse the JSON envelope — don't rely on exit codes alone. The envelope has richer information.
 - Exit code 40 is not an error. Don't treat it as a failure or apologize for it.
 - When showing results to the user, format them nicely — don't dump raw JSON unless they ask for it.
 - If a workflow has multiple sequential `await_event` steps (like a quiz), keep the loop going smoothly without re-explaining the process each time.
 - The `--input` flag accepts either inline JSON (`'{"key": "value"}'`) or a file reference (`@path/to/file.json`). Prefer inline for simple inputs.
 - Use `workflow_name` and `workflow_description` from the envelope to provide context to the user, especially on the first interaction.
+- For quality gate steps that specify commands like lint/typecheck/test, run the real tools (`uv run ruff check .`, `uv run mypy`, `uv run pytest`) — don't rely on the hardcoded echo output.
