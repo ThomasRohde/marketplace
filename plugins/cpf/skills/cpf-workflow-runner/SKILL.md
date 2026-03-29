@@ -28,15 +28,30 @@ If no workflows are found, tell the user and suggest they create one (the `cpf-w
 
 ## Running a workflow
 
-### Step 1: Identify inputs
+### Step 1: Present the workflow
+
+When the envelope comes back (from `cpf run` or `cpf resume`), use `workflow_name` and `workflow_description` from the JSON envelope to introduce the workflow to the user. This gives context even if you haven't read the YAML file.
+
+### Step 2: Identify inputs
 
 Read the workflow YAML to check what inputs it requires:
 - Look at `workflow.inputs.required` and `workflow.inputs.properties`
 - If the user hasn't provided inputs, use a structured prompt tool to collect them
-- For simple inputs (string, boolean), ask directly
 - For complex inputs, ask the user to provide JSON
 
-### Step 2: Execute
+### Step 3: Build good prompt options from the schema
+
+For each input property, build AskUserQuestion options using this priority:
+
+1. **`enum` array** → one option per enum value (the user picks one)
+2. **`type: boolean`** → two options: "Yes" / "No"
+3. **`examples` array** → one option per example value (the user picks one or types "Other" for a custom value). This is the key mechanism for free-text fields — workflow authors provide examples that become real, meaningful options.
+4. **`description` with inline examples** → if the description contains patterns like `e.g. "foo", "bar"` or `(e.g. "foo", "bar")`, extract those values and use them as options
+5. **No examples available** → use the `description` text itself to craft 2 meaningful, distinct example options that illustrate the expected format
+
+**Never create placeholder options** like "Type value" or "Enter value". Every option should be a real, plausible value the user might choose.
+
+### Step 4: Execute
 
 ```bash
 cpf run -f <path> --input '<json>'
@@ -44,7 +59,7 @@ cpf run -f <path> --input '<json>'
 
 Parse the JSON envelope from stdout. The `ok`, `status`, and `exit_code` fields tell you what happened.
 
-### Step 3: Handle the result
+### Step 5: Handle the result
 
 Based on `exit_code`:
 
@@ -63,6 +78,8 @@ This is the core of the skill. When a workflow pauses at an `await_event` step (
 
 ```json
 {
+  "workflow_name": "My Workflow",
+  "workflow_description": "What this workflow does",
   "wait": {
     "audience": "user",
     "event_name": "approval",
@@ -79,13 +96,11 @@ Handle it like this:
 
 1. **Read the wait block** — extract `prompt`, `input_schema`, `event_name`, and `run_id`.
 
-2. **Collect input using AskUserQuestion** — map each field in `input_schema` to a question:
-
-   **Mapping rules (input_schema field → structured prompt):**
-   - `enum` array → one option per enum value, with the field name as the header
-   - `type: boolean` → two options: "Yes" / "No"
-   - `type: string` (no enum) → two placeholder options like "Enter value" so the user types via "Other"
-   - `type: number` / `type: integer` → same as string, user types via "Other"
+2. **Collect input using AskUserQuestion** — map each field in `input_schema` to a question using the same option-building rules from Step 3 above:
+   - `enum` → one option per value
+   - `boolean` → "Yes" / "No"
+   - `examples` array → one option per example (user can always pick "Other")
+   - Free-text without examples → craft 2 realistic example values from context
 
    **Multiple fields:** If `input_schema` has multiple `required` fields, ask them together in a single prompt call when possible. Optional fields can be asked in a follow-up or skipped.
 
@@ -97,7 +112,7 @@ Handle it like this:
    ```
    Present a structured prompt with:
    - Question 1 (Decision): options "approve" / "reject"
-   - Question 2 (Notes): options "No notes" / free-text input
+   - Question 2 (Notes): options "No notes" / "Looks good, minor nits" (realistic examples, not placeholders)
 
 3. **Build the event JSON** from the user's answers. Map each answer back to the field name in `input_schema`. Make sure the result matches the schema types (strings stay strings, numbers get parsed).
 
@@ -165,3 +180,4 @@ The dashboard shows workflow graphs with all step types rendered, run history wi
 - When showing results to the user, format them nicely — don't dump raw JSON unless they ask for it.
 - If a workflow has multiple sequential `await_event` steps (like a quiz), keep the loop going smoothly without re-explaining the process each time.
 - The `--input` flag accepts either inline JSON (`'{"key": "value"}'`) or a file reference (`@path/to/file.json`). Prefer inline for simple inputs.
+- Use `workflow_name` and `workflow_description` from the envelope to provide context to the user, especially on the first interaction.
