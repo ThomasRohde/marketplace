@@ -1,0 +1,9 @@
+{
+  "name": "cpf",
+  "version": "1.0.0",
+  "description": "Author, run, and build with deterministic, resumable agent workflows using checkpointflow. Includes workflow authoring, interactive running with pause/resume, and structured skill creation through cpf-driven iteration.",
+  "author": {
+    "name": "Claude Code Plugin"
+  },
+  "keywords": ["checkpointflow", "cpf", "workflow", "automation", "skill-creator", "pipeline", "yaml"]
+}
