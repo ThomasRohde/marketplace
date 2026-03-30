@@ -69,7 +69,7 @@ ArchiMate enterprise architecture modeling assistance for element selection, rel
 
 ### cpf
 
-Author and run deterministic, resumable agent workflows with [checkpointflow](https://github.com/ThomasRohde/checkpointflow). Two skills: `cpf-workflow-author` for creating workflow YAML, and `cpf-workflow-runner` for running workflows interactively with pause/resume.
+Author, run, and build with deterministic, resumable agent workflows using [checkpointflow](https://github.com/ThomasRohde/checkpointflow). Three skills: `cpf-workflow-author` for creating workflow YAML, `cpf-workflow-runner` for running workflows interactively with pause/resume, and `cpf-skill-creator` for creating skills through structured cpf-driven iteration.
 
 **Install:**
 ```shell

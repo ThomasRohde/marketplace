@@ -1,6 +1,6 @@
 # checkpointflow Plugin for Claude Code
 
-Author and run deterministic, resumable agent workflows with [checkpointflow](https://github.com/ThomasRohde/checkpointflow). Two skills that give Claude Code full control over the `cpf` CLI — from writing workflows to running them interactively with pause/resume.
+Author, run, and build with deterministic, resumable agent workflows using [checkpointflow](https://github.com/ThomasRohde/checkpointflow). Three skills that give Claude Code full control over the `cpf` CLI — from writing workflows, to running them interactively with pause/resume, to creating new skills through structured iteration.
 
 ## Prerequisites
 
@@ -38,6 +38,17 @@ Runs workflows interactively, handling the full pause/resume cycle. Activates wh
 - "Resume the workflow and approve it"
 
 The runner collects input through structured prompts — when a workflow pauses at an `await_event` step, it presents the required choices as a form rather than asking for free-text.
+
+### cpf-skill-creator
+
+Creates and improves Claude Code skills through a structured, workflow-driven process. Wraps the full skill creation lifecycle — capture intent, draft, test, grade, iterate, optimize, package — in a cpf workflow with audience-driven dispatch.
+
+**Example requests:**
+- "Create a skill for generating API docs"
+- "Improve my deploy skill with better test coverage"
+- "Build a skill that converts markdown to PDF"
+
+Requires the `skill-creator` plugin for eval scripts and the review viewer.
 
 ## Installation
 
